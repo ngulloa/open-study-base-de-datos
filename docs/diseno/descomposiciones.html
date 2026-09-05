@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Proyecciones de una relación, reconstrucción mediante join, tuplas espurias y dependencias proyectadas.">
+
+<title>Descomposiciones y pérdida de información – Bases de Datos</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../diseno/implicacion-clausura.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No se han encontrado resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../diseno/dependencias-llaves.html">Diseño relacional y dependencias</a></li><li class="breadcrumb-item"><a href="../diseno/descomposiciones.html">Descomposiciones y pérdida de información</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Bases de Datos</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Inicio</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Fundamentos del modelo relacional</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentos/sistemas-rdbms.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sistemas de bases de datos y RDBMS</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentos/modelo-relacional.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modelo relacional</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../fundamentos/relaciones-nombradas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Atributos y relaciones nombradas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false">
+ <span class="menu-text">Teoría de consultas</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../teoria-consultas/logica-primer-orden.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lógica de primer orden y consultas</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../teoria-consultas/algebra-relacional.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Álgebra relacional</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../teoria-consultas/joins-operadores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Joins y operadores derivados</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../teoria-consultas/equivalencia-patrones.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Equivalencia y patrones de consulta</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false">
+ <span class="menu-text">SQL</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sql/ddl-dml.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">DDL y DML</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sql/consultas-basicas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">SELECT-FROM-WHERE, joins y conjuntos</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sql/subconsultas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Subconsultas</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sql/agregacion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Agregación, GROUP BY y HAVING</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sql/funciones-filtros.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Funciones, filtros, orden y dialectos</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false">
+ <span class="menu-text">Nulos e información incompleta</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="false" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../nulos/null-tres-valores.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">NULL y lógica de tres valores</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../nulos/informacion-incompleta.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Información incompleta y mundos posibles</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../nulos/outer-joins.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Outer joins</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Diseño relacional y dependencias</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../diseno/dependencias-llaves.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Redundancia, dependencias funcionales y llaves</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../diseno/implicacion-clausura.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Implicación y clausura</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../diseno/descomposiciones.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Descomposiciones y pérdida de información</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En esta página</h2>
+   
+  <ul>
+  <li><a href="#intuición-y-concepto" id="toc-intuición-y-concepto" class="nav-link active" data-scroll-target="#intuición-y-concepto">Intuición y concepto</a></li>
+  <li><a href="#relación-redundante-de-ejemplo" id="toc-relación-redundante-de-ejemplo" class="nav-link" data-scroll-target="#relación-redundante-de-ejemplo">Relación redundante de ejemplo</a></li>
+  <li><a href="#descomposición-binaria" id="toc-descomposición-binaria" class="nav-link" data-scroll-target="#descomposición-binaria">Descomposición binaria</a></li>
+  <li><a href="#un-primer-paso-útil" id="toc-un-primer-paso-útil" class="nav-link" data-scroll-target="#un-primer-paso-útil">Un primer paso útil</a></li>
+  <li><a href="#reconstrucción-y-tuplas-espurias" id="toc-reconstrucción-y-tuplas-espurias" class="nav-link" data-scroll-target="#reconstrucción-y-tuplas-espurias">Reconstrucción y tuplas espurias</a>
+  <ul class="collapse">
+  <li><a href="#ejemplo-de-una-mala-elección" id="toc-ejemplo-de-una-mala-elección" class="nav-link" data-scroll-target="#ejemplo-de-una-mala-elección">Ejemplo de una mala elección</a></li>
+  </ul></li>
+  <li><a href="#descomposición-sin-pérdida" id="toc-descomposición-sin-pérdida" class="nav-link" data-scroll-target="#descomposición-sin-pérdida">Descomposición sin pérdida</a></li>
+  <li><a href="#dependencias-después-de-descomponer" id="toc-dependencias-después-de-descomponer" class="nav-link" data-scroll-target="#dependencias-después-de-descomponer">Dependencias después de descomponer</a></li>
+  <li><a href="#ejemplo-de-dependencias-proyectadas" id="toc-ejemplo-de-dependencias-proyectadas" class="nav-link" data-scroll-target="#ejemplo-de-dependencias-proyectadas">Ejemplo de dependencias proyectadas</a></li>
+  <li><a href="#algoritmo-presentado-en-clase-08" id="toc-algoritmo-presentado-en-clase-08" class="nav-link" data-scroll-target="#algoritmo-presentado-en-clase-08">Algoritmo presentado en Clase 08</a></li>
+  <li><a href="#qué-falta-para-normalización" id="toc-qué-falta-para-normalización" class="nav-link" data-scroll-target="#qué-falta-para-normalización">Qué falta para normalización</a>
+  <ul class="collapse">
+  <li><a href="#resumen" id="toc-resumen" class="nav-link" data-scroll-target="#resumen">Resumen</a></li>
+  </ul></li>
+  <li><a href="#conceptos-relacionados" id="toc-conceptos-relacionados" class="nav-link" data-scroll-target="#conceptos-relacionados">Conceptos relacionados</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../diseno/dependencias-llaves.html">Diseño relacional y dependencias</a></li><li class="breadcrumb-item"><a href="../diseno/descomposiciones.html">Descomposiciones y pérdida de información</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Descomposiciones y pérdida de información</h1>
+</div>
+
+<div>
+  <div class="description">
+    Proyecciones de una relación, reconstrucción mediante join, tuplas espurias y dependencias proyectadas.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="intuición-y-concepto" class="level2">
+<h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
+<p>Las dependencias funcionales explican por qué una relación redundante puede sufrir anomalías. Una estrategia de diseño es <strong>descomponerla</strong> en relaciones más pequeñas. El riesgo es que al separar atributos perdamos la capacidad de reconstruir exactamente la información original. La Clase 08 formaliza esta tensión mediante descomposiciones y joins. <span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+</section>
+<section id="relación-redundante-de-ejemplo" class="level2">
+<h2 class="anchored" data-anchor-id="relación-redundante-de-ejemplo">Relación redundante de ejemplo</h2>
+<p>Consideremos:</p>
+<p>[ InscripcionDetallada(rut,nombreEst,carrera,codigo,nombreCurso,creditos,semestre) ]</p>
+<p>con dependencias del dominio como</p>
+<p>[ rutnombreEst&nbsp;carrera, codigonombreCurso&nbsp;creditos. ]</p>
+<p>La relación repite datos de estudiante y de curso en cada inscripción.</p>
+</section>
+<section id="descomposición-binaria" class="level2">
+<h2 class="anchored" data-anchor-id="descomposición-binaria">Descomposición binaria</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Definición de Clase 08">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Definición de Clase 08
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Una descomposición de una relación (R) en listas de atributos (A) y (B) consiste en</p>
+<p>[ att(R)={A}{B}, ]</p>
+<p>[ S=<em>{A}(R), T=</em>{B}(R). ]</p>
+<p><span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+</div>
+</div>
+<p>Una descomposición con más de dos relaciones puede obtenerse aplicando sucesivamente descomposiciones binarias.</p>
+</section>
+<section id="un-primer-paso-útil" class="level2">
+<h2 class="anchored" data-anchor-id="un-primer-paso-útil">Un primer paso útil</h2>
+<p>Tomemos</p>
+<p>[ A=(rut,nombreEst,carrera), ]</p>
+<p>[ B=(rut,codigo,nombreCurso,creditos,semestre). ]</p>
+<p>Entonces:</p>
+<p>[ S=_{rut,nombreEst,carrera}(InscripcionDetallada), ]</p>
+<p>[ T=_{rut,codigo,nombreCurso,creditos,semestre}(InscripcionDetallada). ]</p>
+<p>La proyección elimina repeticiones idénticas porque el álgebra relacional usa conjuntos.</p>
+</section>
+<section id="reconstrucción-y-tuplas-espurias" class="level2">
+<h2 class="anchored" data-anchor-id="reconstrucción-y-tuplas-espurias">Reconstrucción y tuplas espurias</h2>
+<p>Una vez separadas las relaciones intentamos reconstruir con</p>
+<p>[ ST. ]</p>
+<p>Siempre recuperaremos las tuplas originales en esta construcción por proyección, pero el join <strong>puede producir tuplas adicionales</strong> cuando los atributos compartidos no conservan suficiente información para emparejar correctamente las partes. Esas combinaciones adicionales se conocen como tuplas espurias en la bibliografía de diseño relacional. <span class="citation" data-cites="silberschatz2020 garciamolina2009">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>; <a href="#ref-garciamolina2009" role="doc-biblioref">Garcia-Molina et&nbsp;al. 2009</a>)</span></p>
+<section id="ejemplo-de-una-mala-elección" class="level3">
+<h3 class="anchored" data-anchor-id="ejemplo-de-una-mala-elección">Ejemplo de una mala elección</h3>
+<p>Supongamos que de una relación con</p>
+<div class="table-responsive">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>rut</th>
+<th>nombreEst</th>
+<th>codigo</th>
+<th>nombreCurso</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>r2</td>
+<td>Ben</td>
+<td>IIC2233</td>
+<td>Programación Avanzada</td>
+</tr>
+<tr class="even">
+<td>r2</td>
+<td>Ben</td>
+<td>IIC2413</td>
+<td>Bases de Datos</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>formamos:</p>
+<p>[ X=_{rut,nombreEst,codigo}(R) ]</p>
+<p>y</p>
+<p>[ Y=_{rut,nombreCurso}(R). ]</p>
+<p>El atributo compartido es solo <code>rut</code>. Al hacer (XY), cada código de Ben puede combinarse con <strong>cada</strong> nombre de curso de Ben. Aparecen asociaciones falsas como <code>IIC2233</code> con <code>Bases de Datos</code>.</p>
+<p>La información no desapareció de las proyecciones, pero la separación olvidó qué nombre de curso correspondía a qué código.</p>
+</section>
+</section>
+<section id="descomposición-sin-pérdida" class="level2">
+<h2 class="anchored" data-anchor-id="descomposición-sin-pérdida">Descomposición sin pérdida</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Definición de Clase 08">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Nota</span>Definición de Clase 08
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Sean (S=<em>{A}(R)) y (T=</em>{B}(R)). La descomposición es <strong>sin pérdida</strong> para (R) si</p>
+<p>[ R=ST. ]</p>
+<p><span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+</div>
+</div>
+<p>Esta igualdad exige dos cosas:</p>
+<ul>
+<li>el join recupere todas las tuplas originales;</li>
+<li>no genere ninguna tupla espuria.</li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled" title="Nivel de generalidad">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Advertencia</span>Nivel de generalidad
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>La Clase 08 define aquí la propiedad respecto de una relación (R) concreta. La teoría de normalización estudia condiciones para garantizar pérdida cero para <strong>todas</strong> las relaciones que satisfacen ciertas dependencias. Como las formas normales todavía no aparecen en el material disponible, no adelantamos esas condiciones en esta página.</p>
+</div>
+</div>
+</section>
+<section id="dependencias-después-de-descomponer" class="level2">
+<h2 class="anchored" data-anchor-id="dependencias-después-de-descomponer">Dependencias después de descomponer</h2>
+<p>No basta con conocer las dependencias escritas originalmente dentro de cada lado. También debemos considerar las que están <strong>implicadas</strong> por (F) y usan solo atributos de la nueva relación.</p>
+<p>La Clase 08 define, para el lado (S) con atributos (A):</p>
+<p>[ F_S := {XY FXY, {X}{A}, {Y}{A} }. ]</p>
+<p>Análogamente, para (T):</p>
+<p>[ F_T := {ZU FZU, {Z}{B}, {U}{B} }. ]</p>
+<p><span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>Esta operación suele llamarse <strong>proyección de dependencias</strong> sobre los atributos de una relación.</p>
+</section>
+<section id="ejemplo-de-dependencias-proyectadas" class="level2">
+<h2 class="anchored" data-anchor-id="ejemplo-de-dependencias-proyectadas">Ejemplo de dependencias proyectadas</h2>
+<p>Sea</p>
+<p>[ R(rut,nombreEst,codigo,nombreCurso) ]</p>
+<p>con</p>
+<p>[ F={rutnombreEst,;codigonombreCurso}. ]</p>
+<p>Si descomponemos en</p>
+<p>[ A={rut,nombreEst,codigo} ]</p>
+<p>y</p>
+<p>[ B={codigo,nombreCurso}, ]</p>
+<p>entonces, entre otras dependencias triviales:</p>
+<p>[ rutnombreEstF_A, ]</p>
+<p>[ codigonombreCursoF_B. ]</p>
+<p>Las reglas de cada componente deben obtenerse a partir de <strong>todas las consecuencias de (F)</strong> que permanecen dentro de sus atributos, no solo copiando textualmente dependencias originales.</p>
+</section>
+<section id="algoritmo-presentado-en-clase-08" class="level2">
+<h2 class="anchored" data-anchor-id="algoritmo-presentado-en-clase-08">Algoritmo presentado en Clase 08</h2>
+<p>Para calcular (F_S), la clase propone enumerar subconjuntos no vacíos (X) de los atributos de (S), calcular (X^+) bajo (F), y agregar la parte de la clausura que permanece dentro de (S). <span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>En forma conceptual:</p>
+<pre class="text"><code>reglas &lt;- conjunto vacío
+para cada X no vacío contenido en atributos(S):
+  calcular X+ según F
+  Y &lt;- (X+ - X) intersección atributos(S)
+  si Y no es vacío:
+    agregar X -&gt; Y a reglas
+retornar reglas</code></pre>
+<p>Este algoritmo reutiliza directamente la <a href="../diseno/implicacion-clausura.html">clausura de atributos</a>.</p>
+</section>
+<section id="qué-falta-para-normalización" class="level2">
+<h2 class="anchored" data-anchor-id="qué-falta-para-normalización">Qué falta para normalización</h2>
+<p>Con el material actual ya podemos formular tres preguntas de diseño:</p>
+<ol type="1">
+<li>¿qué redundancias sugieren las dependencias funcionales?</li>
+<li>¿la descomposición permite reconstruir la relación sin información espuria?</li>
+<li>¿qué dependencias quedan vigentes en cada componente?</li>
+</ol>
+<p>El paso siguiente será estudiar formas normales y algoritmos sistemáticos de descomposición. Ese contenido aparece en el programa, pero aún no está desarrollado en las clases disponibles, así que no se incorpora todavía. <span class="citation" data-cites="riveros2026-programa">(<a href="#ref-riveros2026-programa" role="doc-biblioref">Riveros 2026b</a>)</span></p>
+<section id="resumen" class="level3 summary-box">
+<h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
+<ul>
+<li>Una descomposición binaria se obtiene proyectando una relación sobre dos conjuntos de atributos cuya unión cubre el esquema original.</li>
+<li>El join de las proyecciones puede producir combinaciones espurias.</li>
+<li>Una descomposición es sin pérdida para (R) cuando (R=ST).</li>
+<li>Las dependencias de cada componente incluyen todas las consecuencias de (F) que solo mencionan sus atributos.</li>
+<li>La clausura permite calcular esas dependencias proyectadas.</li>
+</ul>
+</section>
+</section>
+<section id="conceptos-relacionados" class="level2 related-links">
+<h2 class="anchored" data-anchor-id="conceptos-relacionados">Conceptos relacionados</h2>
+<ul>
+<li><a href="../diseno/dependencias-llaves.html">Dependencias funcionales y llaves</a></li>
+<li><a href="../diseno/implicacion-clausura.html">Implicación y clausura</a></li>
+<li><a href="../teoria-consultas/joins-operadores.html">Joins y operadores derivados</a></li>
+</ul>
+</section>
+
+
+
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-garciamolina2009" class="csl-entry" role="listitem">
+Garcia-Molina, Hector, Jeffrey D. Ullman, y Jennifer Widom. 2009. <em>Database Systems: The Complete Book</em>. 2.ª ed. Pearson Prentice Hall.
+</div>
+<div id="ref-riveros2026-clase08" class="csl-entry" role="listitem">
+Riveros, Cristian. 2026a. <em>Dependencias y descomposiciones</em>.
+</div>
+<div id="ref-riveros2026-programa" class="csl-entry" role="listitem">
+Riveros, Cristian. 2026b. <em>Programa de Curso: IIC2413 – Bases de Datos, Sección 3</em>.
+</div>
+<div id="ref-silberschatz2020" class="csl-entry" role="listitem">
+Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System Concepts</em>. 7.ª ed. McGraw-Hill Education.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../diseno/implicacion-clausura.html" class="pagination-link" aria-label="Implicación y clausura">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Implicación y clausura</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>IIC2413 · Bases de Datos</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Sitio de estudio construido con Quarto</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

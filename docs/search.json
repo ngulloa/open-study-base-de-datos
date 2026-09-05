@@ -1,0 +1,2142 @@
+[
+  {
+    "objectID": "teoria-consultas/logica-primer-orden.html",
+    "href": "teoria-consultas/logica-primer-orden.html",
+    "title": "Lógica de primer orden y consultas",
+    "section": "",
+    "text": "Una consulta debe depender de la forma de la base de datos y no de enumerar manualmente su contenido. La Clase 01 introduce la lógica de primer orden como primer lenguaje formal para declarar propiedades de los datos. (Riveros 2026)\nPor ejemplo, sobre\n\nEstudiante(rut, nombre, carrera)\nCurso(codigo, nombre, creditos)\nInscribe(rut, codigo, semestre)\n\npodemos expresar «estudiantes inscritos en IIC2413» diciendo que existe una tupla de Inscribe que conecta el RUT del estudiante con ese código.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Lógica de primer orden y consultas"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/logica-primer-orden.html#intuición-y-concepto",
+    "href": "teoria-consultas/logica-primer-orden.html#intuición-y-concepto",
+    "title": "Lógica de primer orden y consultas",
+    "section": "",
+    "text": "Una consulta debe depender de la forma de la base de datos y no de enumerar manualmente su contenido. La Clase 01 introduce la lógica de primer orden como primer lenguaje formal para declarar propiedades de los datos. (Riveros 2026)\nPor ejemplo, sobre\n\nEstudiante(rut, nombre, carrera)\nCurso(codigo, nombre, creditos)\nInscribe(rut, codigo, semestre)\n\npodemos expresar «estudiantes inscritos en IIC2413» diciendo que existe una tupla de Inscribe que conecta el RUT del estudiante con ese código.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Lógica de primer orden y consultas"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/logica-primer-orden.html#datos-variables-y-términos",
+    "href": "teoria-consultas/logica-primer-orden.html#datos-variables-y-términos",
+    "title": "Lógica de primer orden y consultas",
+    "section": "Datos, variables y términos",
+    "text": "Datos, variables y términos\nEl curso fija:\n\nData: conjunto de datos o constantes;\nVar: conjunto de variables, con (DataVar=);\nun término es un elemento de (DataVar). (Riveros 2026)\n\nUsaremos (a,b,c,) para constantes y (x,y,z,) para variables.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Lógica de primer orden y consultas"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/logica-primer-orden.html#sintaxis",
+    "href": "teoria-consultas/logica-primer-orden.html#sintaxis",
+    "title": "Lógica de primer orden y consultas",
+    "section": "Sintaxis",
+    "text": "Sintaxis\nSea (S=(N,ar)) un esquema posicional. Una fórmula () sobre (S) se construye recursivamente a partir de: (Riveros 2026)\n[\n\\[\\begin{aligned}\n\\varphi ::= {} & x=a\n\\mid x=y\n\\mid R(t_1,\\ldots,t_k) \\\\\n&\\mid \\varphi_1\\lor\\varphi_2\n\\mid \\varphi_1\\land\\varphi_2\n\\mid \\neg\\psi \\\\\n&\\mid \\exists x.\\psi\n\\mid \\forall x.\\psi,\n\\end{aligned}\\]\n]\ndonde (RN), (k=ar(R)) y cada (t_iDataVar).\nLas tres primeras formas son atómicas; las restantes construyen fórmulas compuestas.\n\n\n\n\n\n\nNotaComparaciones usadas en el curso\n\n\n\nLa Ayudantía 1 extiende las fórmulas atómicas con comparaciones\n[ xa,xy, {&lt;,&gt;,,}, ]\ncon la semántica esperada. Esta extensión es útil para mantener una correspondencia directa con selecciones comparativas del álgebra relacional. (Saavedra 2026)",
+    "crumbs": [
+      "Teoría de consultas",
+      "Lógica de primer orden y consultas"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/logica-primer-orden.html#variables-libres-y-cuantificadas",
+    "href": "teoria-consultas/logica-primer-orden.html#variables-libres-y-cuantificadas",
+    "title": "Lógica de primer orden y consultas",
+    "section": "Variables libres y cuantificadas",
+    "text": "Variables libres y cuantificadas\nUna variable es libre si su valor debe venir dado por una asignación externa; queda cuantificada cuando está bajo () o ().\nPor ejemplo,\n[ (x)=cs.; Inscribe(x,c,s)c= ]\ntiene a (x) libre y a (c,s) cuantificadas.\nEl curso denota por (FV()) el conjunto de variables libres y por (Const()) las constantes mencionadas por la fórmula. (Riveros 2026)",
+    "crumbs": [
+      "Teoría de consultas",
+      "Lógica de primer orden y consultas"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/logica-primer-orden.html#semántica",
+    "href": "teoria-consultas/logica-primer-orden.html#semántica",
+    "title": "Lógica de primer orden y consultas",
+    "section": "Semántica",
+    "text": "Semántica\nSea (D) una base de datos del esquema. Una asignación () de () sobre (D) asigna a cada variable libre un elemento de\n[ Dom(D)Const(). ]\nEl curso adopta además ((a)=a) para constantes (aData). (Riveros 2026)\nLa relación de satisfacción ((D,)) se define inductivamente. Los casos centrales son:\n[ (D,)x=a (x)=a, ]\n[ (D,)x=y (x)=(y), ]\n[ (D,)R(t_1,,t_k) ((t_1),,(t_k))D(R). ]\nPara los conectivos:\n[ (D,) (D,) (D,), ]\ncon definiciones análogas para () y ().\nPara los cuantificadores, el curso cuantifica sobre el dominio activo más las constantes de la fórmula:\n[ (D,)x. (D,_{x/a}) aDom(D)Const(), ]\n[ (D,)x. (D,_{x/a}) aDom(D)Const(). ]\nEsta elección de semántica activa es importante cuando más adelante relacionemos lógica y álgebra relacional. (Riveros 2026; Arenas et al. 2022)",
+    "crumbs": [
+      "Teoría de consultas",
+      "Lógica de primer orden y consultas"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/logica-primer-orden.html#consultas-de-primer-orden",
+    "href": "teoria-consultas/logica-primer-orden.html#consultas-de-primer-orden",
+    "title": "Lógica de primer orden y consultas",
+    "section": "Consultas de primer orden",
+    "text": "Consultas de primer orden\n\n\n\n\n\n\nNotaDefinición del curso\n\n\n\nUna consulta de primer orden tiene la forma\n[ Q(x_1,,x_n), ]\ncon (FV(){x_1,,x_n}). Su respuesta sobre (D) es\n[ Q(D)= {((x_1),,(x_n)) (D,)}. ]\n(Riveros 2026)\n\n\n\n\n\n\n\n\nAdvertenciaDetalle de la definición\n\n\n\nLas diapositivas escriben la condición (FV(){x_1,,x_n}). La definición semántica usa valores para todas las variables de la cabeza. Para evitar el caso límite no desarrollado en el material, todos los ejemplos de este sitio harán que cada variable de la cabeza ocurra libremente en la fórmula.\n\n\n\nEjemplo: estudiantes inscritos en IIC2413\n[\n\\[\\begin{aligned}\nQ(n)\\leftarrow\\;&\\exists r\\exists c\\exists s.\\\\\n&Estudiante(r,n,c)\\land\nInscribe(r,\\text{IIC2413},s).\n\\end{aligned}\\]\n]\nLa consulta retorna los nombres de estudiantes para los cuales existe una inscripción compatible.\n\n\nEjemplo: cursos sin prerrequisitos\n[ Q(n) ccr.; Curso(c,n,cr) p.;Requisito(c,p). ]\nAquí la negación de un existencial expresa «no existe ningún prerrequisito».",
+    "crumbs": [
+      "Teoría de consultas",
+      "Lógica de primer orden y consultas"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/logica-primer-orden.html#universal-como-ausencia-de-contraejemplo",
+    "href": "teoria-consultas/logica-primer-orden.html#universal-como-ausencia-de-contraejemplo",
+    "title": "Lógica de primer orden y consultas",
+    "section": "Universal como ausencia de contraejemplo",
+    "text": "Universal como ausencia de contraejemplo\nLa equivalencia\n[ x. x. ]\nes especialmente útil para consultas de tipo «para todos». La Ayudantía 1 la destaca como patrón central de traducción entre lógica y álgebra. (Saavedra 2026)\nLa idea práctica es buscar un contraejemplo: una condición universal se cumple cuando no existe ningún elemento que la viole.\n\nResumen\n\nLas relaciones de una base de datos se interpretan como predicados.\nUna fórmula combina átomos mediante conectivos y cuantificadores.\nLa semántica del curso cuantifica sobre (Dom(D)Const()).\nUna consulta (Q(x)) produce una relación con las asignaciones que satisfacen ().\n«No existe» y «para todos» son patrones fundamentales para formular consultas.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Lógica de primer orden y consultas"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/logica-primer-orden.html#conceptos-relacionados",
+    "href": "teoria-consultas/logica-primer-orden.html#conceptos-relacionados",
+    "title": "Lógica de primer orden y consultas",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nModelo relacional\nÁlgebra relacional\nEquivalencia y patrones de consulta\nSubconsultas SQL",
+    "crumbs": [
+      "Teoría de consultas",
+      "Lógica de primer orden y consultas"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/algebra-relacional.html",
+    "href": "teoria-consultas/algebra-relacional.html",
+    "title": "Álgebra relacional",
+    "section": "",
+    "text": "El álgebra relacional es un lenguaje de consultas composicional: cada operador recibe relaciones y devuelve una relación. Por lo tanto, el resultado de una operación puede usarse como entrada de otra. Esta propiedad permite construir consultas complejas a partir de operadores simples. (Riveros 2026a; Arenas et al. 2022)\nTrabajaremos sobre relaciones nombradas. El esquema transversal será:\n\nEstudiante(rut, nombre, carrera)\nCurso(codigo, nombre, creditos)\nInscribe(rut, codigo, semestre)",
+    "crumbs": [
+      "Teoría de consultas",
+      "Álgebra relacional"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/algebra-relacional.html#intuición-y-concepto",
+    "href": "teoria-consultas/algebra-relacional.html#intuición-y-concepto",
+    "title": "Álgebra relacional",
+    "section": "",
+    "text": "El álgebra relacional es un lenguaje de consultas composicional: cada operador recibe relaciones y devuelve una relación. Por lo tanto, el resultado de una operación puede usarse como entrada de otra. Esta propiedad permite construir consultas complejas a partir de operadores simples. (Riveros 2026a; Arenas et al. 2022)\nTrabajaremos sobre relaciones nombradas. El esquema transversal será:\n\nEstudiante(rut, nombre, carrera)\nCurso(codigo, nombre, creditos)\nInscribe(rut, codigo, semestre)",
+    "crumbs": [
+      "Teoría de consultas",
+      "Álgebra relacional"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/algebra-relacional.html#operadores-de-conjuntos",
+    "href": "teoria-consultas/algebra-relacional.html#operadores-de-conjuntos",
+    "title": "Álgebra relacional",
+    "section": "Operadores de conjuntos",
+    "text": "Operadores de conjuntos\nSean (R) y (S) relaciones con los mismos atributos. El curso define: (Riveros 2026a)\n[ RS={RS}, ]\n[ RS={RS}, ]\n[ RS={RS}. ]\nLos tres operadores están definidos solo cuando\n[ att(R)=att(S). ]\nAdemás,\n[ att(RS)=att(RS)=att(RS)=att(R). ]\n\nEjemplo\nSi\n[ C={rut}({carrera=}(Estudiante)) ]\ny (I) contiene los RUT inscritos en IIC2413, entonces (CI) identifica estudiantes de Computación que además están inscritos en el curso.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Álgebra relacional"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/algebra-relacional.html#selección",
+    "href": "teoria-consultas/algebra-relacional.html#selección",
+    "title": "Álgebra relacional",
+    "section": "Selección",
+    "text": "Selección\nLa selección conserva las tuplas que cumplen una condición.\nPara (Aatt(R)) y (aData):\n[ _{A=a}(R) := {R(A)=a}. ]\nPara (A,Batt(R)):\n[ _{A=B}(R) := {R(A)=(B)}. ]\nLa selección no cambia los atributos:\n[ att(_(R))=att(R). ]\nEl curso generaliza (_) a fórmulas booleanas y también utiliza comparaciones (&lt;,&gt;,,). (Riveros 2026a)\n\nEjemplo\n[ _{carrera=}(Estudiante) ]\nretiene solo estudiantes de esa carrera.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Álgebra relacional"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/algebra-relacional.html#proyección",
+    "href": "teoria-consultas/algebra-relacional.html#proyección",
+    "title": "Álgebra relacional",
+    "section": "Proyección",
+    "text": "Proyección\nLa proyección conserva un subconjunto de atributos.\nPara una lista (B_1,,B_katt(R)):\n[ {B_1,,B_k}(R) := {{B_1,,B_k}()R}. ]\nPor lo tanto,\n[ att(_{B_1,,B_k}(R))={B_1,,B_k}. ]\nComo el resultado sigue siendo un conjunto, dos tuplas distintas pueden convertirse en la misma tupla proyectada y el duplicado desaparece. (Riveros 2026a)\n\nEjemplo\n[ _{carrera}(Estudiante) ]\nretorna cada carrera presente una sola vez bajo la semántica del álgebra relacional.\n\n\n\n\n\n\nAdvertenciaÁlgebra relacional y SQL difieren aquí\n\n\n\nEn SQL, SELECT carrera FROM Estudiante puede conservar duplicados. Para reproducir la semántica de conjuntos de la proyección se usa SELECT DISTINCT carrera .... (Riveros 2026b)",
+    "crumbs": [
+      "Teoría de consultas",
+      "Álgebra relacional"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/algebra-relacional.html#renombramiento",
+    "href": "teoria-consultas/algebra-relacional.html#renombramiento",
+    "title": "Álgebra relacional",
+    "section": "Renombramiento",
+    "text": "Renombramiento\nSi (Aatt(R)) y (Batt(R)), el operador\n[ _{AB}(R) ]\ncambia el nombre del atributo (A) por (B). Su esquema resultante es\n[ att(_{AB}(R))= (att(R){A}){B}. ]\n(Riveros 2026a)\nEl renombramiento es crucial cuando necesitamos usar dos copias de la misma relación sin forzar coincidencias no deseadas entre atributos con el mismo nombre.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Álgebra relacional"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/algebra-relacional.html#composición",
+    "href": "teoria-consultas/algebra-relacional.html#composición",
+    "title": "Álgebra relacional",
+    "section": "Composición",
+    "text": "Composición\nUna consulta típica combina varios operadores. Por ejemplo, los nombres de estudiantes de Computación son:\n[ {nombre} ( {carrera=}(Estudiante) ). ]\nEl operador interior filtra tuplas; la proyección exterior conserva solo nombre.\nEn SQL:\nSELECT DISTINCT nombre\nFROM Estudiante\nWHERE carrera = 'Computación';",
+    "crumbs": [
+      "Teoría de consultas",
+      "Álgebra relacional"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/algebra-relacional.html#propiedades-útiles",
+    "href": "teoria-consultas/algebra-relacional.html#propiedades-útiles",
+    "title": "Álgebra relacional",
+    "section": "Propiedades útiles",
+    "text": "Propiedades útiles\nLa Ayudantía 1 trabaja propiedades algebraicas que permiten reescribir consultas. Dos ejemplos son: (Saavedra 2026)\n\nConmutatividad de selecciones\n[ _{1}({2}(R)) = {2}({1}(R)) = {_1_2}(R). ]\n\n\nProyección sobre unión\nSi (att(R)=att(S)):\n[ {B}(RS) = {B}(R)_{B}(S). ]\nEstas igualdades son importantes porque una consulta puede tener muchas expresiones algebraicas equivalentes, base conceptual de la optimización de consultas que aparecerá más adelante en el curso.\n\n\nResumen\n\n(,,) combinan relaciones con el mismo conjunto de atributos.\n() filtra tuplas sin cambiar atributos.\n() conserva atributos y elimina duplicados por semántica de conjuntos.\n() cambia nombres de atributos.\nLa composición permite construir expresiones complejas y reescribirlas mediante propiedades algebraicas.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Álgebra relacional"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/algebra-relacional.html#conceptos-relacionados",
+    "href": "teoria-consultas/algebra-relacional.html#conceptos-relacionados",
+    "title": "Álgebra relacional",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nAtributos y relaciones nombradas\nJoins y operadores derivados\nEquivalencia y patrones de consulta\nSELECT-FROM-WHERE, joins y conjuntos",
+    "crumbs": [
+      "Teoría de consultas",
+      "Álgebra relacional"
+    ]
+  },
+  {
+    "objectID": "sql/subconsultas.html",
+    "href": "sql/subconsultas.html",
+    "title": "Subconsultas",
+    "section": "",
+    "text": "Una subconsulta es una consulta SQL usada dentro de otra consulta. La Clase 04 la conecta con la composición del álgebra relacional y con subfórmulas o consultas auxiliares en lógica de primer orden. (Riveros 2026b)\nLos casos principales vistos en el curso son:\n\nanidación en FROM;\nanidación en WHERE mediante IN;\nEXISTS y NOT EXISTS;\nsubconsultas que producen un valor;\ncomparaciones con ANY y ALL. (Riveros 2026b)",
+    "crumbs": [
+      "SQL",
+      "Subconsultas"
+    ]
+  },
+  {
+    "objectID": "sql/subconsultas.html#intuición-y-concepto",
+    "href": "sql/subconsultas.html#intuición-y-concepto",
+    "title": "Subconsultas",
+    "section": "",
+    "text": "Una subconsulta es una consulta SQL usada dentro de otra consulta. La Clase 04 la conecta con la composición del álgebra relacional y con subfórmulas o consultas auxiliares en lógica de primer orden. (Riveros 2026b)\nLos casos principales vistos en el curso son:\n\nanidación en FROM;\nanidación en WHERE mediante IN;\nEXISTS y NOT EXISTS;\nsubconsultas que producen un valor;\ncomparaciones con ANY y ALL. (Riveros 2026b)",
+    "crumbs": [
+      "SQL",
+      "Subconsultas"
+    ]
+  },
+  {
+    "objectID": "sql/subconsultas.html#subconsultas-en-from",
+    "href": "sql/subconsultas.html#subconsultas-en-from",
+    "title": "Subconsultas",
+    "section": "Subconsultas en FROM",
+    "text": "Subconsultas en FROM\nUna consulta puede producir una relación intermedia y darle un alias:\nSELECT E.nombre, I.codigo\nFROM Estudiante AS E,\n     (\n       SELECT rut, codigo\n       FROM Inscribe\n       WHERE semestre = '2025-2'\n     ) AS I\nWHERE E.rut = I.rut;\nConceptualmente, la subconsulta define primero una relación temporal I; la consulta exterior la combina con Estudiante.\nEn álgebra relacional, esto no requiere un operador nuevo: es simplemente una subexpresión.",
+    "crumbs": [
+      "SQL",
+      "Subconsultas"
+    ]
+  },
+  {
+    "objectID": "sql/subconsultas.html#in",
+    "href": "sql/subconsultas.html#in",
+    "title": "Subconsultas",
+    "section": "IN",
+    "text": "IN\nIN pregunta si un valor aparece en el resultado de una subconsulta de una columna:\nSELECT nombre\nFROM Estudiante\nWHERE rut IN (\n  SELECT rut\n  FROM Inscribe\n  WHERE codigo = 'IIC2413'\n);\nEn lógica, el valor externo se conecta con un testigo producido por la subconsulta. En álgebra, suele expresarse mediante join o semijoin.\n\nNOT IN\nSELECT nombre\nFROM Estudiante\nWHERE rut NOT IN (\n  SELECT rut\n  FROM Inscribe\n  WHERE codigo = 'IIC2413'\n);\nparece expresar «estudiantes no inscritos en IIC2413», pero hay una advertencia importante: si la subconsulta puede producir NULL, la lógica de tres valores puede hacer que NOT IN descarte filas inesperadamente. El ejemplo oficial de Clase 06 muestra incluso un caso donde el resultado se vuelve vacío. (Riveros 2026a)\n\n\n\n\n\n\nAdvertenciaNOT IN y NULL\n\n\n\nCuando la subconsulta puede contener NULL, NOT EXISTS suele reflejar con mayor claridad la intención «no existe una coincidencia». Revisa NULL y lógica de tres valores antes de transformar mecánicamente NOT IN.",
+    "crumbs": [
+      "SQL",
+      "Subconsultas"
+    ]
+  },
+  {
+    "objectID": "sql/subconsultas.html#exists",
+    "href": "sql/subconsultas.html#exists",
+    "title": "Subconsultas",
+    "section": "EXISTS",
+    "text": "EXISTS\nEXISTS es verdadero si la subconsulta produce al menos una fila.\nSELECT C.nombre\nFROM Curso AS C\nWHERE EXISTS (\n  SELECT 1\n  FROM Dicta AS D\n  WHERE D.codigo = C.codigo\n);\nLa subconsulta está correlacionada: usa C.codigo, un valor de la consulta exterior.\nLa Clase 04 explica la correlación como la exposición de una variable externa dentro de la subconsulta. (Riveros 2026b)",
+    "crumbs": [
+      "SQL",
+      "Subconsultas"
+    ]
+  },
+  {
+    "objectID": "sql/subconsultas.html#not-exists",
+    "href": "sql/subconsultas.html#not-exists",
+    "title": "Subconsultas",
+    "section": "NOT EXISTS",
+    "text": "NOT EXISTS\nNOT EXISTS expresa ausencia de testigos:\nSELECT C.nombre\nFROM Curso AS C\nWHERE NOT EXISTS (\n  SELECT 1\n  FROM Requisito AS R\n  WHERE R.codigo = C.codigo\n);\nEn lógica:\n[ Q(n) ccr.; Curso(c,n,cr) p.;Requisito(c,p). ]\nEsta correspondencia hace de NOT EXISTS una herramienta natural para consultas «ninguno» o «nunca».",
+    "crumbs": [
+      "SQL",
+      "Subconsultas"
+    ]
+  },
+  {
+    "objectID": "sql/subconsultas.html#subconsultas-escalares",
+    "href": "sql/subconsultas.html#subconsultas-escalares",
+    "title": "Subconsultas",
+    "section": "Subconsultas escalares",
+    "text": "Subconsultas escalares\nUna subconsulta puede usarse donde se espera un solo valor:\nSELECT nombre\nFROM Curso\nWHERE creditos &gt; (\n  SELECT AVG(creditos)\n  FROM Curso\n);\nLa Clase 04 advierte que una subconsulta usada como valor debe entregar un resultado apropiadamente único; si devuelve varias filas, el motor puede reportar un error. (Riveros 2026b)\nEl comportamiento exacto ante casos no escalares puede depender del RDBMS, por lo que no debe construirse una consulta suponiendo una selección arbitraria de una fila.",
+    "crumbs": [
+      "SQL",
+      "Subconsultas"
+    ]
+  },
+  {
+    "objectID": "sql/subconsultas.html#any-y-all",
+    "href": "sql/subconsultas.html#any-y-all",
+    "title": "Subconsultas",
+    "section": "ANY y ALL",
+    "text": "ANY y ALL\nEl curso presenta comparaciones del tipo:\nexpresion &gt; ANY (subconsulta)\ny\nexpresion &gt; ALL (subconsulta)\nIntuitivamente:\n\n&gt; ANY exige que la comparación sea verdadera para al menos un valor;\n&gt; ALL exige que sea verdadera para todos los valores relevantes de la subconsulta.\n\n(Riveros 2026b)\n\n\n\n\n\n\nAdvertenciaDialectos\n\n\n\nLa Clase 04 señala explícitamente que ANY/ALL no están soportados por SQLite en el contexto usado en el curso. No debe presentarse este comportamiento como universal entre motores. (Riveros 2026b)",
+    "crumbs": [
+      "SQL",
+      "Subconsultas"
+    ]
+  },
+  {
+    "objectID": "sql/subconsultas.html#correlación-y-desanidamiento",
+    "href": "sql/subconsultas.html#correlación-y-desanidamiento",
+    "title": "Subconsultas",
+    "section": "Correlación y desanidamiento",
+    "text": "Correlación y desanidamiento\nUna consulta correlacionada se evalúa conceptualmente en relación con cada fila de la consulta exterior. Esto no significa que el motor deba implementarla literalmente así: el optimizador puede reescribirla.\nLa Clase 04 compara un EXISTS correlacionado con una versión desanidada mediante join y advierte que los duplicados pueden cambiar. (Riveros 2026b)\nEjemplo:\nSELECT E.nombre\nFROM Estudiante AS E\nWHERE EXISTS (\n  SELECT 1\n  FROM Inscribe AS I\n  WHERE I.rut = E.rut\n);\nno es observablemente equivalente, bajo semántica de duplicados, a:\nSELECT E.nombre\nFROM Estudiante AS E\nJOIN Inscribe AS I\n  ON I.rut = E.rut;\nsi un estudiante tiene varias inscripciones. La segunda consulta puede repetir su nombre. Una reescritura que quiera preservar el resultado necesitaría considerar DISTINCT u otra transformación equivalente.",
+    "crumbs": [
+      "SQL",
+      "Subconsultas"
+    ]
+  },
+  {
+    "objectID": "sql/subconsultas.html#elegir-una-forma",
+    "href": "sql/subconsultas.html#elegir-una-forma",
+    "title": "Subconsultas",
+    "section": "Elegir una forma",
+    "text": "Elegir una forma\nNo existe una única sintaxis «correcta» para toda consulta. Una regla útil es expresar directamente la intención:\n\npertenencia a un conjunto de valores → IN;\nexistencia de una fila relacionada → EXISTS;\nausencia de una fila relacionada → NOT EXISTS;\ncomparación contra un único resultado → subconsulta escalar;\nrelación intermedia reutilizable en FROM → subconsulta derivada.\n\nLa equivalencia con álgebra y lógica permite justificar estas elecciones en vez de memorizarlas. (Ramakrishnan y Gehrke 2003; Silberschatz et al. 2020)\n\nResumen\n\nUna subconsulta es una consulta usada como componente de otra.\nLas subconsultas en FROM actúan como relaciones intermedias.\nIN, EXISTS y NOT EXISTS expresan pertenencia, existencia y ausencia.\nUna subconsulta correlacionada depende de valores de la consulta exterior.\nAl desanidar hay que controlar duplicados.\nNOT IN requiere especial cuidado cuando interviene NULL.",
+    "crumbs": [
+      "SQL",
+      "Subconsultas"
+    ]
+  },
+  {
+    "objectID": "sql/subconsultas.html#conceptos-relacionados",
+    "href": "sql/subconsultas.html#conceptos-relacionados",
+    "title": "Subconsultas",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nEquivalencia y patrones de consulta\nNULL y lógica de tres valores\nSELECT-FROM-WHERE, joins y conjuntos\nAgregación",
+    "crumbs": [
+      "SQL",
+      "Subconsultas"
+    ]
+  },
+  {
+    "objectID": "sql/ddl-dml.html",
+    "href": "sql/ddl-dml.html",
+    "title": "Definición y modificación de datos: DDL y DML",
+    "section": "",
+    "text": "El modelo relacional separa esquema y datos. SQL refleja esa separación:\n\nDDL (Data Definition Language) define o modifica la estructura;\nDML (Data Manipulation Language) modifica las tuplas almacenadas. (Riveros 2026c)\n\nLa Clase 03 vincula explícitamente CREATE TABLE con la definición del esquema e INSERT INTO con la construcción de las relaciones de la instancia. (Riveros 2026c)",
+    "crumbs": [
+      "SQL",
+      "DDL y DML"
+    ]
+  },
+  {
+    "objectID": "sql/ddl-dml.html#intuición-y-concepto",
+    "href": "sql/ddl-dml.html#intuición-y-concepto",
+    "title": "Definición y modificación de datos: DDL y DML",
+    "section": "",
+    "text": "El modelo relacional separa esquema y datos. SQL refleja esa separación:\n\nDDL (Data Definition Language) define o modifica la estructura;\nDML (Data Manipulation Language) modifica las tuplas almacenadas. (Riveros 2026c)\n\nLa Clase 03 vincula explícitamente CREATE TABLE con la definición del esquema e INSERT INTO con la construcción de las relaciones de la instancia. (Riveros 2026c)",
+    "crumbs": [
+      "SQL",
+      "DDL y DML"
+    ]
+  },
+  {
+    "objectID": "sql/ddl-dml.html#create-table",
+    "href": "sql/ddl-dml.html#create-table",
+    "title": "Definición y modificación de datos: DDL y DML",
+    "section": "CREATE TABLE",
+    "text": "CREATE TABLE\nLa forma básica presentada en el curso es:\nCREATE TABLE nombre_relacion (\n  atributo1 tipo1,\n  atributo2 tipo2,\n  ...\n);\nPara el dominio universitario:\nCREATE TABLE Estudiante (\n  rut     VARCHAR(12),\n  nombre  VARCHAR(100),\n  carrera VARCHAR(100),\n  PRIMARY KEY (rut)\n);\n\nCREATE TABLE Curso (\n  codigo   VARCHAR(20),\n  nombre   VARCHAR(120),\n  creditos INTEGER,\n  PRIMARY KEY (codigo)\n);\nLa declaración de PRIMARY KEY se conecta con la definición formal de llave. No introducimos aún llaves foráneas porque la integridad referencial aparece en el programa, pero todavía no ha sido desarrollada en los materiales disponibles. (Riveros 2026b)",
+    "crumbs": [
+      "SQL",
+      "DDL y DML"
+    ]
+  },
+  {
+    "objectID": "sql/ddl-dml.html#tipos-de-datos",
+    "href": "sql/ddl-dml.html#tipos-de-datos",
+    "title": "Definición y modificación de datos: DDL y DML",
+    "section": "Tipos de datos",
+    "text": "Tipos de datos\nLa Clase 03 agrupa ejemplos de tipos SQL en categorías como: (Riveros 2026c)\n\nnuméricos: INTEGER, SMALLINT, FLOAT, …;\ncaracteres: CHAR(n), VARCHAR(n), CLOB, …;\nbinarios: BLOB;\nbooleanos: BOOLEAN;\ntemporales: DATE, TIME, TIMESTAMP, …\n\n\n\n\n\n\n\nAdvertenciaSQL estándar y motores reales\n\n\n\nLos nombres, tamaños, conversiones y comportamiento exacto de los tipos dependen del RDBMS. Por ejemplo, distintos motores implementan de manera diferente números en punto flotante, booleanos y tipos de texto. El curso recomienda verificar los tipos soportados por cada motor. (Riveros 2026c)",
+    "crumbs": [
+      "SQL",
+      "DDL y DML"
+    ]
+  },
+  {
+    "objectID": "sql/ddl-dml.html#modificar-el-esquema",
+    "href": "sql/ddl-dml.html#modificar-el-esquema",
+    "title": "Definición y modificación de datos: DDL y DML",
+    "section": "Modificar el esquema",
+    "text": "Modificar el esquema\nEl curso introduce operaciones como:\nDROP TABLE nombre_relacion;\nALTER TABLE nombre_relacion\nADD COLUMN nuevo_atributo tipo;\nALTER TABLE nombre_relacion\nDROP COLUMN atributo;\nEl soporte concreto de algunas variantes de ALTER TABLE depende del motor y su versión. (Riveros 2026c; Silberschatz et al. 2020)",
+    "crumbs": [
+      "SQL",
+      "DDL y DML"
+    ]
+  },
+  {
+    "objectID": "sql/ddl-dml.html#insertar-tuplas",
+    "href": "sql/ddl-dml.html#insertar-tuplas",
+    "title": "Definición y modificación de datos: DDL y DML",
+    "section": "Insertar tuplas",
+    "text": "Insertar tuplas\nLa forma básica es:\nINSERT INTO relacion (atributo1, atributo2, ...)\nVALUES (valor1, valor2, ...);\nEjemplo:\nINSERT INTO Estudiante (rut, nombre, carrera)\nVALUES ('r1', 'Ana', 'Ingeniería Civil');\nTambién podemos nombrar solo algunos atributos:\nINSERT INTO Profesor (pid, nombre)\nVALUES ('p1', 'Riveros');\nSi departamento admite NULL y no tiene un valor por defecto distinto, quedará sin un valor conocido. La semántica de NULL se desarrolla por separado. (Riveros 2026c, 2026a)\n\n\n\n\n\n\nAdvertenciaNo omitir columnas sin revisar restricciones\n\n\n\nOmitir una columna no garantiza que la inserción sea válida: la operación puede fallar si la columna tiene NOT NULL y no posee un valor por defecto compatible.",
+    "crumbs": [
+      "SQL",
+      "DDL y DML"
+    ]
+  },
+  {
+    "objectID": "sql/ddl-dml.html#actualizar-datos",
+    "href": "sql/ddl-dml.html#actualizar-datos",
+    "title": "Definición y modificación de datos: DDL y DML",
+    "section": "Actualizar datos",
+    "text": "Actualizar datos\nUPDATE relacion\nSET atributo1 = valor1,\n    atributo2 = valor2\nWHERE condicion;\nEjemplo:\nUPDATE Estudiante\nSET carrera = 'Computación'\nWHERE rut = 'r1';\nLa condición puede seleccionar varias filas. Por eso, una actualización sin el filtro correcto puede modificar más datos de los pretendidos.",
+    "crumbs": [
+      "SQL",
+      "DDL y DML"
+    ]
+  },
+  {
+    "objectID": "sql/ddl-dml.html#eliminar-datos",
+    "href": "sql/ddl-dml.html#eliminar-datos",
+    "title": "Definición y modificación de datos: DDL y DML",
+    "section": "Eliminar datos",
+    "text": "Eliminar datos\nDELETE FROM relacion\nWHERE condicion;\nEjemplo:\nDELETE FROM Inscribe\nWHERE rut = 'r2'\n  AND codigo = 'IIC2413'\n  AND semestre = '2025-2';\nDe nuevo, WHERE determina qué filas son afectadas.",
+    "crumbs": [
+      "SQL",
+      "DDL y DML"
+    ]
+  },
+  {
+    "objectID": "sql/ddl-dml.html#esquema-teórico-y-sql",
+    "href": "sql/ddl-dml.html#esquema-teórico-y-sql",
+    "title": "Definición y modificación de datos: DDL y DML",
+    "section": "Esquema teórico y SQL",
+    "text": "Esquema teórico y SQL\nEn el modelo nombrado del curso, un esquema especifica nombres de relaciones y sus atributos. CREATE TABLE agrega además información propia de un RDBMS real: tipos, restricciones y otras propiedades de almacenamiento lógico. (Riveros 2026c)\nPor ello, la correspondencia es conceptual, no una identidad literal:\n[ . ]",
+    "crumbs": [
+      "SQL",
+      "DDL y DML"
+    ]
+  },
+  {
+    "objectID": "sql/ddl-dml.html#ejemplo-mínimo-del-esquema-transversal",
+    "href": "sql/ddl-dml.html#ejemplo-mínimo-del-esquema-transversal",
+    "title": "Definición y modificación de datos: DDL y DML",
+    "section": "Ejemplo mínimo del esquema transversal",
+    "text": "Ejemplo mínimo del esquema transversal\nCREATE TABLE Profesor (\n  pid          VARCHAR(20),\n  nombre       VARCHAR(100),\n  departamento VARCHAR(100),\n  PRIMARY KEY (pid)\n);\n\nCREATE TABLE Inscribe (\n  rut      VARCHAR(12),\n  codigo   VARCHAR(20),\n  semestre VARCHAR(10)\n);\n\nCREATE TABLE Dicta (\n  pid      VARCHAR(20),\n  codigo   VARCHAR(20),\n  semestre VARCHAR(10)\n);\n\nCREATE TABLE Requisito (\n  codigo        VARCHAR(20),\n  prerrequisito VARCHAR(20)\n);\nLas restricciones de llave para relaciones multivaluadas y las futuras llaves foráneas deben decidirse desde el modelo conceptual, no solo desde la sintaxis SQL.\n\nResumen\n\nDDL define o modifica el esquema; DML modifica los datos.\nCREATE TABLE agrega tipos y restricciones a la estructura relacional.\nINSERT, UPDATE y DELETE alteran la instancia.\nEl soporte exacto de tipos y algunas operaciones de esquema depende del RDBMS.\nNULL, llaves e integridad referencial tienen semántica propia y se estudian en sus páginas correspondientes.",
+    "crumbs": [
+      "SQL",
+      "DDL y DML"
+    ]
+  },
+  {
+    "objectID": "sql/ddl-dml.html#conceptos-relacionados",
+    "href": "sql/ddl-dml.html#conceptos-relacionados",
+    "title": "Definición y modificación de datos: DDL y DML",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nSistemas de bases de datos y RDBMS\nModelo relacional\nNULL y lógica de tres valores\nDependencias funcionales y llaves",
+    "crumbs": [
+      "SQL",
+      "DDL y DML"
+    ]
+  },
+  {
+    "objectID": "sql/consultas-basicas.html",
+    "href": "sql/consultas-basicas.html",
+    "title": "Consultas SQL: SELECT-FROM-WHERE, joins y conjuntos",
+    "section": "",
+    "text": "SQL es declarativo: especificamos el resultado deseado y el RDBMS decide cómo obtenerlo. La Clase 03 introduce el caso base de DQL con SELECT, FROM y WHERE; la Clase 04 lo extiende con combinaciones de relaciones y operadores de conjuntos. (Riveros 2026a, 2026b)\n\nEstudiante(rut, nombre, carrera)\nCurso(codigo, nombre, creditos)\nInscribe(rut, codigo, semestre)",
+    "crumbs": [
+      "SQL",
+      "SELECT-FROM-WHERE, joins y conjuntos"
+    ]
+  },
+  {
+    "objectID": "sql/consultas-basicas.html#intuición-y-concepto",
+    "href": "sql/consultas-basicas.html#intuición-y-concepto",
+    "title": "Consultas SQL: SELECT-FROM-WHERE, joins y conjuntos",
+    "section": "",
+    "text": "SQL es declarativo: especificamos el resultado deseado y el RDBMS decide cómo obtenerlo. La Clase 03 introduce el caso base de DQL con SELECT, FROM y WHERE; la Clase 04 lo extiende con combinaciones de relaciones y operadores de conjuntos. (Riveros 2026a, 2026b)\n\nEstudiante(rut, nombre, carrera)\nCurso(codigo, nombre, creditos)\nInscribe(rut, codigo, semestre)",
+    "crumbs": [
+      "SQL",
+      "SELECT-FROM-WHERE, joins y conjuntos"
+    ]
+  },
+  {
+    "objectID": "sql/consultas-basicas.html#select-from-where",
+    "href": "sql/consultas-basicas.html#select-from-where",
+    "title": "Consultas SQL: SELECT-FROM-WHERE, joins y conjuntos",
+    "section": "SELECT-FROM-WHERE",
+    "text": "SELECT-FROM-WHERE\nLa estructura básica es:\nSELECT [DISTINCT] lista_atributos\nFROM lista_relaciones\nWHERE condicion;\nConceptualmente:\n\nFROM determina las relaciones de entrada;\nWHERE filtra combinaciones de tuplas;\nSELECT determina qué atributos aparecen en la salida;\nDISTINCT elimina duplicados. (Riveros 2026a)\n\n\nSelección y proyección\nSELECT nombre\nFROM Estudiante\nWHERE carrera = 'Computación';\ncorresponde, ignorando por un momento la diferencia de duplicados, a\n[ {nombre} ( {carrera=}(Estudiante) ). ]",
+    "crumbs": [
+      "SQL",
+      "SELECT-FROM-WHERE, joins y conjuntos"
+    ]
+  },
+  {
+    "objectID": "sql/consultas-basicas.html#sql-permite-duplicados",
+    "href": "sql/consultas-basicas.html#sql-permite-duplicados",
+    "title": "Consultas SQL: SELECT-FROM-WHERE, joins y conjuntos",
+    "section": "SQL permite duplicados",
+    "text": "SQL permite duplicados\nEn el álgebra del curso una relación es un conjunto. SQL, en cambio, puede conservar filas repetidas. La Clase 03 destaca esta diferencia mediante la proyección. (Riveros 2026a)\nSi dos estudiantes tienen la misma carrera:\nSELECT carrera\nFROM Estudiante;\npuede retornar Computación más de una vez.\nPara obtener el comportamiento de conjuntos:\nSELECT DISTINCT carrera\nFROM Estudiante;\n\n\n\n\n\n\nAdvertenciaNo insertar DISTINCT por costumbre\n\n\n\nDISTINCT cambia la semántica de la consulta y puede tener costo. Debe usarse cuando la eliminación de duplicados forma parte del resultado que queremos declarar.",
+    "crumbs": [
+      "SQL",
+      "SELECT-FROM-WHERE, joins y conjuntos"
+    ]
+  },
+  {
+    "objectID": "sql/consultas-basicas.html#alias",
+    "href": "sql/consultas-basicas.html#alias",
+    "title": "Consultas SQL: SELECT-FROM-WHERE, joins y conjuntos",
+    "section": "Alias",
+    "text": "Alias\nUn alias permite renombrar atributos o relaciones dentro de una consulta:\nSELECT E.nombre AS estudiante\nFROM Estudiante AS E;\nCuando dos relaciones tienen atributos con el mismo nombre, calificarlos evita ambigüedad:\nSELECT E.nombre, C.nombre\nFROM Estudiante AS E, Curso AS C;\nLa Clase 04 relaciona un alias de relación con el renombramiento de todos sus atributos mediante un prefijo, por ejemplo E.rut. (Riveros 2026b)",
+    "crumbs": [
+      "SQL",
+      "SELECT-FROM-WHERE, joins y conjuntos"
+    ]
+  },
+  {
+    "objectID": "sql/consultas-basicas.html#producto-cartesiano-en-from",
+    "href": "sql/consultas-basicas.html#producto-cartesiano-en-from",
+    "title": "Consultas SQL: SELECT-FROM-WHERE, joins y conjuntos",
+    "section": "Producto cartesiano en FROM",
+    "text": "Producto cartesiano en FROM\nLa forma\nSELECT ...\nFROM R, S;\ngenera conceptualmente combinaciones de filas de ambas relaciones. Si hay nombres de atributos repetidos, deben calificarse. En álgebra, el curso exige renombramientos para formar un producto cartesiano cuando los conjuntos de atributos no son disjuntos. (Riveros 2026b)\nEn la práctica, un producto cartesiano sin una condición que lo justifique suele producir muchas filas y puede indicar un join incompleto.",
+    "crumbs": [
+      "SQL",
+      "SELECT-FROM-WHERE, joins y conjuntos"
+    ]
+  },
+  {
+    "objectID": "sql/consultas-basicas.html#joins",
+    "href": "sql/consultas-basicas.html#joins",
+    "title": "Consultas SQL: SELECT-FROM-WHERE, joins y conjuntos",
+    "section": "Joins",
+    "text": "Joins\nLa Clase 04 presenta varias formas de expresar la combinación de relaciones. (Riveros 2026b)\n\nNATURAL JOIN\nSELECT nombre, codigo, semestre\nFROM Estudiante\nNATURAL JOIN Inscribe;\nCompara todos los atributos de igual nombre —aquí rut— y mantiene una sola copia de ellos.\n\n\nJOIN ... USING\nSELECT E.nombre, I.codigo, I.semestre\nFROM Estudiante AS E\nJOIN Inscribe AS I USING (rut);\nExplicita qué atributo compartido debe usarse.\n\n\nJOIN ... ON\nAunque el curso ilustra con frecuencia la combinación mediante FROM R, S y una condición en WHERE, en este sitio preferiremos JOIN ... ON cuando la condición de unión sea explícita:\nSELECT E.nombre, I.codigo, I.semestre\nFROM Estudiante AS E\nJOIN Inscribe AS I\n  ON E.rut = I.rut;\nLa forma equivalente mostrada repetidamente en Clase 04 es:\nSELECT E.nombre, I.codigo, I.semestre\nFROM Estudiante AS E, Inscribe AS I\nWHERE E.rut = I.rut;\nAmbas separan correctamente las copias de atributos mediante alias; JOIN ... ON hace más visible qué condición pertenece al join.",
+    "crumbs": [
+      "SQL",
+      "SELECT-FROM-WHERE, joins y conjuntos"
+    ]
+  },
+  {
+    "objectID": "sql/consultas-basicas.html#join-más-filtro",
+    "href": "sql/consultas-basicas.html#join-más-filtro",
+    "title": "Consultas SQL: SELECT-FROM-WHERE, joins y conjuntos",
+    "section": "Join más filtro",
+    "text": "Join más filtro\nSELECT E.nombre\nFROM Estudiante AS E\nJOIN Inscribe AS I\n  ON E.rut = I.rut\nWHERE I.codigo = 'IIC2413';\nEn álgebra:\n[ {nombre} ( {codigo=} (EstudianteInscribe) ). ]",
+    "crumbs": [
+      "SQL",
+      "SELECT-FROM-WHERE, joins y conjuntos"
+    ]
+  },
+  {
+    "objectID": "sql/consultas-basicas.html#operadores-de-conjuntos-en-sql",
+    "href": "sql/consultas-basicas.html#operadores-de-conjuntos-en-sql",
+    "title": "Consultas SQL: SELECT-FROM-WHERE, joins y conjuntos",
+    "section": "Operadores de conjuntos en SQL",
+    "text": "Operadores de conjuntos en SQL\nEl fragmento presentado en las clases incluye: (Riveros 2026a, 2026b)\nQ1 UNION Q2\nQ1 UNION ALL Q2\nQ1 INTERSECT Q2\nQ1 INTERSECT ALL Q2\nQ1 EXCEPT Q2\nQ1 EXCEPT ALL Q2\nEl principio general es que ambos lados deben producir el mismo número de columnas y tipos compatibles. Las variantes ALL conservan multiplicidades cuando el dialecto las soporta; su disponibilidad no es uniforme entre motores. (Riveros 2026b)\n\nUNION versus UNION ALL\nUNION elimina duplicados del resultado combinado; UNION ALL los conserva.\nEjemplo:\nSELECT rut\nFROM Inscribe\nWHERE codigo = 'IIC2413'\nUNION\nSELECT rut\nFROM Inscribe\nWHERE codigo = 'IIC2233';\nretorna cada RUT una sola vez.\n\n\nINTERSECT\nSELECT rut\nFROM Inscribe\nWHERE codigo = 'IIC2413'\nINTERSECT\nSELECT rut\nFROM Inscribe\nWHERE codigo = 'IIC2233';\nexpresa estudiantes inscritos en ambos cursos.\n\n\nEXCEPT\nUna combinación inválida por cantidad de columnas sería, por ejemplo:\nSELECT rut, nombre\nFROM Estudiante\nEXCEPT\nSELECT rut\nFROM Inscribe;\nLos dos lados de un operador de conjuntos deben entregar el mismo número de columnas y tipos compatibles. Para expresar «estudiantes sin ninguna inscripción» proyectamos el RUT en ambos lados:\nSELECT rut\nFROM Estudiante\nEXCEPT\nSELECT rut\nFROM Inscribe;\nAhora ambos lados producen una sola columna rut; el resultado son RUT presentes en Estudiante y ausentes en Inscribe.",
+    "crumbs": [
+      "SQL",
+      "SELECT-FROM-WHERE, joins y conjuntos"
+    ]
+  },
+  {
+    "objectID": "sql/consultas-basicas.html#sql-álgebra-y-lógica",
+    "href": "sql/consultas-basicas.html#sql-álgebra-y-lógica",
+    "title": "Consultas SQL: SELECT-FROM-WHERE, joins y conjuntos",
+    "section": "SQL, álgebra y lógica",
+    "text": "SQL, álgebra y lógica\nEl caso básico del curso se resume como:\n[ ((R_1R_k)) Q(x)y.;R_1R_k. ]\nEsta correspondencia se desarrolla formalmente en equivalencia y patrones de consulta. (Riveros 2026b)\n\nResumen\n\nSELECT, FROM y WHERE corresponden naturalmente a proyección, combinación y selección.\nSQL usa semántica de duplicados; DISTINCT permite eliminarlos explícitamente.\nLos alias desambiguan atributos y permiten trabajar con varias copias de relaciones.\nLos joins pueden escribirse de varias formas; una condición explícita evita combinaciones accidentales.\nUNION, INTERSECT y EXCEPT conectan SQL con operadores de conjuntos.",
+    "crumbs": [
+      "SQL",
+      "SELECT-FROM-WHERE, joins y conjuntos"
+    ]
+  },
+  {
+    "objectID": "sql/consultas-basicas.html#conceptos-relacionados",
+    "href": "sql/consultas-basicas.html#conceptos-relacionados",
+    "title": "Consultas SQL: SELECT-FROM-WHERE, joins y conjuntos",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nÁlgebra relacional\nJoins y operadores derivados\nSubconsultas\nAgregación, GROUP BY y HAVING",
+    "crumbs": [
+      "SQL",
+      "SELECT-FROM-WHERE, joins y conjuntos"
+    ]
+  },
+  {
+    "objectID": "nulos/outer-joins.html",
+    "href": "nulos/outer-joins.html",
+    "title": "Outer joins",
+    "section": "",
+    "text": "Un join ordinario solo conserva combinaciones compatibles. Si una fila no tiene compañero en la otra relación, desaparece. Los outer joins preservan ciertas filas sin compañero y completan los atributos faltantes con NULL. La Clase 06 los introduce como mecanismo para modelar datos opcionales. (Riveros 2026)\nEjemplo:\n\nCurso(codigo, nombre, creditos)\nRequisito(codigo, prerrequisito)\n\nUn natural join devuelve solo cursos que tienen al menos un prerrequisito. Si queremos listar todos los cursos, incluidos los que no tienen prerrequisito, necesitamos un left outer join.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Outer joins"
+    ]
+  },
+  {
+    "objectID": "nulos/outer-joins.html#intuición-y-concepto",
+    "href": "nulos/outer-joins.html#intuición-y-concepto",
+    "title": "Outer joins",
+    "section": "",
+    "text": "Un join ordinario solo conserva combinaciones compatibles. Si una fila no tiene compañero en la otra relación, desaparece. Los outer joins preservan ciertas filas sin compañero y completan los atributos faltantes con NULL. La Clase 06 los introduce como mecanismo para modelar datos opcionales. (Riveros 2026)\nEjemplo:\n\nCurso(codigo, nombre, creditos)\nRequisito(codigo, prerrequisito)\n\nUn natural join devuelve solo cursos que tienen al menos un prerrequisito. Si queremos listar todos los cursos, incluidos los que no tienen prerrequisito, necesitamos un left outer join.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Outer joins"
+    ]
+  },
+  {
+    "objectID": "nulos/outer-joins.html#extender-una-tupla-con-null",
+    "href": "nulos/outer-joins.html#extender-una-tupla-con-null",
+    "title": "Outer joins",
+    "section": "Extender una tupla con NULL",
+    "text": "Extender una tupla con NULL\nEl curso supone aquí (NULLData) y define una extensión de tupla. Para una tupla () y un conjunto de atributos (X):\n[ :att()XData{NULL}, ]\ncon\n[ (A)=\n\\[\\begin{cases}\n\\bar\\tau(A), & A\\in att(\\bar\\tau),\\\\\nNULL, & A\\notin att(\\bar\\tau).\n\\end{cases}\\]\n]\n(Riveros 2026)\nEsta operación permite completar una tupla cuando no existe información proveniente de la otra relación.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Outer joins"
+    ]
+  },
+  {
+    "objectID": "nulos/outer-joins.html#left-outer-join",
+    "href": "nulos/outer-joins.html#left-outer-join",
+    "title": "Outer joins",
+    "section": "Left outer join",
+    "text": "Left outer join\nEl left outer join contiene:\n\ntodas las combinaciones del join normal;\ncada tupla de la relación izquierda que no tiene compañero, extendida con NULL en los atributos faltantes. (Riveros 2026)\n\nEn SQL:\nSELECT C.codigo, C.nombre, R.prerrequisito\nFROM Curso AS C\nLEFT OUTER JOIN Requisito AS R\n  ON C.codigo = R.codigo;\nSi IIC1103 no tiene prerrequisito, la fila puede verse como:\n\n\n\n\ncodigo\nnombre\nprerrequisito\n\n\n\n\nIIC1103\nIntroducción a Programación\nNULL\n\n\n\n\nSi un curso tiene dos prerrequisitos, aparecerá una fila por cada coincidencia.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Outer joins"
+    ]
+  },
+  {
+    "objectID": "nulos/outer-joins.html#right-outer-join",
+    "href": "nulos/outer-joins.html#right-outer-join",
+    "title": "Outer joins",
+    "section": "Right outer join",
+    "text": "Right outer join\nEl right outer join es simétrico: preserva las tuplas sin compañero de la relación derecha. La Clase 06 presenta la equivalencia conceptual de intercambiar los lados y usar left outer join. (Riveros 2026)\nSELECT C.codigo, C.nombre, R.prerrequisito\nFROM Curso AS C\nRIGHT OUTER JOIN Requisito AS R\n  ON C.codigo = R.codigo;\nEl soporte de RIGHT OUTER JOIN no ha sido históricamente uniforme entre versiones de todos los motores; debe verificarse en el RDBMS concreto.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Outer joins"
+    ]
+  },
+  {
+    "objectID": "nulos/outer-joins.html#full-outer-join",
+    "href": "nulos/outer-joins.html#full-outer-join",
+    "title": "Outer joins",
+    "section": "Full outer join",
+    "text": "Full outer join\nEl full outer join preserva:\n\nlas coincidencias;\nfilas de la izquierda sin compañero;\nfilas de la derecha sin compañero.\n\nLa definición de Clase 06 lo construye como unión del left y right outer join. (Riveros 2026)\nSELECT ...\nFROM R\nFULL OUTER JOIN S\n  ON condicion;\nEs útil cuando interesa detectar tanto elementos «sin correspondencia a la derecha» como elementos «sin correspondencia a la izquierda».",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Outer joins"
+    ]
+  },
+  {
+    "objectID": "nulos/outer-joins.html#join-ordinario-versus-outer-join",
+    "href": "nulos/outer-joins.html#join-ordinario-versus-outer-join",
+    "title": "Outer joins",
+    "section": "Join ordinario versus outer join",
+    "text": "Join ordinario versus outer join\n\n\n\n\n\n\n\n\n\n\nOperador\nCoincidencias\nIzquierda sin compañero\nDerecha sin compañero\n\n\n\n\nJOIN / INNER JOIN\nsí\nno\nno\n\n\nLEFT OUTER JOIN\nsí\nsí\nno\n\n\nRIGHT OUTER JOIN\nsí\nno\nsí\n\n\nFULL OUTER JOIN\nsí\nsí\nsí",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Outer joins"
+    ]
+  },
+  {
+    "objectID": "nulos/outer-joins.html#condiciones-en-on-y-where",
+    "href": "nulos/outer-joins.html#condiciones-en-on-y-where",
+    "title": "Outer joins",
+    "section": "Condiciones en ON y WHERE",
+    "text": "Condiciones en ON y WHERE\nCon outer joins, mover una condición entre ON y WHERE puede cambiar el resultado.\nSupongamos que queremos conservar todos los cursos y mostrar solo prerrequisitos cuyo código empieza por IIC:\nSELECT C.codigo, R.prerrequisito\nFROM Curso AS C\nLEFT JOIN Requisito AS R\n  ON C.codigo = R.codigo\n AND R.prerrequisito LIKE 'IIC%';\nLa condición forma parte de la coincidencia; un curso sin coincidencia apropiada sigue apareciendo con NULL.\nEn cambio:\nSELECT C.codigo, R.prerrequisito\nFROM Curso AS C\nLEFT JOIN Requisito AS R\n  ON C.codigo = R.codigo\nWHERE R.prerrequisito LIKE 'IIC%';\nel WHERE elimina las filas donde R.prerrequisito es NULL porque la condición no resulta TRUE. Esto puede convertir el efecto observable en algo cercano a un inner join para ese filtro.\nLa explicación depende directamente de la lógica de tres valores.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Outer joins"
+    ]
+  },
+  {
+    "objectID": "nulos/outer-joins.html#outer-join-y-anti-join-no-son-lo-mismo",
+    "href": "nulos/outer-joins.html#outer-join-y-anti-join-no-son-lo-mismo",
+    "title": "Outer joins",
+    "section": "Outer join y anti-join no son lo mismo",
+    "text": "Outer join y anti-join no son lo mismo\nUn anti-join responde «qué tuplas de (R) no tienen compañero en (S)». Un left outer join conserva tanto las coincidencias como las no coincidencias de la izquierda. Para extraer solo las no coincidencias puede usarse un patrón como:\nSELECT C.codigo, C.nombre\nFROM Curso AS C\nLEFT JOIN Requisito AS R\n  ON C.codigo = R.codigo\nWHERE R.codigo IS NULL;\nSin embargo, cuando la intención es simplemente existencia/ausencia, NOT EXISTS suele expresar de manera más directa el anti-join lógico.\n\nResumen\n\nUn join ordinario elimina filas sin compañero.\nLeft, right y full outer join preservan distintos lados y completan atributos con NULL.\nLas condiciones en ON y WHERE no son intercambiables en general con outer joins.\nLa semántica de NULL explica por qué un filtro posterior puede eliminar filas preservadas.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Outer joins"
+    ]
+  },
+  {
+    "objectID": "nulos/outer-joins.html#conceptos-relacionados",
+    "href": "nulos/outer-joins.html#conceptos-relacionados",
+    "title": "Outer joins",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nJoins y operadores derivados\nNULL y lógica de tres valores\nInformación incompleta\nSubconsultas",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Outer joins"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Bases de Datos",
+    "section": "",
+    "text": "Este sitio organiza el material disponible de IIC2413 — Bases de Datos por conceptos. La prioridad editorial es mantener las definiciones y convenciones del curso, y utilizar bibliografía académica para formalizar y profundizar cuando aporta claridad. (Riveros 2026)\nLa primera versión cubre el material desarrollado hasta dependencias funcionales y descomposiciones. Temas anunciados en el programa pero todavía no desarrollados en el material del curso —como formas normales, E/R, procesamiento de consultas o transacciones— no se adelantan artificialmente.",
+    "crumbs": [
+      "Inicio"
+    ]
+  },
+  {
+    "objectID": "index.html#modelo-relacional-consultas-sql-y-diseño",
+    "href": "index.html#modelo-relacional-consultas-sql-y-diseño",
+    "title": "Bases de Datos",
+    "section": "",
+    "text": "Este sitio organiza el material disponible de IIC2413 — Bases de Datos por conceptos. La prioridad editorial es mantener las definiciones y convenciones del curso, y utilizar bibliografía académica para formalizar y profundizar cuando aporta claridad. (Riveros 2026)\nLa primera versión cubre el material desarrollado hasta dependencias funcionales y descomposiciones. Temas anunciados en el programa pero todavía no desarrollados en el material del curso —como formas normales, E/R, procesamiento de consultas o transacciones— no se adelantan artificialmente.",
+    "crumbs": [
+      "Inicio"
+    ]
+  },
+  {
+    "objectID": "index.html#ejemplo-transversal",
+    "href": "index.html#ejemplo-transversal",
+    "title": "Bases de Datos",
+    "section": "Ejemplo transversal",
+    "text": "Ejemplo transversal\nLa mayor parte del sitio utiliza un dominio universitario común:\n\nEstudiante(rut, nombre, carrera)\nCurso(codigo, nombre, creditos)\nProfesor(pid, nombre, departamento)\nInscribe(rut, codigo, semestre)\nDicta(pid, codigo, semestre)\nRequisito(codigo, prerrequisito)\n\nLos ejemplos oficiales del curso se conservan cuando son necesarios para explicar fielmente una definición, una advertencia o un argumento.",
+    "crumbs": [
+      "Inicio"
+    ]
+  },
+  {
+    "objectID": "index.html#mapa-de-contenidos",
+    "href": "index.html#mapa-de-contenidos",
+    "title": "Bases de Datos",
+    "section": "Mapa de contenidos",
+    "text": "Mapa de contenidos\n\n\nFundamentos\nDel concepto de RDBMS a tuplas, relaciones, esquemas, atributos y relaciones nombradas.\nComenzar por el modelo relacional\n\n\nTeoría de consultas\nLógica de primer orden, álgebra relacional, joins, composición y equivalencia expresiva.\nIr a teoría de consultas\n\n\nSQL\nDDL, DML, SELECT-FROM-WHERE, joins, conjuntos, subconsultas, agregación y dialectos.\nIr a SQL\n\n\nNulos e información incompleta\nNULL, lógica de tres valores, mundos posibles, tablas de Codd y outer joins.\nIr a nulos\n\n\nDiseño relacional\nRedundancia, dependencias funcionales, llaves, implicación, clausura y descomposiciones.\nIr a diseño",
+    "crumbs": [
+      "Inicio"
+    ]
+  },
+  {
+    "objectID": "index.html#convenciones-editoriales",
+    "href": "index.html#convenciones-editoriales",
+    "title": "Bases de Datos",
+    "section": "Convenciones editoriales",
+    "text": "Convenciones editoriales\n\nLa notación del curso tiene prioridad; cuando existe una ambigüedad, se explicita.\nSQL se presenta como lenguaje real con semántica de duplicados y particularidades de motor, distinguiéndolo del modelo de conjuntos del álgebra relacional.\nLas definiciones formales, teoremas y propiedades importantes se contrastan con bibliografía de teoría y sistemas de bases de datos. (Arenas et al. 2022; Abiteboul et al. 1995; Garcia-Molina et al. 2009; Silberschatz et al. 2020; Ramakrishnan y Gehrke 2003)\nUna definición se desarrolla en su página principal y, en el resto del sitio, se enlaza en vez de repetirse extensamente.",
+    "crumbs": [
+      "Inicio"
+    ]
+  },
+  {
+    "objectID": "fundamentos/modelo-relacional.html",
+    "href": "fundamentos/modelo-relacional.html",
+    "title": "Modelo relacional: tuplas, relaciones, esquemas y bases de datos",
+    "section": "",
+    "text": "El modelo relacional representa la información mediante relaciones. Antes de introducir atributos con nombre, la Clase 01 construye el modelo desde objetos matemáticos simples: tuplas, producto cartesiano, relaciones, esquemas y bases de datos. (Riveros 2026)\nUsaremos el dominio universitario como ejemplo transversal. En su forma posicional, una tupla de estudiante puede representarse como\n[ (r1, , ). ]\nAquí la posición 1 representa el RUT, la posición 2 el nombre y la posición 3 la carrera. En la página de relaciones nombradas reemplazaremos esta dependencia de posiciones por atributos explícitos.",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Modelo relacional"
+    ]
+  },
+  {
+    "objectID": "fundamentos/modelo-relacional.html#intuición-y-concepto",
+    "href": "fundamentos/modelo-relacional.html#intuición-y-concepto",
+    "title": "Modelo relacional: tuplas, relaciones, esquemas y bases de datos",
+    "section": "",
+    "text": "El modelo relacional representa la información mediante relaciones. Antes de introducir atributos con nombre, la Clase 01 construye el modelo desde objetos matemáticos simples: tuplas, producto cartesiano, relaciones, esquemas y bases de datos. (Riveros 2026)\nUsaremos el dominio universitario como ejemplo transversal. En su forma posicional, una tupla de estudiante puede representarse como\n[ (r1, , ). ]\nAquí la posición 1 representa el RUT, la posición 2 el nombre y la posición 3 la carrera. En la página de relaciones nombradas reemplazaremos esta dependencia de posiciones por atributos explícitos.",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Modelo relacional"
+    ]
+  },
+  {
+    "objectID": "fundamentos/modelo-relacional.html#tuplas",
+    "href": "fundamentos/modelo-relacional.html#tuplas",
+    "title": "Modelo relacional: tuplas, relaciones, esquemas y bases de datos",
+    "section": "Tuplas",
+    "text": "Tuplas\n\n\n\n\n\n\nNotaDefinición formal\n\n\n\nUna (k)-tupla (t) es una secuencia ordenada de (k) elementos:\n[ t := (a_1,a_2,,a_k). ]\nCuando (k=0), (t=()) es la tupla vacía. (Riveros 2026; Arenas et al. 2022)\n\n\nEl orden y la repetición importan en una tupla:\n[ (a,b,c)(c,b,a), (a,a,b)(a,b). ]\nEn cambio, en un conjunto el orden y la multiplicidad no importan.\nPara (t=(a_1,,a_n)), el curso usa:\n\n(t[i]=a_i) para el elemento en posición (i);\n({t}={a_1,,a_n}) para el conjunto de elementos mencionados por la tupla. (Riveros 2026)\n\nLa tupla vacía no debe confundirse con el conjunto vacío:\n[ (), {()}. ]",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Modelo relacional"
+    ]
+  },
+  {
+    "objectID": "fundamentos/modelo-relacional.html#producto-cartesiano",
+    "href": "fundamentos/modelo-relacional.html#producto-cartesiano",
+    "title": "Modelo relacional: tuplas, relaciones, esquemas y bases de datos",
+    "section": "Producto cartesiano",
+    "text": "Producto cartesiano\nPara conjuntos (A_1,,A_k), el producto cartesiano es\n[ A_1A_k := {(a_1,,a_k)a_iA_ii}. ]\nEs el conjunto de todas las (k)-tuplas que pueden formarse tomando un elemento de cada conjunto. (Riveros 2026)\nPara un conjunto (A), la notación del curso es\n[ A^k=_{k}, A^0={()}. ]",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Modelo relacional"
+    ]
+  },
+  {
+    "objectID": "fundamentos/modelo-relacional.html#relaciones",
+    "href": "fundamentos/modelo-relacional.html#relaciones",
+    "title": "Modelo relacional: tuplas, relaciones, esquemas y bases de datos",
+    "section": "Relaciones",
+    "text": "Relaciones\n\n\n\n\n\n\nNotaDefinición formal\n\n\n\nUna (k)-relación (R) es un conjunto finito de (k)-tuplas. En particular, para conjuntos apropiados (A_1,,A_k):\n[ RA_1A_k. ]\n(Riveros 2026)\n\n\nPor ejemplo, una relación posicional Estudiante puede ser\n[ {(r1,,), (r2,,), (r3,,)}. ]\nComo una relación es un conjunto:\n\nno tiene un orden intrínseco entre sus tuplas;\nno contiene la misma tupla más de una vez.\n\n\n\n\n\n\n\nAdvertenciaRelaciones, tablas y orden\n\n\n\nLa Clase 01 contrasta las relaciones matemáticas con una representación tabular, indicando que una tabla puede mostrar filas en un orden y puede contener filas repetidas. (Riveros 2026)\nEn SQL, sin embargo, el orden de las filas de una consulta no está garantizado sin ORDER BY. Por eso, en este sitio distinguiremos siempre entre el objeto matemático —la relación— y su visualización concreta como tabla.",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Modelo relacional"
+    ]
+  },
+  {
+    "objectID": "fundamentos/modelo-relacional.html#esquema-relacional",
+    "href": "fundamentos/modelo-relacional.html#esquema-relacional",
+    "title": "Modelo relacional: tuplas, relaciones, esquemas y bases de datos",
+    "section": "Esquema relacional",
+    "text": "Esquema relacional\nSea Data un conjunto fijo de datos posibles. La Clase 01 define un esquema mediante los nombres de las relaciones y sus aridades. (Riveros 2026)\n\n\n\n\n\n\nNotaDefinición formal\n\n\n\nUn esquema de base de datos es un par\n[ S=(N,ar), ]\ndonde:\n\n(N) es un conjunto de nombres de relaciones;\n(ar:NN) asigna a cada nombre su aridad. (Riveros 2026)\n\n\n\nPara el ejemplo universitario, una parte del esquema puede representarse por\n[ N={,,} ]\ncon\n[ ar()=3, ar()=3, ar()=3. ]\nEl esquema describe la forma de la base de datos, no sus valores actuales.",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Modelo relacional"
+    ]
+  },
+  {
+    "objectID": "fundamentos/modelo-relacional.html#base-de-datos-de-un-esquema",
+    "href": "fundamentos/modelo-relacional.html#base-de-datos-de-un-esquema",
+    "title": "Modelo relacional: tuplas, relaciones, esquemas y bases de datos",
+    "section": "Base de datos de un esquema",
+    "text": "Base de datos de un esquema\nSea Rel el conjunto de todas las relaciones finitas sobre Data:\n[ Rel={RRData^k, |R|&lt;kN}. ]\n\n\n\n\n\n\nNotaDefinición formal\n\n\n\nDado un esquema (S=(N,ar)), una base de datos (D) de (S) es una función\n[ D:NRel ]\ntal que, para cada (RN),\n[ D(R)Data^{ar(R)}. ]\n(Riveros 2026)\n\n\nAsí, D(Estudiante) es la relación concreta almacenada para ese nombre, mientras que ar(Estudiante)=3 pertenece al esquema.",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Modelo relacional"
+    ]
+  },
+  {
+    "objectID": "fundamentos/modelo-relacional.html#dominio-de-la-base-de-datos",
+    "href": "fundamentos/modelo-relacional.html#dominio-de-la-base-de-datos",
+    "title": "Modelo relacional: tuplas, relaciones, esquemas y bases de datos",
+    "section": "Dominio de la base de datos",
+    "text": "Dominio de la base de datos\nLa Clase 01 define el dominio activo de una base de datos como los datos que efectivamente aparecen en sus relaciones:\n[ Dom(D) := {RN} {tD(R)} {t}. ]\nEsta noción será importante al definir la semántica de las consultas de primer orden. (Riveros 2026)",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Modelo relacional"
+    ]
+  },
+  {
+    "objectID": "fundamentos/modelo-relacional.html#forma-y-contenido",
+    "href": "fundamentos/modelo-relacional.html#forma-y-contenido",
+    "title": "Modelo relacional: tuplas, relaciones, esquemas y bases de datos",
+    "section": "Forma y contenido",
+    "text": "Forma y contenido\nLa distinción esencial es:\n\nesquema: estructura relativamente estable de la base de datos;\nbase de datos o instancia: relaciones concretas que cumplen ese esquema en un momento dado.\n\nEsta separación entre esquema e instancia es estándar en el modelo relacional y reaparece en SQL cuando CREATE TABLE define estructura e INSERT, UPDATE y DELETE modifican datos. (Silberschatz et al. 2020; Ramakrishnan y Gehrke 2003)\n\nResumen\n\nUna tupla es una secuencia ordenada; una relación es un conjunto finito de tuplas.\nLas relaciones no tienen duplicados ni orden intrínseco.\nEl esquema (S=(N,ar)) define nombres y aridades.\nUna base de datos (D) asigna a cada nombre una relación compatible con el esquema.\n(Dom(D)) contiene los datos que aparecen efectivamente en la instancia.",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Modelo relacional"
+    ]
+  },
+  {
+    "objectID": "fundamentos/modelo-relacional.html#conceptos-relacionados",
+    "href": "fundamentos/modelo-relacional.html#conceptos-relacionados",
+    "title": "Modelo relacional: tuplas, relaciones, esquemas y bases de datos",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nAtributos y relaciones nombradas\nLógica de primer orden y consultas\nÁlgebra relacional\nDDL y DML",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Modelo relacional"
+    ]
+  },
+  {
+    "objectID": "diseno/descomposiciones.html",
+    "href": "diseno/descomposiciones.html",
+    "title": "Descomposiciones y pérdida de información",
+    "section": "",
+    "text": "Las dependencias funcionales explican por qué una relación redundante puede sufrir anomalías. Una estrategia de diseño es descomponerla en relaciones más pequeñas. El riesgo es que al separar atributos perdamos la capacidad de reconstruir exactamente la información original. La Clase 08 formaliza esta tensión mediante descomposiciones y joins. (Riveros 2026a)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Descomposiciones y pérdida de información"
+    ]
+  },
+  {
+    "objectID": "diseno/descomposiciones.html#intuición-y-concepto",
+    "href": "diseno/descomposiciones.html#intuición-y-concepto",
+    "title": "Descomposiciones y pérdida de información",
+    "section": "",
+    "text": "Las dependencias funcionales explican por qué una relación redundante puede sufrir anomalías. Una estrategia de diseño es descomponerla en relaciones más pequeñas. El riesgo es que al separar atributos perdamos la capacidad de reconstruir exactamente la información original. La Clase 08 formaliza esta tensión mediante descomposiciones y joins. (Riveros 2026a)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Descomposiciones y pérdida de información"
+    ]
+  },
+  {
+    "objectID": "diseno/descomposiciones.html#relación-redundante-de-ejemplo",
+    "href": "diseno/descomposiciones.html#relación-redundante-de-ejemplo",
+    "title": "Descomposiciones y pérdida de información",
+    "section": "Relación redundante de ejemplo",
+    "text": "Relación redundante de ejemplo\nConsideremos:\n[ InscripcionDetallada(rut,nombreEst,carrera,codigo,nombreCurso,creditos,semestre) ]\ncon dependencias del dominio como\n[ rutnombreEst carrera, codigonombreCurso creditos. ]\nLa relación repite datos de estudiante y de curso en cada inscripción.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Descomposiciones y pérdida de información"
+    ]
+  },
+  {
+    "objectID": "diseno/descomposiciones.html#descomposición-binaria",
+    "href": "diseno/descomposiciones.html#descomposición-binaria",
+    "title": "Descomposiciones y pérdida de información",
+    "section": "Descomposición binaria",
+    "text": "Descomposición binaria\n\n\n\n\n\n\nNotaDefinición de Clase 08\n\n\n\nUna descomposición de una relación (R) en listas de atributos (A) y (B) consiste en\n[ att(R)={A}{B}, ]\n[ S={A}(R), T={B}(R). ]\n(Riveros 2026a)\n\n\nUna descomposición con más de dos relaciones puede obtenerse aplicando sucesivamente descomposiciones binarias.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Descomposiciones y pérdida de información"
+    ]
+  },
+  {
+    "objectID": "diseno/descomposiciones.html#un-primer-paso-útil",
+    "href": "diseno/descomposiciones.html#un-primer-paso-útil",
+    "title": "Descomposiciones y pérdida de información",
+    "section": "Un primer paso útil",
+    "text": "Un primer paso útil\nTomemos\n[ A=(rut,nombreEst,carrera), ]\n[ B=(rut,codigo,nombreCurso,creditos,semestre). ]\nEntonces:\n[ S=_{rut,nombreEst,carrera}(InscripcionDetallada), ]\n[ T=_{rut,codigo,nombreCurso,creditos,semestre}(InscripcionDetallada). ]\nLa proyección elimina repeticiones idénticas porque el álgebra relacional usa conjuntos.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Descomposiciones y pérdida de información"
+    ]
+  },
+  {
+    "objectID": "diseno/descomposiciones.html#reconstrucción-y-tuplas-espurias",
+    "href": "diseno/descomposiciones.html#reconstrucción-y-tuplas-espurias",
+    "title": "Descomposiciones y pérdida de información",
+    "section": "Reconstrucción y tuplas espurias",
+    "text": "Reconstrucción y tuplas espurias\nUna vez separadas las relaciones intentamos reconstruir con\n[ ST. ]\nSiempre recuperaremos las tuplas originales en esta construcción por proyección, pero el join puede producir tuplas adicionales cuando los atributos compartidos no conservan suficiente información para emparejar correctamente las partes. Esas combinaciones adicionales se conocen como tuplas espurias en la bibliografía de diseño relacional. (Silberschatz et al. 2020; Garcia-Molina et al. 2009)\n\nEjemplo de una mala elección\nSupongamos que de una relación con\n\n\n\n\nrut\nnombreEst\ncodigo\nnombreCurso\n\n\n\n\nr2\nBen\nIIC2233\nProgramación Avanzada\n\n\nr2\nBen\nIIC2413\nBases de Datos\n\n\n\n\nformamos:\n[ X=_{rut,nombreEst,codigo}(R) ]\ny\n[ Y=_{rut,nombreCurso}(R). ]\nEl atributo compartido es solo rut. Al hacer (XY), cada código de Ben puede combinarse con cada nombre de curso de Ben. Aparecen asociaciones falsas como IIC2233 con Bases de Datos.\nLa información no desapareció de las proyecciones, pero la separación olvidó qué nombre de curso correspondía a qué código.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Descomposiciones y pérdida de información"
+    ]
+  },
+  {
+    "objectID": "diseno/descomposiciones.html#descomposición-sin-pérdida",
+    "href": "diseno/descomposiciones.html#descomposición-sin-pérdida",
+    "title": "Descomposiciones y pérdida de información",
+    "section": "Descomposición sin pérdida",
+    "text": "Descomposición sin pérdida\n\n\n\n\n\n\nNotaDefinición de Clase 08\n\n\n\nSean (S={A}(R)) y (T={B}(R)). La descomposición es sin pérdida para (R) si\n[ R=ST. ]\n(Riveros 2026a)\n\n\nEsta igualdad exige dos cosas:\n\nel join recupere todas las tuplas originales;\nno genere ninguna tupla espuria.\n\n\n\n\n\n\n\nAdvertenciaNivel de generalidad\n\n\n\nLa Clase 08 define aquí la propiedad respecto de una relación (R) concreta. La teoría de normalización estudia condiciones para garantizar pérdida cero para todas las relaciones que satisfacen ciertas dependencias. Como las formas normales todavía no aparecen en el material disponible, no adelantamos esas condiciones en esta página.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Descomposiciones y pérdida de información"
+    ]
+  },
+  {
+    "objectID": "diseno/descomposiciones.html#dependencias-después-de-descomponer",
+    "href": "diseno/descomposiciones.html#dependencias-después-de-descomponer",
+    "title": "Descomposiciones y pérdida de información",
+    "section": "Dependencias después de descomponer",
+    "text": "Dependencias después de descomponer\nNo basta con conocer las dependencias escritas originalmente dentro de cada lado. También debemos considerar las que están implicadas por (F) y usan solo atributos de la nueva relación.\nLa Clase 08 define, para el lado (S) con atributos (A):\n[ F_S := {XY FXY, {X}{A}, {Y}{A} }. ]\nAnálogamente, para (T):\n[ F_T := {ZU FZU, {Z}{B}, {U}{B} }. ]\n(Riveros 2026a)\nEsta operación suele llamarse proyección de dependencias sobre los atributos de una relación.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Descomposiciones y pérdida de información"
+    ]
+  },
+  {
+    "objectID": "diseno/descomposiciones.html#ejemplo-de-dependencias-proyectadas",
+    "href": "diseno/descomposiciones.html#ejemplo-de-dependencias-proyectadas",
+    "title": "Descomposiciones y pérdida de información",
+    "section": "Ejemplo de dependencias proyectadas",
+    "text": "Ejemplo de dependencias proyectadas\nSea\n[ R(rut,nombreEst,codigo,nombreCurso) ]\ncon\n[ F={rutnombreEst,;codigonombreCurso}. ]\nSi descomponemos en\n[ A={rut,nombreEst,codigo} ]\ny\n[ B={codigo,nombreCurso}, ]\nentonces, entre otras dependencias triviales:\n[ rutnombreEstF_A, ]\n[ codigonombreCursoF_B. ]\nLas reglas de cada componente deben obtenerse a partir de todas las consecuencias de (F) que permanecen dentro de sus atributos, no solo copiando textualmente dependencias originales.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Descomposiciones y pérdida de información"
+    ]
+  },
+  {
+    "objectID": "diseno/descomposiciones.html#algoritmo-presentado-en-clase-08",
+    "href": "diseno/descomposiciones.html#algoritmo-presentado-en-clase-08",
+    "title": "Descomposiciones y pérdida de información",
+    "section": "Algoritmo presentado en Clase 08",
+    "text": "Algoritmo presentado en Clase 08\nPara calcular (F_S), la clase propone enumerar subconjuntos no vacíos (X) de los atributos de (S), calcular (X^+) bajo (F), y agregar la parte de la clausura que permanece dentro de (S). (Riveros 2026a)\nEn forma conceptual:\nreglas &lt;- conjunto vacío\npara cada X no vacío contenido en atributos(S):\n  calcular X+ según F\n  Y &lt;- (X+ - X) intersección atributos(S)\n  si Y no es vacío:\n    agregar X -&gt; Y a reglas\nretornar reglas\nEste algoritmo reutiliza directamente la clausura de atributos.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Descomposiciones y pérdida de información"
+    ]
+  },
+  {
+    "objectID": "diseno/descomposiciones.html#qué-falta-para-normalización",
+    "href": "diseno/descomposiciones.html#qué-falta-para-normalización",
+    "title": "Descomposiciones y pérdida de información",
+    "section": "Qué falta para normalización",
+    "text": "Qué falta para normalización\nCon el material actual ya podemos formular tres preguntas de diseño:\n\n¿qué redundancias sugieren las dependencias funcionales?\n¿la descomposición permite reconstruir la relación sin información espuria?\n¿qué dependencias quedan vigentes en cada componente?\n\nEl paso siguiente será estudiar formas normales y algoritmos sistemáticos de descomposición. Ese contenido aparece en el programa, pero aún no está desarrollado en las clases disponibles, así que no se incorpora todavía. (Riveros 2026b)\n\nResumen\n\nUna descomposición binaria se obtiene proyectando una relación sobre dos conjuntos de atributos cuya unión cubre el esquema original.\nEl join de las proyecciones puede producir combinaciones espurias.\nUna descomposición es sin pérdida para (R) cuando (R=ST).\nLas dependencias de cada componente incluyen todas las consecuencias de (F) que solo mencionan sus atributos.\nLa clausura permite calcular esas dependencias proyectadas.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Descomposiciones y pérdida de información"
+    ]
+  },
+  {
+    "objectID": "diseno/descomposiciones.html#conceptos-relacionados",
+    "href": "diseno/descomposiciones.html#conceptos-relacionados",
+    "title": "Descomposiciones y pérdida de información",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nDependencias funcionales y llaves\nImplicación y clausura\nJoins y operadores derivados",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Descomposiciones y pérdida de información"
+    ]
+  },
+  {
+    "objectID": "diseno/dependencias-llaves.html",
+    "href": "diseno/dependencias-llaves.html",
+    "title": "Redundancia, dependencias funcionales y llaves",
+    "section": "",
+    "text": "Una base de datos puede almacenar información correcta y aun así tener un mal esquema. La Clase 07 parte de una pregunta de diseño: ¿conviene almacenar todo en una sola relación o fragmentarlo en muchas relaciones pequeñas? Ninguno de los extremos es correcto por sí mismo. (Riveros 2026)\nEl objetivo es diseñar un esquema que favorezca:\n\nintegridad y consistencia de los datos;\nrepresentación precisa del dominio;\neficiencia en tiempo y espacio;\nflexibilidad frente a cambios. (Riveros 2026)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Redundancia, dependencias funcionales y llaves"
+    ]
+  },
+  {
+    "objectID": "diseno/dependencias-llaves.html#intuición-por-qué-diseñar-relaciones",
+    "href": "diseno/dependencias-llaves.html#intuición-por-qué-diseñar-relaciones",
+    "title": "Redundancia, dependencias funcionales y llaves",
+    "section": "",
+    "text": "Una base de datos puede almacenar información correcta y aun así tener un mal esquema. La Clase 07 parte de una pregunta de diseño: ¿conviene almacenar todo en una sola relación o fragmentarlo en muchas relaciones pequeñas? Ninguno de los extremos es correcto por sí mismo. (Riveros 2026)\nEl objetivo es diseñar un esquema que favorezca:\n\nintegridad y consistencia de los datos;\nrepresentación precisa del dominio;\neficiencia en tiempo y espacio;\nflexibilidad frente a cambios. (Riveros 2026)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Redundancia, dependencias funcionales y llaves"
+    ]
+  },
+  {
+    "objectID": "diseno/dependencias-llaves.html#redundancia-y-anomalías",
+    "href": "diseno/dependencias-llaves.html#redundancia-y-anomalías",
+    "title": "Redundancia, dependencias funcionales y llaves",
+    "section": "Redundancia y anomalías",
+    "text": "Redundancia y anomalías\nConsideremos una relación deliberadamente redundante:\n\n\n\n\n\n\n\n\n\n\n\n\n\nrut\nestudiante\ncarrera\ncodigo\ncurso\ncreditos\nsemestre\n\n\n\n\nr2\nBen\nComputación\nIIC2233\nProgramación Avanzada\n10\n2025-1\n\n\nr2\nBen\nComputación\nIIC2413\nBases de Datos\n10\n2025-2\n\n\nr3\nZoe\nComputación\nIIC2233\nProgramación Avanzada\n10\n2024-2\n\n\nr3\nZoe\nComputación\nIIC2413\nBases de Datos\n10\n2025-2\n\n\n\n\nLa carrera de Ben se repite; también el nombre y créditos de cada curso.\nLa Clase 07 presenta tres anomalías clásicas asociadas a redundancia. (Riveros 2026; Silberschatz et al. 2020)\n\nAnomalía de actualización\nSi IIC2413 cambia su nombre, hay que modificar varias filas. Si una queda sin actualizar, la relación pasa a afirmar dos nombres distintos para el mismo código.\n\n\nAnomalía de eliminación\nSi eliminamos la última inscripción de cierto curso y los datos del curso solo existen dentro de esta relación, podemos perder accidentalmente el nombre y sus créditos.\n\n\nAnomalía de inserción\nSi queremos registrar un curso nuevo antes de que tenga estudiantes inscritos, el esquema combinado puede obligarnos a inventar datos de inscripción o usar nulos innecesarios.\nEl ejemplo oficial de Clase 07 muestra los mismos fenómenos con una relación Movies. Lo importante no es el dominio concreto, sino que la repetición proviene de dependencias entre atributos. (Riveros 2026)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Redundancia, dependencias funcionales y llaves"
+    ]
+  },
+  {
+    "objectID": "diseno/dependencias-llaves.html#dependencias-funcionales",
+    "href": "diseno/dependencias-llaves.html#dependencias-funcionales",
+    "title": "Redundancia, dependencias funcionales y llaves",
+    "section": "Dependencias funcionales",
+    "text": "Dependencias funcionales\nSea (R) una relación nombrada y sean (A) y (B) listas de atributos de (R).\n\n\n\n\n\n\nNotaDefinición formal\n\n\n\nUna dependencia funcional tiene la forma\n[ AB. ]\nLa relación (R) satisface esa dependencia, escrito\n[ RAB, ]\nsi para todas (_1,_2R):\n[ _{A}(1)={A}(2) {B}(1)={B}(_2). ]\n(Riveros 2026; Arenas et al. 2022)\n\n\nIntuitivamente: si dos tuplas coinciden en (A), entonces deben coincidir en (B).",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Redundancia, dependencias funcionales y llaves"
+    ]
+  },
+  {
+    "objectID": "diseno/dependencias-llaves.html#dependencias-del-dominio-universitario",
+    "href": "diseno/dependencias-llaves.html#dependencias-del-dominio-universitario",
+    "title": "Redundancia, dependencias funcionales y llaves",
+    "section": "Dependencias del dominio universitario",
+    "text": "Dependencias del dominio universitario\nEn el esquema acordado, son naturales restricciones como:\n[ rutnombre carrera ]\npara Estudiante,\n[ codigonombre creditos ]\npara Curso, y\n[ pidnombre departamento ]\npara Profesor.\nEstas dependencias no se justifican porque «casualmente» la instancia actual tenga valores distintos. Representan reglas del dominio: un RUT identifica los datos de un estudiante; un código identifica la información de un curso; un PID identifica un profesor.\n\n\n\n\n\n\nAdvertenciaInstancia versus restricción del dominio\n\n\n\nLa Clase 07 enfatiza que una dependencia funcional no debe inferirse solo observando una instancia. Una tabla pequeña puede satisfacer accidentalmente muchas dependencias que dejarían de cumplirse al insertar nuevos datos. Las dependencias relevantes para diseño son restricciones que el dominio pretende mantener. (Riveros 2026)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Redundancia, dependencias funcionales y llaves"
+    ]
+  },
+  {
+    "objectID": "diseno/dependencias-llaves.html#dependencias-triviales",
+    "href": "diseno/dependencias-llaves.html#dependencias-triviales",
+    "title": "Redundancia, dependencias funcionales y llaves",
+    "section": "Dependencias triviales",
+    "text": "Dependencias triviales\nUna dependencia\n[ AB ]\nes trivial cuando los atributos de (B) ya están contenidos en (A). En ese caso siempre se satisface, porque dos tuplas que coinciden en (A) necesariamente coinciden en cualquier subconjunto de esos atributos. (Riveros 2026)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Redundancia, dependencias funcionales y llaves"
+    ]
+  },
+  {
+    "objectID": "diseno/dependencias-llaves.html#superllaves",
+    "href": "diseno/dependencias-llaves.html#superllaves",
+    "title": "Redundancia, dependencias funcionales y llaves",
+    "section": "Superllaves",
+    "text": "Superllaves\n\n\n\n\n\n\nNotaDefinición del curso\n\n\n\nSea (A^c) el complemento de los atributos (A) dentro de (R). (A) es una superllave de (R) si y solo si\n[ RAA^c. ]\nEs decir, (A) determina todos los demás atributos. (Riveros 2026)\n\n\nEquivalentemente, la Clase 07 demuestra la caracterización:\n[ A _1,2R, ; {A}(1)={A}(_2) _1=_2. ]\nPor tanto, una superllave identifica unívocamente cada tupla.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Redundancia, dependencias funcionales y llaves"
+    ]
+  },
+  {
+    "objectID": "diseno/dependencias-llaves.html#llaves",
+    "href": "diseno/dependencias-llaves.html#llaves",
+    "title": "Redundancia, dependencias funcionales y llaves",
+    "section": "Llaves",
+    "text": "Llaves\nUna llave es una superllave minimal:\n\n(A) es superllave;\nningún subconjunto propio de sus atributos sigue siendo superllave. (Riveros 2026)\n\nPara Estudiante(rut,nombre,carrera), si el dominio garantiza que cada estudiante tiene un único RUT, entonces:\n\nrut es llave;\nrut nombre es superllave, pero no llave, porque contiene una superllave más pequeña.\n\nPara Inscribe(rut,codigo,semestre), si el dominio garantiza a lo sumo una inscripción por estudiante, curso y semestre, el conjunto de los tres atributos puede declararse como llave. Esta es una decisión de modelamiento que debe confirmarse con los requisitos del dominio.\n\n\n\n\n\n\nNotaTerminología\n\n\n\nLa diapositiva de Clase 07 muestra «superset key» como traducción inglesa de superllave. La terminología estándar de la bibliografía es superkey, que es la que usaremos en el sitio. (Silberschatz et al. 2020; Ramakrishnan y Gehrke 2003)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Redundancia, dependencias funcionales y llaves"
+    ]
+  },
+  {
+    "objectID": "diseno/dependencias-llaves.html#llaves-en-sql",
+    "href": "diseno/dependencias-llaves.html#llaves-en-sql",
+    "title": "Redundancia, dependencias funcionales y llaves",
+    "section": "Llaves en SQL",
+    "text": "Llaves en SQL\nEl curso presenta la sintaxis:\nCREATE TABLE Estudiante (\n  rut     VARCHAR(12),\n  nombre  VARCHAR(100),\n  carrera VARCHAR(100),\n  PRIMARY KEY (rut)\n);\nPara una llave compuesta:\nCREATE TABLE Inscribe (\n  rut      VARCHAR(12),\n  codigo   VARCHAR(20),\n  semestre VARCHAR(10),\n  PRIMARY KEY (rut, codigo, semestre)\n);\nPRIMARY KEY declara una llave primaria elegida para la tabla. La teoría puede admitir más de una llave candidata; SQL distingue cuál se declara como primaria. (Riveros 2026; Silberschatz et al. 2020)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Redundancia, dependencias funcionales y llaves"
+    ]
+  },
+  {
+    "objectID": "diseno/dependencias-llaves.html#qué-problema-resolvimos-y-cuál-falta",
+    "href": "diseno/dependencias-llaves.html#qué-problema-resolvimos-y-cuál-falta",
+    "title": "Redundancia, dependencias funcionales y llaves",
+    "section": "Qué problema resolvimos y cuál falta",
+    "text": "Qué problema resolvimos y cuál falta\nLas dependencias funcionales formalizan regularidades que explican redundancia y permiten reconocer llaves. Aún falta responder preguntas como:\n\n¿qué dependencias se deducen de otras?\n¿cómo decidir algorítmicamente si un conjunto de atributos es superllave?\n¿cómo descomponer una relación sin introducir información falsa?\n\nEstas preguntas conducen a implicación y clausura y luego a descomposiciones.\n\nResumen\n\nLa redundancia puede producir anomalías de actualización, eliminación e inserción.\nUna dependencia funcional (AB) exige que coincidencia en (A) implique coincidencia en (B).\nLas dependencias relevantes son restricciones del dominio, no coincidencias accidentales de una instancia.\nUna superllave determina todos los atributos; una llave es una superllave minimal.\nPRIMARY KEY materializa en SQL una llave elegida para la tabla.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Redundancia, dependencias funcionales y llaves"
+    ]
+  },
+  {
+    "objectID": "diseno/dependencias-llaves.html#conceptos-relacionados",
+    "href": "diseno/dependencias-llaves.html#conceptos-relacionados",
+    "title": "Redundancia, dependencias funcionales y llaves",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nImplicación y clausura\nDescomposiciones y pérdida de información\nDDL y DML\nÁlgebra relacional",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Redundancia, dependencias funcionales y llaves"
+    ]
+  },
+  {
+    "objectID": "diseno/implicacion-clausura.html",
+    "href": "diseno/implicacion-clausura.html",
+    "title": "Razonamiento con dependencias: implicación y clausura",
+    "section": "",
+    "text": "Una base de datos rara vez tiene una sola dependencia funcional. Cuando conocemos un conjunto (F), algunas dependencias adicionales se siguen lógicamente de él. La Clase 08 formaliza este razonamiento y presenta la clausura de atributos como herramienta algorítmica. (Riveros 2026)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Implicación y clausura"
+    ]
+  },
+  {
+    "objectID": "diseno/implicacion-clausura.html#intuición-y-concepto",
+    "href": "diseno/implicacion-clausura.html#intuición-y-concepto",
+    "title": "Razonamiento con dependencias: implicación y clausura",
+    "section": "",
+    "text": "Una base de datos rara vez tiene una sola dependencia funcional. Cuando conocemos un conjunto (F), algunas dependencias adicionales se siguen lógicamente de él. La Clase 08 formaliza este razonamiento y presenta la clausura de atributos como herramienta algorítmica. (Riveros 2026)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Implicación y clausura"
+    ]
+  },
+  {
+    "objectID": "diseno/implicacion-clausura.html#satisfacción-de-un-conjunto-de-dependencias",
+    "href": "diseno/implicacion-clausura.html#satisfacción-de-un-conjunto-de-dependencias",
+    "title": "Razonamiento con dependencias: implicación y clausura",
+    "section": "Satisfacción de un conjunto de dependencias",
+    "text": "Satisfacción de un conjunto de dependencias\nSea (F) un conjunto de dependencias funcionales.\n[ RF ]\nsignifica que (R) satisface cada dependencia de (F):\n[ RF (AB)F, ;RAB. ]\n(Riveros 2026)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Implicación y clausura"
+    ]
+  },
+  {
+    "objectID": "diseno/implicacion-clausura.html#implicación",
+    "href": "diseno/implicacion-clausura.html#implicación",
+    "title": "Razonamiento con dependencias: implicación y clausura",
+    "section": "Implicación",
+    "text": "Implicación\n\n\n\n\n\n\nNotaDefinición formal\n\n\n\nDecimos que (F) implica (F’), escrito\n[ FF’, ]\nsi para toda relación (R):\n[ RF RF’. ]\n(Riveros 2026; Arenas et al. 2022)\n\n\nPara una sola dependencia escribimos, por ejemplo,\n[ FAC. ]\nEsto no pregunta si una instancia concreta satisface (AC), sino si toda relación que respete (F) necesariamente debe respetarla.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Implicación y clausura"
+    ]
+  },
+  {
+    "objectID": "diseno/implicacion-clausura.html#equivalencia-de-conjuntos",
+    "href": "diseno/implicacion-clausura.html#equivalencia-de-conjuntos",
+    "title": "Razonamiento con dependencias: implicación y clausura",
+    "section": "Equivalencia de conjuntos",
+    "text": "Equivalencia de conjuntos\n(F) y (F’) son equivalentes cuando tienen exactamente los mismos modelos:\n[ FF’ R, RF RF’. ]\n(Riveros 2026)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Implicación y clausura"
+    ]
+  },
+  {
+    "objectID": "diseno/implicacion-clausura.html#reglas-trabajadas-en-clase",
+    "href": "diseno/implicacion-clausura.html#reglas-trabajadas-en-clase",
+    "title": "Razonamiento con dependencias: implicación y clausura",
+    "section": "Reglas trabajadas en clase",
+    "text": "Reglas trabajadas en clase\nLa Clase 08 introduce explícitamente dos reglas de razonamiento. (Riveros 2026)\n\nDividir y juntar\n[ {AB_1B_m} {AB_1,,AB_m}. ]\nPor ejemplo:\n[ codigonombre creditos ]\nes equivalente a\n[ {codigonombre,;codigocreditos}. ]\n\n\nTransitividad\n[ {AB,;BC} AC. ]\nSi un atributo determina otro, y ese segundo determina un tercero, el primero determina el tercero.\nLa bibliografía presenta sistemas axiomáticos completos para dependencias funcionales, pero el material del curso disponible hasta Clase 08 solo necesita estas reglas y el algoritmo de clausura. No adelantaremos una página separada de axiomas de Armstrong todavía. (Silberschatz et al. 2020; Garcia-Molina et al. 2009)",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Implicación y clausura"
+    ]
+  },
+  {
+    "objectID": "diseno/implicacion-clausura.html#dos-problemas-algorítmicos",
+    "href": "diseno/implicacion-clausura.html#dos-problemas-algorítmicos",
+    "title": "Razonamiento con dependencias: implicación y clausura",
+    "section": "Dos problemas algorítmicos",
+    "text": "Dos problemas algorítmicos\nLa Clase 08 plantea: dado (F), (Riveros 2026)\n\n¿es (A) una superllave?\n¿se cumple (FAB)?\n\nAmbos se resuelven calculando la clausura de (A).",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Implicación y clausura"
+    ]
+  },
+  {
+    "objectID": "diseno/implicacion-clausura.html#clausura-de-atributos",
+    "href": "diseno/implicacion-clausura.html#clausura-de-atributos",
+    "title": "Razonamiento con dependencias: implicación y clausura",
+    "section": "Clausura de atributos",
+    "text": "Clausura de atributos\n\n\n\n\n\n\nNotaDefinición formal\n\n\n\nLa clausura de (A) bajo (F) es\n[ A^+ := {BFAB}. ]\n(Riveros 2026)\n\n\nContiene exactamente los atributos individuales que están funcionalmente determinados por (A) según (F).",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Implicación y clausura"
+    ]
+  },
+  {
+    "objectID": "diseno/implicacion-clausura.html#ejemplo-universitario",
+    "href": "diseno/implicacion-clausura.html#ejemplo-universitario",
+    "title": "Razonamiento con dependencias: implicación y clausura",
+    "section": "Ejemplo universitario",
+    "text": "Ejemplo universitario\nSupongamos una relación auxiliar\n[ InscripcionDetallada(rut,nombreEst,carrera,codigo,nombreCurso,creditos) ]\ncon\n[ F={ rutnombreEst carrera, codigonombreCurso creditos }. ]\nEntonces:\n[ {rut,codigo}^+ = {rut,codigo,nombreEst,carrera,nombreCurso,creditos}. ]\nPor lo tanto, rut codigo determina todos los atributos de esta relación y es una superllave bajo (F).\nEn cambio:\n[ {rut}^+ = {rut,nombreEst,carrera}, ]\npor lo que rut no es superllave de InscripcionDetallada.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Implicación y clausura"
+    ]
+  },
+  {
+    "objectID": "diseno/implicacion-clausura.html#algoritmo-de-clausura",
+    "href": "diseno/implicacion-clausura.html#algoritmo-de-clausura",
+    "title": "Razonamiento con dependencias: implicación y clausura",
+    "section": "Algoritmo de clausura",
+    "text": "Algoritmo de clausura\nLa Clase 08 presenta el siguiente procedimiento: (Riveros 2026)\nentrada: F y un conjunto de atributos A\nclausura &lt;- A\nreglas   &lt;- F\n\nrepetir\n  si existe B -&gt; C en reglas con B contenido en clausura:\n    clausura &lt;- clausura union C\n    eliminar B -&gt; C de reglas\nhasta que no haya cambios\n\nretornar clausura\nLa idea es simple: cada vez que ya conocemos todos los atributos del lado izquierdo de una dependencia, podemos agregar los del lado derecho.\n\nEjecución sobre el ejemplo\nInicio:\n[ clausura={rut,codigo}. ]\nPor rut → nombreEst carrera:\n[ clausura= {rut,codigo,nombreEst,carrera}. ]\nPor codigo → nombreCurso creditos:\n[ clausura= {rut,codigo,nombreEst,carrera,nombreCurso,creditos}. ]\nNo quedan reglas aplicables que agreguen atributos nuevos; el algoritmo termina.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Implicación y clausura"
+    ]
+  },
+  {
+    "objectID": "diseno/implicacion-clausura.html#corrección-del-algoritmo",
+    "href": "diseno/implicacion-clausura.html#corrección-del-algoritmo",
+    "title": "Razonamiento con dependencias: implicación y clausura",
+    "section": "Corrección del algoritmo",
+    "text": "Corrección del algoritmo\nLa Clase 08 bosqueja una demostración en dos direcciones: (Riveros 2026)\n\nsi un atributo entra a clausura, entonces realmente pertenece a (A^+);\nsi un atributo no entra al finalizar, puede construirse una relación que satisface (F) pero viola (AB), por lo que (BA^+).\n\nEl primer punto se demuestra inductivamente sobre las iteraciones. El segundo usa dos tuplas que coinciden en los atributos de la clausura y difieren en los demás.\nNo expandiremos aquí los detalles que el propio material deja como ejercicio, pero mantendremos el resultado que la clase establece.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Implicación y clausura"
+    ]
+  },
+  {
+    "objectID": "diseno/implicacion-clausura.html#resolver-los-dos-problemas",
+    "href": "diseno/implicacion-clausura.html#resolver-los-dos-problemas",
+    "title": "Razonamiento con dependencias: implicación y clausura",
+    "section": "Resolver los dos problemas",
+    "text": "Resolver los dos problemas\n\n\n\n\n\n\nNotaProposición de Clase 08\n\n\n\nLa clausura permite decidir:\n[ A A^+=att(R), ]\n[ FAB {B}A^+. ]\n(Riveros 2026)\n\n\nEsta es una de las herramientas algorítmicas más importantes del diseño relacional.\n\nResumen\n\n(FF’) significa que toda relación que satisface (F) también satisface (F’).\nDos conjuntos son equivalentes si tienen exactamente las mismas consecuencias sobre todas las relaciones.\nDividir/juntar y transitividad permiten deducir dependencias.\n(A^+) reúne todos los atributos determinados por (A).\nCon la clausura podemos decidir implicación y superllaves.",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Implicación y clausura"
+    ]
+  },
+  {
+    "objectID": "diseno/implicacion-clausura.html#conceptos-relacionados",
+    "href": "diseno/implicacion-clausura.html#conceptos-relacionados",
+    "title": "Razonamiento con dependencias: implicación y clausura",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nDependencias funcionales y llaves\nDescomposiciones y pérdida de información\nÁlgebra relacional",
+    "crumbs": [
+      "Diseño relacional y dependencias",
+      "Implicación y clausura"
+    ]
+  },
+  {
+    "objectID": "fundamentos/sistemas-rdbms.html",
+    "href": "fundamentos/sistemas-rdbms.html",
+    "title": "Sistemas de bases de datos y RDBMS",
+    "section": "",
+    "text": "Una aplicación que almacena datos necesita más que archivos: debe poder persistir, consultar, modificar y administrar información de manera controlada. Un sistema de manejo de bases de datos (DBMS) ofrece esa capa de software. Cuando el sistema organiza los datos mediante el modelo relacional, hablamos de un RDBMS (Relational Database Management System). La Clase 03 lo presenta como el motor encargado del almacenamiento, gestión y optimización del acceso a datos organizados en relaciones. (Riveros 2026b)\nLa idea central es separar dos responsabilidades:\n\nel usuario o la aplicación declara qué datos quiere almacenar, modificar o consultar;\nel motor decide cómo ejecutar esas acciones sobre el almacenamiento físico.\n\nEsta separación permite trabajar con una representación lógica estable aunque cambie la implementación interna del sistema. Es una de las ideas fundamentales de los sistemas de bases de datos modernos. (Abiteboul et al. 1995; Silberschatz et al. 2020; Ramakrishnan y Gehrke 2003)\n\n\n\n\n\n\nNotaDefinición del curso\n\n\n\nUn RDBMS es un software —el motor de bases de datos— encargado del almacenamiento, gestión y optimización del acceso a datos organizados en relaciones. (Riveros 2026b)",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Sistemas de bases de datos y RDBMS"
+    ]
+  },
+  {
+    "objectID": "fundamentos/sistemas-rdbms.html#intuición-y-concepto",
+    "href": "fundamentos/sistemas-rdbms.html#intuición-y-concepto",
+    "title": "Sistemas de bases de datos y RDBMS",
+    "section": "",
+    "text": "Una aplicación que almacena datos necesita más que archivos: debe poder persistir, consultar, modificar y administrar información de manera controlada. Un sistema de manejo de bases de datos (DBMS) ofrece esa capa de software. Cuando el sistema organiza los datos mediante el modelo relacional, hablamos de un RDBMS (Relational Database Management System). La Clase 03 lo presenta como el motor encargado del almacenamiento, gestión y optimización del acceso a datos organizados en relaciones. (Riveros 2026b)\nLa idea central es separar dos responsabilidades:\n\nel usuario o la aplicación declara qué datos quiere almacenar, modificar o consultar;\nel motor decide cómo ejecutar esas acciones sobre el almacenamiento físico.\n\nEsta separación permite trabajar con una representación lógica estable aunque cambie la implementación interna del sistema. Es una de las ideas fundamentales de los sistemas de bases de datos modernos. (Abiteboul et al. 1995; Silberschatz et al. 2020; Ramakrishnan y Gehrke 2003)\n\n\n\n\n\n\nNotaDefinición del curso\n\n\n\nUn RDBMS es un software —el motor de bases de datos— encargado del almacenamiento, gestión y optimización del acceso a datos organizados en relaciones. (Riveros 2026b)",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Sistemas de bases de datos y RDBMS"
+    ]
+  },
+  {
+    "objectID": "fundamentos/sistemas-rdbms.html#rdbms-relaciones-y-sql",
+    "href": "fundamentos/sistemas-rdbms.html#rdbms-relaciones-y-sql",
+    "title": "Sistemas de bases de datos y RDBMS",
+    "section": "RDBMS, relaciones y SQL",
+    "text": "RDBMS, relaciones y SQL\nEn el curso, SQL se introduce como el lenguaje de acciones al RDBMS. El usuario envía una instrucción SQL y el motor produce o modifica relaciones según corresponda. (Riveros 2026b)\nUna vista simplificada es:\n[ . ]\nEsto conecta tres niveles que se desarrollan en páginas distintas:\n\nel modelo relacional, que define qué son las relaciones y los esquemas;\nSQL, que permite definir, modificar y consultar datos;\nel motor, que transforma las consultas declarativas en procedimientos de ejecución.",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Sistemas de bases de datos y RDBMS"
+    ]
+  },
+  {
+    "objectID": "fundamentos/sistemas-rdbms.html#lenguajes-dentro-de-sql",
+    "href": "fundamentos/sistemas-rdbms.html#lenguajes-dentro-de-sql",
+    "title": "Sistemas de bases de datos y RDBMS",
+    "section": "Lenguajes dentro de SQL",
+    "text": "Lenguajes dentro de SQL\nLa Clase 03 distingue varios sublenguajes. (Riveros 2026b)\n\n\n\nSublenguaje\nPropósito\nComandos típicos\n\n\n\n\nDDL\ndefinir o modificar el esquema\nCREATE, ALTER, DROP\n\n\nDML\nmodificar datos\nINSERT, UPDATE, DELETE\n\n\nDQL\nconsultar datos\nSELECT\n\n\nDCL\ncontrolar permisos\nGRANT, REVOKE\n\n\n\nEsta clasificación es útil pedagógicamente, aunque la frontera entre DML y DQL no siempre se trata igual en toda la literatura. En este sitio mantendremos la clasificación usada en el curso.",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Sistemas de bases de datos y RDBMS"
+    ]
+  },
+  {
+    "objectID": "fundamentos/sistemas-rdbms.html#arquitecturas-de-aplicación",
+    "href": "fundamentos/sistemas-rdbms.html#arquitecturas-de-aplicación",
+    "title": "Sistemas de bases de datos y RDBMS",
+    "section": "Arquitecturas de aplicación",
+    "text": "Arquitecturas de aplicación\nEl material del curso menciona arquitecturas cliente-servidor y tres niveles como ejemplos del uso de un RDBMS. (Riveros 2026b) Por ahora basta con la intuición:\n\nen cliente-servidor, una aplicación se conecta a un servidor de bases de datos;\nen una arquitectura de tres niveles, una capa intermedia contiene la lógica de aplicación y se comunica con la base de datos.\n\nLa conexión de aplicaciones mediante drivers y cursores aparece en el programa, pero todavía no hay material suficiente del curso para desarrollarla como página propia. (Riveros 2026a)",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Sistemas de bases de datos y RDBMS"
+    ]
+  },
+  {
+    "objectID": "fundamentos/sistemas-rdbms.html#sql-es-declarativo",
+    "href": "fundamentos/sistemas-rdbms.html#sql-es-declarativo",
+    "title": "Sistemas de bases de datos y RDBMS",
+    "section": "SQL es declarativo",
+    "text": "SQL es declarativo\nUna consulta SQL expresa qué resultado se busca, no el algoritmo exacto para obtenerlo. La Clase 04 resume esta idea señalando que el RDBMS transforma la consulta en un algoritmo eficiente. (Riveros 2026c)\nPor ejemplo:\nSELECT nombre\nFROM Estudiante\nWHERE carrera = 'Computación';\nLa consulta no especifica si el motor debe recorrer todas las filas, usar un índice o aplicar otra estrategia. Esas decisiones pertenecen al procesamiento y optimización de consultas, una unidad posterior del curso.\n\nResumen\n\nUn DBMS administra datos persistentes; un RDBMS lo hace usando el modelo relacional.\nSQL es el lenguaje principal para interactuar con un RDBMS en este curso.\nEl usuario declara operaciones lógicas; el motor se ocupa de su ejecución.\nDDL, DML y DQL separan, pedagógicamente, definición de esquema, modificación y consulta.",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Sistemas de bases de datos y RDBMS"
+    ]
+  },
+  {
+    "objectID": "fundamentos/sistemas-rdbms.html#conceptos-relacionados",
+    "href": "fundamentos/sistemas-rdbms.html#conceptos-relacionados",
+    "title": "Sistemas de bases de datos y RDBMS",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nModelo relacional: tuplas, relaciones, esquemas y bases de datos\nDDL y DML\nSELECT-FROM-WHERE, joins y conjuntos",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Sistemas de bases de datos y RDBMS"
+    ]
+  },
+  {
+    "objectID": "fundamentos/relaciones-nombradas.html",
+    "href": "fundamentos/relaciones-nombradas.html",
+    "title": "Atributos y relaciones nombradas",
+    "section": "",
+    "text": "Una tupla posicional como\n[ (r2,,) ]\nsolo puede interpretarse si sabemos qué significa cada posición. En la práctica, las relaciones tienen atributos: rut, nombre, carrera. La Clase 02 formaliza esta idea mediante tuplas y relaciones nombradas. (Riveros 2026a)\nLos atributos permiten:\n\nreferirse a una columna por nombre;\nmodelar la estructura de los datos;\npresentar y combinar relaciones de forma más legible.\n\nA partir de esta página, salvo que se indique lo contrario, la notación del sitio sigue las relaciones nombradas usadas por el curso.",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Atributos y relaciones nombradas"
+    ]
+  },
+  {
+    "objectID": "fundamentos/relaciones-nombradas.html#intuición-y-concepto",
+    "href": "fundamentos/relaciones-nombradas.html#intuición-y-concepto",
+    "title": "Atributos y relaciones nombradas",
+    "section": "",
+    "text": "Una tupla posicional como\n[ (r2,,) ]\nsolo puede interpretarse si sabemos qué significa cada posición. En la práctica, las relaciones tienen atributos: rut, nombre, carrera. La Clase 02 formaliza esta idea mediante tuplas y relaciones nombradas. (Riveros 2026a)\nLos atributos permiten:\n\nreferirse a una columna por nombre;\nmodelar la estructura de los datos;\npresentar y combinar relaciones de forma más legible.\n\nA partir de esta página, salvo que se indique lo contrario, la notación del sitio sigue las relaciones nombradas usadas por el curso.",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Atributos y relaciones nombradas"
+    ]
+  },
+  {
+    "objectID": "fundamentos/relaciones-nombradas.html#tuplas-nombradas",
+    "href": "fundamentos/relaciones-nombradas.html#tuplas-nombradas",
+    "title": "Atributos y relaciones nombradas",
+    "section": "Tuplas nombradas",
+    "text": "Tuplas nombradas\nSea Data el conjunto de datos y Att un conjunto infinito de atributos.\n\n\n\n\n\n\nNotaDefinición formal\n\n\n\nUna tupla nombrada () es una función\n[ :{A_1,,A_k}Data, ]\ndonde (A_1,,A_kAtt). (Riveros 2026a)\n\n\nSu conjunto de atributos se denota\n[ att()={A_1,,A_k}. ]\nEl curso utiliza la notación\n[ =(A_1:a_1,,A_k:a_k) ]\npara indicar que ((A_i)=a_i).\nPor ejemplo:\n[ =(rut:r2, nombre:, carrera:). ]\nComo una tupla nombrada es una función cuyo dominio es un conjunto de atributos,\n[ (A:a,B:b)=(B:b,A:a). ]\nEl orden de escritura ya no tiene significado semántico: el nombre del atributo queda unido al dato.\n\nTupla nombrada vacía\nLa tupla vacía es la única función\n[ ():Data. ]\nConserva el mismo papel conceptual que la tupla vacía del modelo posicional. (Riveros 2026a)",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Atributos y relaciones nombradas"
+    ]
+  },
+  {
+    "objectID": "fundamentos/relaciones-nombradas.html#relaciones-nombradas",
+    "href": "fundamentos/relaciones-nombradas.html#relaciones-nombradas",
+    "title": "Atributos y relaciones nombradas",
+    "section": "Relaciones nombradas",
+    "text": "Relaciones nombradas\n\n\n\n\n\n\nNotaDefinición formal\n\n\n\nUna relación nombrada (R) es un subconjunto finito de tuplas nombradas que tienen exactamente los mismos atributos:\n[ R {att()={A_1,,A_k}}. ]\nDefinimos\n[ att(R)={A_1,,A_k}. ]\n(Riveros 2026a)\n\n\nPara el dominio universitario:\n\n\n\n\nrut\nnombre\ncarrera\n\n\n\n\nr1\nAna\nIngeniería Civil\n\n\nr2\nBen\nComputación\n\n\nr3\nZoe\nComputación\n\n\n\n\nrepresenta la relación\n[\n\\[\\begin{aligned}\nEstudiante=\\{&\n(rut:r1,nombre:\\text{Ana},carrera:\\text{IngenieríaCivil}),\\\\\n& (rut:r2,nombre:\\text{Ben},carrera:\\text{Computación}),\\\\\n& (rut:r3,nombre:\\text{Zoe},carrera:\\text{Computación})\\}.\n\\end{aligned}\\]\n]\ncon\n[ att(Estudiante)={rut,nombre,carrera}. ]",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Atributos y relaciones nombradas"
+    ]
+  },
+  {
+    "objectID": "fundamentos/relaciones-nombradas.html#de-relaciones-posicionales-a-nombradas",
+    "href": "fundamentos/relaciones-nombradas.html#de-relaciones-posicionales-a-nombradas",
+    "title": "Atributos y relaciones nombradas",
+    "section": "De relaciones posicionales a nombradas",
+    "text": "De relaciones posicionales a nombradas\nToda relación posicional puede verse como una relación nombrada asignando atributos 1, 2, …, k a sus posiciones. Por ello, las relaciones nombradas generalizan la representación anterior. La Clase 02 adopta desde este punto la convención de llamar simplemente tupla y relación a las versiones nombradas cuando el contexto lo permite. (Riveros 2026a)\n\n\n\n\n\n\nAdvertenciaConvención de notación del sitio\n\n\n\nLa Clase 01 usa (ar:NN) para la aridad. En la Clase 03, al introducir esquemas nombrados, se reutiliza el símbolo ar para asociar nombres de relaciones con conjuntos de atributos. (Riveros 2026b, 2026c)\nPara evitar ambigüedad, este sitio mantendrá:\n\n(ar(R)) para la aridad cuando se trabaje con el modelo posicional;\n(att(R)) para los atributos de una relación nombrada;\ncuando sea necesario hablar del esquema nombrado, se describirá explícitamente qué atributos corresponden a cada nombre, sin reutilizar ar con un segundo tipo.",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Atributos y relaciones nombradas"
+    ]
+  },
+  {
+    "objectID": "fundamentos/relaciones-nombradas.html#por-qué-los-atributos-son-esenciales-para-el-álgebra",
+    "href": "fundamentos/relaciones-nombradas.html#por-qué-los-atributos-son-esenciales-para-el-álgebra",
+    "title": "Atributos y relaciones nombradas",
+    "section": "Por qué los atributos son esenciales para el álgebra",
+    "text": "Por qué los atributos son esenciales para el álgebra\nLos operadores que veremos a continuación se definen sobre atributos:\n\nselección, por ejemplo (_{carrera=}(Estudiante));\nproyección, por ejemplo (_{nombre}(Estudiante));\nrenombramiento, por ejemplo (_{nombrenombreEst}(Estudiante));\njoin, que compara automáticamente atributos con el mismo nombre.\n\nEsta es la razón por la que la álgebra relacional del curso se construye sobre relaciones nombradas.\n\nResumen\n\nUna tupla nombrada es una función desde atributos hacia datos.\natt(τ) y att(R) identifican los atributos de una tupla o relación.\nEl orden de escritura de los atributos no altera una tupla nombrada.\nLas relaciones nombradas generalizan las relaciones posicionales.\nEn adelante, «tupla» y «relación» significarán normalmente sus versiones nombradas.",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Atributos y relaciones nombradas"
+    ]
+  },
+  {
+    "objectID": "fundamentos/relaciones-nombradas.html#conceptos-relacionados",
+    "href": "fundamentos/relaciones-nombradas.html#conceptos-relacionados",
+    "title": "Atributos y relaciones nombradas",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nModelo relacional\nÁlgebra relacional\nJoins y operadores derivados\nDDL y DML",
+    "crumbs": [
+      "Fundamentos del modelo relacional",
+      "Atributos y relaciones nombradas"
+    ]
+  },
+  {
+    "objectID": "nulos/null-tres-valores.html",
+    "href": "nulos/null-tres-valores.html",
+    "title": "NULL y lógica de tres valores",
+    "section": "",
+    "text": "En una base de datos real puede faltar información. SQL usa NULL como marcador especial para representar situaciones que suelen interpretarse como «desconocido» o «no aplicable». La Clase 06 advierte inmediatamente que estas interpretaciones no son idénticas y pregunta cuál es realmente la semántica de NULL. (Riveros 2026a)\nPor eso, NULL no debe tratarse como una constante ordinaria. En particular:\nNULL = NULL\nno se evalúa como verdadero.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "NULL y lógica de tres valores"
+    ]
+  },
+  {
+    "objectID": "nulos/null-tres-valores.html#intuición-y-concepto",
+    "href": "nulos/null-tres-valores.html#intuición-y-concepto",
+    "title": "NULL y lógica de tres valores",
+    "section": "",
+    "text": "En una base de datos real puede faltar información. SQL usa NULL como marcador especial para representar situaciones que suelen interpretarse como «desconocido» o «no aplicable». La Clase 06 advierte inmediatamente que estas interpretaciones no son idénticas y pregunta cuál es realmente la semántica de NULL. (Riveros 2026a)\nPor eso, NULL no debe tratarse como una constante ordinaria. En particular:\nNULL = NULL\nno se evalúa como verdadero.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "NULL y lógica de tres valores"
+    ]
+  },
+  {
+    "objectID": "nulos/null-tres-valores.html#crear-y-detectar-null",
+    "href": "nulos/null-tres-valores.html#crear-y-detectar-null",
+    "title": "NULL y lógica de tres valores",
+    "section": "Crear y detectar NULL",
+    "text": "Crear y detectar NULL\nUna inserción puede escribirlo explícitamente:\nINSERT INTO Profesor (pid, nombre, departamento)\nVALUES ('p9', 'Alex', NULL);\nTambién puede aparecer al omitir una columna que admite NULL y no tiene otro valor por defecto.\nPara preguntar por el marcador se usan predicados especiales:\nSELECT pid, nombre\nFROM Profesor\nWHERE departamento IS NULL;\nSELECT pid, nombre\nFROM Profesor\nWHERE departamento IS NOT NULL;\nNo se debe reemplazar IS NULL por = NULL. (Riveros 2026a)",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "NULL y lógica de tres valores"
+    ]
+  },
+  {
+    "objectID": "nulos/null-tres-valores.html#evitar-nulos-cuando-el-dominio-no-los-necesita",
+    "href": "nulos/null-tres-valores.html#evitar-nulos-cuando-el-dominio-no-los-necesita",
+    "title": "NULL y lógica de tres valores",
+    "section": "Evitar nulos cuando el dominio no los necesita",
+    "text": "Evitar nulos cuando el dominio no los necesita\nSQL permite declarar:\nCREATE TABLE Profesor (\n  pid          VARCHAR(20) NOT NULL,\n  nombre       VARCHAR(100) NOT NULL,\n  departamento VARCHAR(100)\n);\nNOT NULL prohíbe el marcador en una columna. La decisión debe responder al significado del dato: si un valor es obligatorio en el dominio, permitir NULL crea estados que luego deben manejar todas las consultas. (Riveros 2026a)",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "NULL y lógica de tres valores"
+    ]
+  },
+  {
+    "objectID": "nulos/null-tres-valores.html#lógica-de-tres-valores",
+    "href": "nulos/null-tres-valores.html#lógica-de-tres-valores",
+    "title": "NULL y lógica de tres valores",
+    "section": "Lógica de tres valores",
+    "text": "Lógica de tres valores\nCon NULL, SQL no usa únicamente TRUE y FALSE. Introduce un tercer valor lógico:\n[ UNKNOWN. ]\nLa Clase 06 define las comparaciones ordinarias con NULL como UNKNOWN, salvo predicados especiales como IS NULL. (Riveros 2026a)\n\nNOT\n\n\n\n(p)\nNOT p\n\n\n\n\nTRUE\nFALSE\n\n\nFALSE\nTRUE\n\n\nUNKNOWN\nUNKNOWN\n\n\n\n\n\nAND\n\n\n\nAND\nTRUE\nUNKNOWN\nFALSE\n\n\n\n\nTRUE\nTRUE\nUNKNOWN\nFALSE\n\n\nUNKNOWN\nUNKNOWN\nUNKNOWN\nFALSE\n\n\nFALSE\nFALSE\nFALSE\nFALSE\n\n\n\n\n\nOR\n\n\n\nOR\nTRUE\nUNKNOWN\nFALSE\n\n\n\n\nTRUE\nTRUE\nTRUE\nTRUE\n\n\nUNKNOWN\nTRUE\nUNKNOWN\nUNKNOWN\n\n\nFALSE\nTRUE\nUNKNOWN\nFALSE\n\n\n\nEstas tablas explican resultados que serían imposibles bajo lógica clásica. (Riveros 2026a; Ramakrishnan y Gehrke 2003)",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "NULL y lógica de tres valores"
+    ]
+  },
+  {
+    "objectID": "nulos/null-tres-valores.html#operaciones-y-comparaciones",
+    "href": "nulos/null-tres-valores.html#operaciones-y-comparaciones",
+    "title": "NULL y lógica de tres valores",
+    "section": "Operaciones y comparaciones",
+    "text": "Operaciones y comparaciones\nLa regla pedagógica presentada en clase es:\n[ NULL  a = NULL ]\npara muchas operaciones ordinarias, y\n[ NULLa = UNKNOWN ]\npara comparaciones ordinarias. (Riveros 2026a)\nPor ejemplo:\nNULL + 3          -&gt; NULL\nNULL = 3          -&gt; UNKNOWN\nNULL = NULL       -&gt; UNKNOWN\nNULL IS NULL      -&gt; TRUE\nHay excepciones definidas por operadores o funciones específicos; no conviene extender estas reglas mecánicamente a toda función de cada motor.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "NULL y lógica de tres valores"
+    ]
+  },
+  {
+    "objectID": "nulos/null-tres-valores.html#semántica-de-where",
+    "href": "nulos/null-tres-valores.html#semántica-de-where",
+    "title": "NULL y lógica de tres valores",
+    "section": "Semántica de WHERE",
+    "text": "Semántica de WHERE\n\n\n\n\n\n\nNotaRegla clave del curso\n\n\n\nUna fila pasa el filtro WHERE si y solo si la condición se evalúa como TRUE. Tanto FALSE como UNKNOWN quedan fuera del resultado. (Riveros 2026a)\n\n\nEsto explica por qué una aparente tautología clásica puede fallar:\nSELECT pid\nFROM Profesor\nWHERE departamento = 'Computación'\n   OR departamento &lt;&gt; 'Computación';\nSi departamento es NULL, ambas comparaciones son UNKNOWN:\n[ UNKNOWNUNKNOWN=UNKNOWN, ]\ny la fila no pasa WHERE.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "NULL y lógica de tres valores"
+    ]
+  },
+  {
+    "objectID": "nulos/null-tres-valores.html#el-problema-de-not-in",
+    "href": "nulos/null-tres-valores.html#el-problema-de-not-in",
+    "title": "NULL y lógica de tres valores",
+    "section": "El problema de NOT IN",
+    "text": "El problema de NOT IN\nLa Clase 06 muestra un caso oficial en que una subconsulta usada por NOT IN contiene NULL. Para un valor (x) distinto de las constantes conocidas:\n[\n\\[\\begin{aligned}\nx\\;NOT\\ IN\\;\\{NULL,1610\\}\n&=NOT(x=NULL\\lor x=1610)\\\\\n&=NOT(UNKNOWN\\lor FALSE)\\\\\n&=UNKNOWN.\n\\end{aligned}\\]\n]\nComo WHERE solo conserva TRUE, el resultado puede ser vacío. (Riveros 2026a)\n\n\n\n\n\n\nAdvertenciaPatrón seguro para ausencia\n\n\n\nSi la intención es «no existe una fila relacionada», NOT EXISTS suele ser una formulación más directa y evita que un NULL en la columna de comparación de la subconsulta contamine un NOT IN.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "NULL y lógica de tres valores"
+    ]
+  },
+  {
+    "objectID": "nulos/null-tres-valores.html#null-y-agregación",
+    "href": "nulos/null-tres-valores.html#null-y-agregación",
+    "title": "NULL y lógica de tres valores",
+    "section": "NULL y agregación",
+    "text": "NULL y agregación\nLa Clase 05 muestra que:\nCOUNT(*)\ncuenta filas, mientras\nCOUNT(departamento)\nno cuenta las filas donde departamento es NULL. (Riveros 2026b)\nOtros agregados también tienen reglas respecto de NULL; para esta primera versión nos limitamos a la distinción explícitamente trabajada en el curso.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "NULL y lógica de tres valores"
+    ]
+  },
+  {
+    "objectID": "nulos/null-tres-valores.html#null-no-es-todavía-una-teoría-completa-de-información-incompleta",
+    "href": "nulos/null-tres-valores.html#null-no-es-todavía-una-teoría-completa-de-información-incompleta",
+    "title": "NULL y lógica de tres valores",
+    "section": "NULL no es todavía una teoría completa de información incompleta",
+    "text": "NULL no es todavía una teoría completa de información incompleta\nLa lógica de tres valores describe cómo SQL evalúa expresiones con NULL, pero no resuelve por sí sola preguntas como «¿qué mundos completos son compatibles con esta tabla?». La segunda parte de Clase 06 introduce una semántica formal mediante tablas de Codd y mundos posibles. (Riveros 2026a)\n\nResumen\n\nNULL es un marcador especial, no una constante ordinaria.\nPara probarlo se usan IS NULL e IS NOT NULL.\nSQL incorpora UNKNOWN además de TRUE y FALSE.\nWHERE conserva únicamente filas cuya condición es TRUE.\nNOT IN puede comportarse de manera sorprendente si la subconsulta contiene NULL.\nLa semántica de mundos posibles permite estudiar información incompleta de forma más rigurosa.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "NULL y lógica de tres valores"
+    ]
+  },
+  {
+    "objectID": "nulos/null-tres-valores.html#conceptos-relacionados",
+    "href": "nulos/null-tres-valores.html#conceptos-relacionados",
+    "title": "NULL y lógica de tres valores",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nInformación incompleta y mundos posibles\nOuter joins\nSubconsultas\nAgregación",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "NULL y lógica de tres valores"
+    ]
+  },
+  {
+    "objectID": "nulos/informacion-incompleta.html",
+    "href": "nulos/informacion-incompleta.html",
+    "title": "Información incompleta y mundos posibles",
+    "section": "",
+    "text": "Un NULL indica que la información disponible no determina completamente un dato. Una forma formal de entender esa incertidumbre es pensar que la tabla observada representa muchas bases de datos completas posibles. La Clase 06 introduce esta perspectiva mediante tablas de Codd y mundos posibles. (Riveros 2026)\nEl material hace una simplificación explícita: desarrolla la teoría para una base con una sola relación, señalando que el enfoque se extiende a esquemas con varias relaciones. Mantendremos esa misma presentación. (Riveros 2026)",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Información incompleta y mundos posibles"
+    ]
+  },
+  {
+    "objectID": "nulos/informacion-incompleta.html#intuición-y-concepto",
+    "href": "nulos/informacion-incompleta.html#intuición-y-concepto",
+    "title": "Información incompleta y mundos posibles",
+    "section": "",
+    "text": "Un NULL indica que la información disponible no determina completamente un dato. Una forma formal de entender esa incertidumbre es pensar que la tabla observada representa muchas bases de datos completas posibles. La Clase 06 introduce esta perspectiva mediante tablas de Codd y mundos posibles. (Riveros 2026)\nEl material hace una simplificación explícita: desarrolla la teoría para una base con una sola relación, señalando que el enfoque se extiende a esquemas con varias relaciones. Mantendremos esa misma presentación. (Riveros 2026)",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Información incompleta y mundos posibles"
+    ]
+  },
+  {
+    "objectID": "nulos/informacion-incompleta.html#tablas-de-codd",
+    "href": "nulos/informacion-incompleta.html#tablas-de-codd",
+    "title": "Información incompleta y mundos posibles",
+    "section": "Tablas de Codd",
+    "text": "Tablas de Codd\nSea Data el conjunto de datos, Att un conjunto infinito de atributos y Var un conjunto infinito de variables.\n\n\n\n\n\n\nNotaDefinición del curso\n\n\n\nUna tabla de Codd (T) es un subconjunto finito de tuplas con los mismos atributos, cuyos valores pertenecen a (DataVar), y donde cada variable aparece una sola vez. (Riveros 2026)\n\n\nEjemplo universitario:\n\n\n\n\nrut\nnombre\ncarrera\n\n\n\n\nr1\nAna\n(x)\n\n\n(y)\nBen\nComputación\n\n\nr3\nZoe\n(z)\n\n\n\n\nLas variables (x,y,z) representan datos aún no determinados.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Información incompleta y mundos posibles"
+    ]
+  },
+  {
+    "objectID": "nulos/informacion-incompleta.html#variables-de-una-tabla",
+    "href": "nulos/informacion-incompleta.html#variables-de-una-tabla",
+    "title": "Información incompleta y mundos posibles",
+    "section": "Variables de una tabla",
+    "text": "Variables de una tabla\nEl curso define\n[ Var(T) = {(A)Var T, Aatt(T)}. ]\nUna valuación es una función\n[ :Var(T)DataData ]\ntal que\n[ (a)=a aData. ]\nEs decir, la valuación elige un dato concreto para cada variable y deja intactas las constantes. (Riveros 2026)",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Información incompleta y mundos posibles"
+    ]
+  },
+  {
+    "objectID": "nulos/informacion-incompleta.html#aplicar-una-valuación",
+    "href": "nulos/informacion-incompleta.html#aplicar-una-valuación",
+    "title": "Información incompleta y mundos posibles",
+    "section": "Aplicar una valuación",
+    "text": "Aplicar una valuación\nPara una valuación (), la relación completa obtenida es\n[ (T)={T}. ]\nPor ejemplo, con\n[ (x)=, (y)=r2, (z)=, ]\nobtenemos una relación ordinaria completamente determinada.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Información incompleta y mundos posibles"
+    ]
+  },
+  {
+    "objectID": "nulos/informacion-incompleta.html#mundos-posibles",
+    "href": "nulos/informacion-incompleta.html#mundos-posibles",
+    "title": "Información incompleta y mundos posibles",
+    "section": "Mundos posibles",
+    "text": "Mundos posibles\n\n\n\n\n\n\nNotaDefinición formal\n\n\n\nLos posibles mundos representados por una tabla de Codd (T) son\n[ Worlds(T) = {(T)T}. ]\n(Riveros 2026)\n\n\nT es una representación finita de un conjunto potencialmente muy grande —incluso infinito— de relaciones completas.\nEsta idea es una base clásica para estudiar información incompleta. Foundations of Databases trata formalmente bases de datos incompletas y representaciones de posibles mundos; Database Theory incluye una parte dedicada a incertidumbre e información incompleta. (Abiteboul et al. 1995; Arenas et al. 2022)",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Información incompleta y mundos posibles"
+    ]
+  },
+  {
+    "objectID": "nulos/informacion-incompleta.html#base-de-datos-incompleta",
+    "href": "nulos/informacion-incompleta.html#base-de-datos-incompleta",
+    "title": "Información incompleta y mundos posibles",
+    "section": "Base de datos incompleta",
+    "text": "Base de datos incompleta\nLa Clase 06 generaliza:\n\n\n\n\n\n\nNotaDefinición del curso\n\n\n\nUna base de datos incompleta (I) es un conjunto de relaciones ordinarias que comparten los mismos atributos:\n[ R_1,R_2I, att(R_1)=att(R_2). ]\n(Riveros 2026)\n\n\nEjemplos:\n\n(Worlds(T)) para una tabla de Codd (T);\n({R}) para una relación completa (R);\n().",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Información incompleta y mundos posibles"
+    ]
+  },
+  {
+    "objectID": "nulos/informacion-incompleta.html#consultas-sobre-información-incompleta",
+    "href": "nulos/informacion-incompleta.html#consultas-sobre-información-incompleta",
+    "title": "Información incompleta y mundos posibles",
+    "section": "Consultas sobre información incompleta",
+    "text": "Consultas sobre información incompleta\nPara una consulta (Q), el curso define:\n[ Q(I)={Q(R)RI}. ]\nEs decir, aplicamos la consulta a cada mundo posible. El resultado vuelve a ser una base de datos incompleta. (Riveros 2026)\n\nProyección\nSi (I=Worlds(T)), entonces\n[ {nombre}(I) = {{nombre}(R)RWorlds(T)}. ]\nCada mundo genera su propio resultado.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Información incompleta y mundos posibles"
+    ]
+  },
+  {
+    "objectID": "nulos/informacion-incompleta.html#toda-consulta-puede-representarse-otra-vez-con-una-tabla-de-codd",
+    "href": "nulos/informacion-incompleta.html#toda-consulta-puede-representarse-otra-vez-con-una-tabla-de-codd",
+    "title": "Información incompleta y mundos posibles",
+    "section": "¿Toda consulta puede representarse otra vez con una tabla de Codd?",
+    "text": "¿Toda consulta puede representarse otra vez con una tabla de Codd?\nLa Clase 06 formula la pregunta de cierre:\n[ T’ Q(Worlds(T))=Worlds(T’)? ]\nLa respuesta es no. El curso entrega un contraejemplo con selección donde el conjunto de resultados posibles contiene tanto la relación vacía como una relación no vacía específica, y pide demostrar que ninguna tabla de Codd puede representar exactamente ese conjunto. (Riveros 2026)\nEsto muestra una diferencia importante:\n\nuna representación puede ser finita y útil;\npero una clase de representaciones no tiene por qué ser cerrada bajo todas las consultas.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Información incompleta y mundos posibles"
+    ]
+  },
+  {
+    "objectID": "nulos/informacion-incompleta.html#relación-con-null",
+    "href": "nulos/informacion-incompleta.html#relación-con-null",
+    "title": "Información incompleta y mundos posibles",
+    "section": "Relación con NULL",
+    "text": "Relación con NULL\nUna celda con NULL en SQL no es literalmente una variable de Codd. La teoría de mundos posibles se introduce para formalizar la intuición de información desconocida, no para afirmar que el estándar SQL implemente directamente Worlds(T). (Riveros 2026)\n\n\n\n\n\n\nAdvertenciaNo confundir dos niveles\n\n\n\n\nNULL y la lógica de tres valores describen la evaluación concreta de SQL.\nTablas de Codd, valuaciones y mundos posibles forman un modelo teórico de información incompleta.\n\nAmbos temas están relacionados, pero no son la misma semántica operacional.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Información incompleta y mundos posibles"
+    ]
+  },
+  {
+    "objectID": "nulos/informacion-incompleta.html#qué-queda-fuera-por-ahora",
+    "href": "nulos/informacion-incompleta.html#qué-queda-fuera-por-ahora",
+    "title": "Información incompleta y mundos posibles",
+    "section": "Qué queda fuera por ahora",
+    "text": "Qué queda fuera por ahora\nLa teoría de información incompleta incluye preguntas sobre respuestas ciertas, poder expresivo y representaciones más generales. El material disponible las señala como un área de investigación, pero no las desarrolla todavía. No las incorporaremos como páginas adicionales hasta contar con material suficiente del curso. (Riveros 2026; Arenas et al. 2022)\n\nResumen\n\nUna tabla de Codd contiene constantes y variables que aparecen una sola vez.\nUna valuación reemplaza variables por datos concretos.\nWorlds(T) reúne todas las relaciones completas compatibles con la tabla.\nUna consulta sobre una base incompleta se aplica a cada mundo posible.\nLas tablas de Codd no son cerradas bajo todas las consultas.\nEsta teoría formaliza información incompleta, pero no debe identificarse sin más con la ejecución de NULL en SQL.",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Información incompleta y mundos posibles"
+    ]
+  },
+  {
+    "objectID": "nulos/informacion-incompleta.html#conceptos-relacionados",
+    "href": "nulos/informacion-incompleta.html#conceptos-relacionados",
+    "title": "Información incompleta y mundos posibles",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nNULL y lógica de tres valores\nLógica de primer orden\nOuter joins",
+    "crumbs": [
+      "Nulos e información incompleta",
+      "Información incompleta y mundos posibles"
+    ]
+  },
+  {
+    "objectID": "sql/agregacion.html",
+    "href": "sql/agregacion.html",
+    "title": "Agregación, GROUP BY y HAVING",
+    "section": "",
+    "text": "Las consultas vistas hasta ahora transforman filas o combinaciones de filas. La agregación responde preguntas sobre colecciones: cuántos elementos hay, cuál es el mínimo, el máximo, la suma o el promedio. La Clase 05 desarrolla agregación, GROUP BY y HAVING. (Riveros 2026)\nUsaremos:\n\nInscribe(rut, codigo, semestre)",
+    "crumbs": [
+      "SQL",
+      "Agregación, GROUP BY y HAVING"
+    ]
+  },
+  {
+    "objectID": "sql/agregacion.html#intuición-y-concepto",
+    "href": "sql/agregacion.html#intuición-y-concepto",
+    "title": "Agregación, GROUP BY y HAVING",
+    "section": "",
+    "text": "Las consultas vistas hasta ahora transforman filas o combinaciones de filas. La agregación responde preguntas sobre colecciones: cuántos elementos hay, cuál es el mínimo, el máximo, la suma o el promedio. La Clase 05 desarrolla agregación, GROUP BY y HAVING. (Riveros 2026)\nUsaremos:\n\nInscribe(rut, codigo, semestre)",
+    "crumbs": [
+      "SQL",
+      "Agregación, GROUP BY y HAVING"
+    ]
+  },
+  {
+    "objectID": "sql/agregacion.html#funciones-agregadas",
+    "href": "sql/agregacion.html#funciones-agregadas",
+    "title": "Agregación, GROUP BY y HAVING",
+    "section": "Funciones agregadas",
+    "text": "Funciones agregadas\nLas funciones principales del curso son: (Riveros 2026)\n\nCOUNT: cuenta valores;\nSUM: suma valores;\nMAX: obtiene el máximo;\nMIN: obtiene el mínimo;\nAVG: calcula el promedio.\n\nEjemplo: número de registros de inscripción.\nSELECT COUNT(*) AS inscripciones\nFROM Inscribe;\nUna consulta agregada sin GROUP BY produce, conceptualmente, un único grupo formado por las filas que sobreviven a FROM y WHERE.",
+    "crumbs": [
+      "SQL",
+      "Agregación, GROUP BY y HAVING"
+    ]
+  },
+  {
+    "objectID": "sql/agregacion.html#count-y-countatributo",
+    "href": "sql/agregacion.html#count-y-countatributo",
+    "title": "Agregación, GROUP BY y HAVING",
+    "section": "COUNT(*) y COUNT(atributo)",
+    "text": "COUNT(*) y COUNT(atributo)\nNo son equivalentes si hay NULL:\nSELECT COUNT(*)\nFROM Profesor;\ncuenta filas, mientras\nSELECT COUNT(departamento)\nFROM Profesor;\ncuenta solo valores de departamento que no son NULL. La Clase 05 destaca este comportamiento. (Riveros 2026)",
+    "crumbs": [
+      "SQL",
+      "Agregación, GROUP BY y HAVING"
+    ]
+  },
+  {
+    "objectID": "sql/agregacion.html#agregación-y-distinct",
+    "href": "sql/agregacion.html#agregación-y-distinct",
+    "title": "Agregación, GROUP BY y HAVING",
+    "section": "Agregación y DISTINCT",
+    "text": "Agregación y DISTINCT\nPara contar códigos distintos:\nSELECT COUNT(DISTINCT codigo) AS cursos_con_inscripciones\nFROM Inscribe;\nEl DISTINCT está dentro del agregado. La Clase 05 contrasta esto con\nSELECT DISTINCT COUNT(codigo)\nFROM Inscribe;\nque no elimina duplicados antes del conteo y, al producir una sola fila agregada, no cumple la intención de contar valores distintos. (Riveros 2026)",
+    "crumbs": [
+      "SQL",
+      "Agregación, GROUP BY y HAVING"
+    ]
+  },
+  {
+    "objectID": "sql/agregacion.html#más-de-un-agregado",
+    "href": "sql/agregacion.html#más-de-un-agregado",
+    "title": "Agregación, GROUP BY y HAVING",
+    "section": "Más de un agregado",
+    "text": "Más de un agregado\nPodemos calcular varios agregados sobre el mismo conjunto:\nSELECT MIN(creditos) AS minimo,\n       MAX(creditos) AS maximo,\n       AVG(creditos) AS promedio\nFROM Curso;",
+    "crumbs": [
+      "SQL",
+      "Agregación, GROUP BY y HAVING"
+    ]
+  },
+  {
+    "objectID": "sql/agregacion.html#atributos-no-agregados",
+    "href": "sql/agregacion.html#atributos-no-agregados",
+    "title": "Agregación, GROUP BY y HAVING",
+    "section": "Atributos no agregados",
+    "text": "Atributos no agregados\nUna consulta como\nSELECT codigo, MIN(creditos)\nFROM Curso;\nmezcla un atributo no agregado con una agregación sin definir cómo se relaciona codigo con el único valor agregado.\n\n\n\n\n\n\nAdvertenciaNo depender del comportamiento permisivo de SQLite\n\n\n\nLa Clase 05 muestra que SQLite puede aceptar algunas consultas con «bare columns» que otros motores, como PostgreSQL, rechazan. El curso recomienda considerar este tipo de consulta como incorrecta en general. (Riveros 2026)\nPara escribir SQL portable, todo atributo seleccionado en una consulta agrupada debe estar justificado por la agrupación o por una agregación según las reglas del motor y del estándar aplicable.",
+    "crumbs": [
+      "SQL",
+      "Agregación, GROUP BY y HAVING"
+    ]
+  },
+  {
+    "objectID": "sql/agregacion.html#group-by",
+    "href": "sql/agregacion.html#group-by",
+    "title": "Agregación, GROUP BY y HAVING",
+    "section": "GROUP BY",
+    "text": "GROUP BY\nGROUP BY divide las filas en grupos según uno o más atributos y calcula agregados por grupo.\nNúmero de inscripciones por curso:\nSELECT codigo, COUNT(*) AS n\nFROM Inscribe\nGROUP BY codigo;\nLa idea del curso es equivalente a ejecutar una consulta agregada por cada valor distinto del atributo de agrupación y unir los resultados. (Riveros 2026)\n\nAgrupación por varios atributos\nSELECT codigo, semestre, COUNT(*) AS n\nFROM Inscribe\nGROUP BY codigo, semestre;\nCada combinación distinta de codigo y semestre define un grupo.",
+    "crumbs": [
+      "SQL",
+      "Agregación, GROUP BY y HAVING"
+    ]
+  },
+  {
+    "objectID": "sql/agregacion.html#where-versus-having",
+    "href": "sql/agregacion.html#where-versus-having",
+    "title": "Agregación, GROUP BY y HAVING",
+    "section": "WHERE versus HAVING",
+    "text": "WHERE versus HAVING\nWHERE filtra filas antes de agrupar; HAVING filtra grupos. (Riveros 2026)\nEjemplo: cursos con al menos dos inscripciones en 2025-2.\nSELECT codigo, COUNT(*) AS n\nFROM Inscribe\nWHERE semestre = '2025-2'\nGROUP BY codigo\nHAVING COUNT(*) &gt;= 2;\n\nWHERE semestre = '2025-2' elimina filas de otros semestres;\nGROUP BY codigo forma grupos;\nHAVING COUNT(*) &gt;= 2 descarta grupos pequeños.",
+    "crumbs": [
+      "SQL",
+      "Agregación, GROUP BY y HAVING"
+    ]
+  },
+  {
+    "objectID": "sql/agregacion.html#orden-lógico-de-procesamiento",
+    "href": "sql/agregacion.html#orden-lógico-de-procesamiento",
+    "title": "Agregación, GROUP BY y HAVING",
+    "section": "Orden lógico de procesamiento",
+    "text": "Orden lógico de procesamiento\nLa Clase 05 introduce el orden conceptual\n[ FROMWHEREGROUP BYSELECT. ]\nAl incorporar HAVING, la lectura pedagógica queda:\n[ FROMWHEREGROUP BYHAVINGSELECT. ]\nORDER BY se aplica posteriormente a la presentación ordenada del resultado. Esta secuencia ayuda a entender por qué WHERE no puede filtrar directamente sobre un agregado calculado después de agrupar. (Riveros 2026; Silberschatz et al. 2020)",
+    "crumbs": [
+      "SQL",
+      "Agregación, GROUP BY y HAVING"
+    ]
+  },
+  {
+    "objectID": "sql/agregacion.html#cuándo-mover-una-condición-de-having-a-where",
+    "href": "sql/agregacion.html#cuándo-mover-una-condición-de-having-a-where",
+    "title": "Agregación, GROUP BY y HAVING",
+    "section": "Cuándo mover una condición de HAVING a WHERE",
+    "text": "Cuándo mover una condición de HAVING a WHERE\nLa Clase 05 observa que, si una condición de HAVING depende solo de un atributo de agrupación, a menudo puede moverse a WHERE. (Riveros 2026)\nEstas dos consultas expresan la misma intención:\nSELECT codigo, COUNT(*)\nFROM Inscribe\nGROUP BY codigo\nHAVING codigo = 'IIC2413';\nSELECT codigo, COUNT(*)\nFROM Inscribe\nWHERE codigo = 'IIC2413'\nGROUP BY codigo;\nLa segunda filtra antes de formar grupos y deja más clara la separación entre condición de fila y condición agregada.\nEl propósito principal de HAVING aparece cuando la condición depende de un agregado:\nSELECT codigo, COUNT(*) AS n\nFROM Inscribe\nGROUP BY codigo\nHAVING COUNT(*) &gt;= 2;",
+    "crumbs": [
+      "SQL",
+      "Agregación, GROUP BY y HAVING"
+    ]
+  },
+  {
+    "objectID": "sql/agregacion.html#agregación-y-álgebra-relacional",
+    "href": "sql/agregacion.html#agregación-y-álgebra-relacional",
+    "title": "Agregación, GROUP BY y HAVING",
+    "section": "Agregación y álgebra relacional",
+    "text": "Agregación y álgebra relacional\nLa agregación no forma parte del conjunto básico de operadores algebraicos desarrollado en Clase 02. Por eso, el sitio no fuerza una traducción a ese álgebra clásica. Database Theory trata agregados y agrupación como una extensión expresiva posterior. (Arenas et al. 2022)\n\nResumen\n\nLos agregados calculan información sobre conjuntos de filas.\nCOUNT(*) cuenta filas; COUNT(A) ignora NULL en A.\nAGG(DISTINCT A) elimina duplicados antes de agregar.\nGROUP BY crea grupos; HAVING los filtra.\nWHERE actúa antes de la agrupación.\nEvita consultas no portables que mezclen columnas no agrupadas con agregados.",
+    "crumbs": [
+      "SQL",
+      "Agregación, GROUP BY y HAVING"
+    ]
+  },
+  {
+    "objectID": "sql/agregacion.html#conceptos-relacionados",
+    "href": "sql/agregacion.html#conceptos-relacionados",
+    "title": "Agregación, GROUP BY y HAVING",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nNULL y lógica de tres valores\nFunciones, filtros, orden y dialectos\nSubconsultas\nSELECT-FROM-WHERE, joins y conjuntos",
+    "crumbs": [
+      "SQL",
+      "Agregación, GROUP BY y HAVING"
+    ]
+  },
+  {
+    "objectID": "sql/funciones-filtros.html",
+    "href": "sql/funciones-filtros.html",
+    "title": "Funciones, filtros, orden y dialectos SQL",
+    "section": "",
+    "text": "Además del núcleo relacional, SQL ofrece expresiones, funciones, filtros compactos y mecanismos para ordenar o limitar resultados. La Clase 05 enfatiza que muchas de estas construcciones presentan variaciones entre motores. (Riveros 2026)",
+    "crumbs": [
+      "SQL",
+      "Funciones, filtros, orden y dialectos"
+    ]
+  },
+  {
+    "objectID": "sql/funciones-filtros.html#intuición-y-concepto",
+    "href": "sql/funciones-filtros.html#intuición-y-concepto",
+    "title": "Funciones, filtros, orden y dialectos SQL",
+    "section": "",
+    "text": "Además del núcleo relacional, SQL ofrece expresiones, funciones, filtros compactos y mecanismos para ordenar o limitar resultados. La Clase 05 enfatiza que muchas de estas construcciones presentan variaciones entre motores. (Riveros 2026)",
+    "crumbs": [
+      "SQL",
+      "Funciones, filtros, orden y dialectos"
+    ]
+  },
+  {
+    "objectID": "sql/funciones-filtros.html#expresiones-y-funciones",
+    "href": "sql/funciones-filtros.html#expresiones-y-funciones",
+    "title": "Funciones, filtros, orden y dialectos SQL",
+    "section": "Expresiones y funciones",
+    "text": "Expresiones y funciones\nEjemplos de operaciones numéricas mencionadas en el curso incluyen:\n\n+, -, *, /, %;\nABS, CEIL, FLOOR, ROUND, SQRT;\notras funciones que dependen del motor. (Riveros 2026)\n\nEjemplo:\nSELECT codigo,\n       ABS(creditos - 10) AS diferencia\nFROM Curso;\nEntre las funciones de texto, la clase menciona familias como LOWER, UPPER, TRIM y SUBSTRING. La firma exacta puede variar.\n\n\n\n\n\n\nAdvertenciaFunciones y portabilidad\n\n\n\nNo todas las funciones tienen el mismo nombre, número de argumentos o comportamiento en todos los RDBMS. Conviene separar el SQL conceptual de las funciones específicas del motor que se use en una tarea o aplicación. (Riveros 2026)",
+    "crumbs": [
+      "SQL",
+      "Funciones, filtros, orden y dialectos"
+    ]
+  },
+  {
+    "objectID": "sql/funciones-filtros.html#in-con-una-lista",
+    "href": "sql/funciones-filtros.html#in-con-una-lista",
+    "title": "Funciones, filtros, orden y dialectos SQL",
+    "section": "IN con una lista",
+    "text": "IN con una lista\nPara comparar contra un conjunto explícito de valores:\nSELECT nombre\nFROM Estudiante\nWHERE carrera IN ('Computación', 'Ingeniería Civil');\nEsto evita escribir una disyunción larga:\nWHERE carrera = 'Computación'\n   OR carrera = 'Ingeniería Civil'\nIN también puede recibir una subconsulta, caso con semántica adicional en presencia de NULL.",
+    "crumbs": [
+      "SQL",
+      "Funciones, filtros, orden y dialectos"
+    ]
+  },
+  {
+    "objectID": "sql/funciones-filtros.html#between",
+    "href": "sql/funciones-filtros.html#between",
+    "title": "Funciones, filtros, orden y dialectos SQL",
+    "section": "BETWEEN",
+    "text": "BETWEEN\nSELECT nombre, creditos\nFROM Curso\nWHERE creditos BETWEEN 5 AND 10;\nEn el uso mostrado por el curso, expresa un intervalo inclusivo entre los límites. (Riveros 2026)",
+    "crumbs": [
+      "SQL",
+      "Funciones, filtros, orden y dialectos"
+    ]
+  },
+  {
+    "objectID": "sql/funciones-filtros.html#like-y-patrones",
+    "href": "sql/funciones-filtros.html#like-y-patrones",
+    "title": "Funciones, filtros, orden y dialectos SQL",
+    "section": "LIKE y patrones",
+    "text": "LIKE y patrones\nLa Clase 05 utiliza % como comodín para cualquier secuencia de caracteres: (Riveros 2026)\nSELECT nombre\nFROM Curso\nWHERE nombre LIKE 'Bases%';\nPatrones típicos:\n\n\n\nPatrón\nIntuición\n\n\n\n\n'pref%'\nempieza con pref\n\n\n'%suf'\ntermina con suf\n\n\n'%sub%'\ncontiene sub\n\n\n\nLa negación se escribe:\nWHERE nombre NOT LIKE '%Datos%'\nLa sensibilidad a mayúsculas, colaciones y caracteres especiales depende del motor y de su configuración.",
+    "crumbs": [
+      "SQL",
+      "Funciones, filtros, orden y dialectos"
+    ]
+  },
+  {
+    "objectID": "sql/funciones-filtros.html#order-by",
+    "href": "sql/funciones-filtros.html#order-by",
+    "title": "Funciones, filtros, orden y dialectos SQL",
+    "section": "ORDER BY",
+    "text": "ORDER BY\nLas relaciones matemáticas no tienen orden. SQL solo garantiza un orden de salida cuando la consulta declara ORDER BY.\nSELECT codigo, creditos\nFROM Curso\nORDER BY creditos DESC, codigo ASC;\nCada clave puede usar:\n\nASC: ascendente;\nDESC: descendente. (Riveros 2026)\n\n\n\n\n\n\n\nAdvertenciaOrden sin ORDER BY\n\n\n\nAunque una herramienta muestre filas siempre en el mismo orden durante varias ejecuciones, ese orden no debe considerarse parte de la consulta sin ORDER BY.",
+    "crumbs": [
+      "SQL",
+      "Funciones, filtros, orden y dialectos"
+    ]
+  },
+  {
+    "objectID": "sql/funciones-filtros.html#limitar-la-cantidad-de-resultados",
+    "href": "sql/funciones-filtros.html#limitar-la-cantidad-de-resultados",
+    "title": "Funciones, filtros, orden y dialectos SQL",
+    "section": "Limitar la cantidad de resultados",
+    "text": "Limitar la cantidad de resultados\nAquí aparecen diferencias claras entre dialectos. La Clase 05 muestra: (Riveros 2026)\n\nSQLite, PostgreSQL y MySQL\nSELECT codigo, creditos\nFROM Curso\nORDER BY creditos DESC\nLIMIT 3;\n\n\nSQL Server y Microsoft Access\nSELECT TOP 3 codigo, creditos\nFROM Curso\nORDER BY creditos DESC;\n\n\nForma con FETCH\nSELECT codigo, creditos\nFROM Curso\nORDER BY creditos DESC\nOFFSET 0 ROWS FETCH NEXT 3 ROWS ONLY;\nEl soporte concreto de OFFSET/FETCH y sus detalles debe verificarse en el motor utilizado.\n\n\n\n\n\n\nNotaConvención del curso\n\n\n\nLa Clase 05 presenta ORDER BY y los mecanismos de límite dentro de «orden y cantidad de resultados» y los separa conceptualmente del álgebra relacional. En una aplicación real, limitar filas sí cambia qué filas devuelve la consulta; para que «las primeras N» sean reproducibles, debe combinarse con un criterio de orden suficiente. (Riveros 2026)",
+    "crumbs": [
+      "SQL",
+      "Funciones, filtros, orden y dialectos"
+    ]
+  },
+  {
+    "objectID": "sql/funciones-filtros.html#qué-es-un-dialecto-sql",
+    "href": "sql/funciones-filtros.html#qué-es-un-dialecto-sql",
+    "title": "Funciones, filtros, orden y dialectos SQL",
+    "section": "¿Qué es un dialecto SQL?",
+    "text": "¿Qué es un dialecto SQL?\nEl curso define un dialecto SQL como una modificación o extensión no incluida en el estándar SQL considerado. Entre las razones para desviarse del estándar menciona innovación, compatibilidad histórica y eficiencia. (Riveros 2026)\nLa consecuencia práctica es que una consulta puede ser correcta en un motor y no compilar en otro.\n\nEstrategia editorial del sitio\nEn los ejemplos principales:\n\npreferiremos construcciones ampliamente portables;\nindicaremos cuando una sintaxis pertenece a un motor o familia de motores;\nno presentaremos el comportamiento permisivo de un motor como regla general de SQL;\ncuando el curso use SQLite para mostrar una excepción, la marcaremos como tal.",
+    "crumbs": [
+      "SQL",
+      "Funciones, filtros, orden y dialectos"
+    ]
+  },
+  {
+    "objectID": "sql/funciones-filtros.html#orden-y-desempates",
+    "href": "sql/funciones-filtros.html#orden-y-desempates",
+    "title": "Funciones, filtros, orden y dialectos SQL",
+    "section": "Orden y desempates",
+    "text": "Orden y desempates\nSi se solicitan los tres cursos con más créditos:\nSELECT codigo, creditos\nFROM Curso\nORDER BY creditos DESC\nLIMIT 3;\npuede haber varias respuestas igualmente válidas si hay empate en creditos alrededor del corte. Para un resultado determinista, agrega una segunda clave:\nSELECT codigo, creditos\nFROM Curso\nORDER BY creditos DESC, codigo ASC\nLIMIT 3;\nEsta práctica es especialmente importante en pruebas, reportes y paginación.\n\nResumen\n\nSQL ofrece funciones y filtros más allá de los operadores relacionales básicos.\nIN, BETWEEN y LIKE hacen más compactas condiciones frecuentes.\nORDER BY es necesario para declarar un orden de salida.\nLa sintaxis para limitar filas varía entre motores.\nLas funciones y extensiones deben documentarse como SQL estándar o dialecto cuando corresponda.",
+    "crumbs": [
+      "SQL",
+      "Funciones, filtros, orden y dialectos"
+    ]
+  },
+  {
+    "objectID": "sql/funciones-filtros.html#conceptos-relacionados",
+    "href": "sql/funciones-filtros.html#conceptos-relacionados",
+    "title": "Funciones, filtros, orden y dialectos SQL",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nSELECT-FROM-WHERE, joins y conjuntos\nSubconsultas\nAgregación, GROUP BY y HAVING\nNULL y lógica de tres valores",
+    "crumbs": [
+      "SQL",
+      "Funciones, filtros, orden y dialectos"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/equivalencia-patrones.html",
+    "href": "teoria-consultas/equivalencia-patrones.html",
+    "title": "Equivalencia y patrones de consulta",
+    "section": "",
+    "text": "El curso desarrolla en paralelo tres formas de expresar consultas:\n\nlógica de primer orden;\nálgebra relacional;\nSQL.\n\nLa utilidad pedagógica no es solo poder traducir sintaxis. El objetivo es reconocer la misma intención declarativa detrás de expresiones distintas. (Riveros 2026b; Arenas et al. 2022)",
+    "crumbs": [
+      "Teoría de consultas",
+      "Equivalencia y patrones de consulta"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/equivalencia-patrones.html#una-consulta-varios-lenguajes",
+    "href": "teoria-consultas/equivalencia-patrones.html#una-consulta-varios-lenguajes",
+    "title": "Equivalencia y patrones de consulta",
+    "section": "",
+    "text": "El curso desarrolla en paralelo tres formas de expresar consultas:\n\nlógica de primer orden;\nálgebra relacional;\nSQL.\n\nLa utilidad pedagógica no es solo poder traducir sintaxis. El objetivo es reconocer la misma intención declarativa detrás de expresiones distintas. (Riveros 2026b; Arenas et al. 2022)",
+    "crumbs": [
+      "Teoría de consultas",
+      "Equivalencia y patrones de consulta"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/equivalencia-patrones.html#teorema-de-codd",
+    "href": "teoria-consultas/equivalencia-patrones.html#teorema-de-codd",
+    "title": "Equivalencia y patrones de consulta",
+    "section": "Teorema de Codd",
+    "text": "Teorema de Codd\n\n\n\n\n\n\nNotaResultado central\n\n\n\nLa Clase 04 presenta el Teorema de Codd: álgebra relacional y lógica de primer orden son igualmente expresivas, considerando el fragmento apropiado de consultas de primer orden independientes del dominio. (Riveros 2026b; Arenas et al. 2022)\n\n\nEn la notación resumida del curso:\n[ SQL^*;=;;=;^{}, ]\ndonde:\n\n(SQL^*) es el fragmento de SQL estudiado hasta ese punto;\n() restringe la lógica a consultas independientes del dominio; la semántica activa adoptada en Clase 01 evita resultados que dependan de elementos arbitrarios externos a la base de datos. (Riveros 2026a, 2026b)\n\n\n\n\n\n\n\nAdvertenciaQué no afirma esta equivalencia\n\n\n\nNo significa que todo SQL moderno sea equivalente a la lógica de primer orden o al álgebra relacional clásica. Agregación, recursión, ventanas y otras extensiones agregan construcciones que deben analizarse por separado. La igualdad anterior se refiere al fragmento especificado por el curso.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Equivalencia y patrones de consulta"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/equivalencia-patrones.html#patrón-base-selección-proyección-y-join",
+    "href": "teoria-consultas/equivalencia-patrones.html#patrón-base-selección-proyección-y-join",
+    "title": "Equivalencia y patrones de consulta",
+    "section": "Patrón base: selección, proyección y join",
+    "text": "Patrón base: selección, proyección y join\nUna consulta del tipo\nSELECT DISTINCT &lt;atributos&gt;\nFROM R1, ..., Rk\nWHERE &lt;condición&gt;;\npuede verse algebraicamente como\n[ {} ( {} (R_1R_k) ), ]\ncon renombramientos cuando sean necesarios. En lógica, el patrón correspondiente es una consulta conjuntiva:\n[ Q(x) y.; R_1R_k. ]\n(Riveros 2026b)\n\nEjemplo: estudiantes inscritos en IIC2413\nLógica\n[ Q(n) rcs.; Estudiante(r,n,c) Inscribe(r,,s). ]\nÁlgebra\n[ {nombre} ( Estudiante {codigo=}(Inscribe) ). ]\nSQL\nSELECT DISTINCT E.nombre\nFROM Estudiante AS E\nJOIN Inscribe AS I\n  ON E.rut = I.rut\nWHERE I.codigo = 'IIC2413';",
+    "crumbs": [
+      "Teoría de consultas",
+      "Equivalencia y patrones de consulta"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/equivalencia-patrones.html#patrón-existe",
+    "href": "teoria-consultas/equivalencia-patrones.html#patrón-existe",
+    "title": "Equivalencia y patrones de consulta",
+    "section": "Patrón «existe»",
+    "text": "Patrón «existe»\nEn lógica:\n[ y.;(x,y). ]\nEn álgebra, suele corresponder a combinar con otra relación y proyectar los atributos de interés. En SQL, EXISTS, IN o un join pueden expresar la idea según el contexto.\nEjemplo: cursos que tienen al menos un profesor asignado.\nSELECT DISTINCT C.nombre\nFROM Curso AS C\nWHERE EXISTS (\n  SELECT 1\n  FROM Dicta AS D\n  WHERE D.codigo = C.codigo\n);",
+    "crumbs": [
+      "Teoría de consultas",
+      "Equivalencia y patrones de consulta"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/equivalencia-patrones.html#patrón-no-existe-ninguno",
+    "href": "teoria-consultas/equivalencia-patrones.html#patrón-no-existe-ninguno",
+    "title": "Equivalencia y patrones de consulta",
+    "section": "Patrón «no existe ninguno»",
+    "text": "Patrón «no existe ninguno»\nLa lógica usa negación de un existencial:\n[ y.;(x,y). ]\nEn álgebra aparece una diferencia o un anti-join. En SQL, el patrón más directo suele ser NOT EXISTS.\nEjemplo: cursos sin prerrequisitos.\nSELECT C.nombre\nFROM Curso AS C\nWHERE NOT EXISTS (\n  SELECT 1\n  FROM Requisito AS R\n  WHERE R.codigo = C.codigo\n);\nÁlgebra:\n[ _{codigo,nombre,creditos}(Curso) Requisito. ]",
+    "crumbs": [
+      "Teoría de consultas",
+      "Equivalencia y patrones de consulta"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/equivalencia-patrones.html#patrón-dos-o-más-distintos",
+    "href": "teoria-consultas/equivalencia-patrones.html#patrón-dos-o-más-distintos",
+    "title": "Equivalencia y patrones de consulta",
+    "section": "Patrón «dos o más distintos»",
+    "text": "Patrón «dos o más distintos»\nLa Ayudantía 1 destaca que se necesitan dos testigos distintos. (Saavedra 2026)\nPara cursos dictados por más de un profesor en un mismo semestre:\n[\n\\[\\begin{aligned}\nQ(c)\\leftarrow\\;&\n\\exists p_1\\exists p_2\\exists s.\\\\\n&Dicta(p_1,c,s)\\land Dicta(p_2,c,s)\\land\\neg(p_1=p_2).\n\\end{aligned}\\]\n]\nEn álgebra se usan dos copias renombradas de Dicta; sin renombramiento, los atributos compartidos obligarían a igualar valores que queremos comparar como testigos diferentes.\nEn SQL:\nSELECT DISTINCT D1.codigo\nFROM Dicta AS D1\nJOIN Dicta AS D2\n  ON D1.codigo = D2.codigo\n AND D1.semestre = D2.semestre\n AND D1.pid &lt;&gt; D2.pid;",
+    "crumbs": [
+      "Teoría de consultas",
+      "Equivalencia y patrones de consulta"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/equivalencia-patrones.html#patrón-a-y-b",
+    "href": "teoria-consultas/equivalencia-patrones.html#patrón-a-y-b",
+    "title": "Equivalencia y patrones de consulta",
+    "section": "Patrón «A y B»",
+    "text": "Patrón «A y B»\nPara condiciones que deben cumplirse ambas pero pueden tener testigos distintos, una estrategia es usar dos existenciales, dos EXISTS o una intersección.\nEjemplo: estudiantes inscritos tanto en IIC2413 como en IIC2233:\nSELECT E.nombre\nFROM Estudiante AS E\nWHERE EXISTS (\n  SELECT 1 FROM Inscribe AS I\n  WHERE I.rut = E.rut AND I.codigo = 'IIC2413'\n)\nAND EXISTS (\n  SELECT 1 FROM Inscribe AS I\n  WHERE I.rut = E.rut AND I.codigo = 'IIC2233'\n);",
+    "crumbs": [
+      "Teoría de consultas",
+      "Equivalencia y patrones de consulta"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/equivalencia-patrones.html#patrón-para-todos",
+    "href": "teoria-consultas/equivalencia-patrones.html#patrón-para-todos",
+    "title": "Equivalencia y patrones de consulta",
+    "section": "Patrón «para todos»",
+    "text": "Patrón «para todos»\nLa equivalencia\n[ x. x. ]\nsugiere buscar ausencia de contraejemplos. (Saavedra 2026)\nPara una consulta del tipo «estudiantes que cumplen una condición para todos los cursos de un conjunto», la estructura lógica es:\n[ c.;CursoObjetivo(c)Cumple(estudiante,c). ]\nEn álgebra, la Ayudantía señala que este patrón suele requerir diferencias anidadas y se relaciona con el operador de división. No desarrollaremos división como operador primitivo porque todavía no forma parte del núcleo definido en clase; el patrón de contraejemplo es suficiente para razonar las consultas actuales. (Saavedra 2026)",
+    "crumbs": [
+      "Teoría de consultas",
+      "Equivalencia y patrones de consulta"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/equivalencia-patrones.html#equivalencia-no-significa-igualdad-sintáctica",
+    "href": "teoria-consultas/equivalencia-patrones.html#equivalencia-no-significa-igualdad-sintáctica",
+    "title": "Equivalencia y patrones de consulta",
+    "section": "Equivalencia no significa igualdad sintáctica",
+    "text": "Equivalencia no significa igualdad sintáctica\nDos consultas pueden ser equivalentes aunque su forma sea muy distinta. Para demostrar una igualdad algebraica suele ser necesario verificar:\n\nque ambos lados tienen los mismos atributos;\nque toda tupla del lado izquierdo pertenece al derecho;\nque toda tupla del lado derecho pertenece al izquierdo.\n\nLa Ayudantía 1 propone explícitamente pruebas por doble contención o mediante un «si y solo si». (Saavedra 2026)\n\n\n\n\n\n\nAdvertenciaDuplicados al traducir SQL\n\n\n\nEl álgebra del curso tiene semántica de conjuntos, mientras SQL permite duplicados. Una reescritura que es correcta en álgebra puede necesitar DISTINCT para conservar exactamente la misma salida observable en SQL. La Clase 04 advierte especialmente sobre este problema al desanidar consultas. (Riveros 2026b)\n\n\n\nResumen\n\nEl fragmento relacional estudiado de SQL, el álgebra relacional y la lógica de primer orden independiente del dominio expresan las mismas consultas básicas.\nSELECT-FROM-WHERE se interpreta naturalmente como proyección, selección y combinación de relaciones.\n«Existe», «no existe», «dos distintos» y «para todos» son patrones reutilizables.\nLas traducciones deben respetar atributos y, al pasar a SQL, también la semántica de duplicados.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Equivalencia y patrones de consulta"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/equivalencia-patrones.html#conceptos-relacionados",
+    "href": "teoria-consultas/equivalencia-patrones.html#conceptos-relacionados",
+    "title": "Equivalencia y patrones de consulta",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nLógica de primer orden y consultas\nÁlgebra relacional\nJoins y operadores derivados\nSubconsultas",
+    "crumbs": [
+      "Teoría de consultas",
+      "Equivalencia y patrones de consulta"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/joins-operadores.html",
+    "href": "teoria-consultas/joins-operadores.html",
+    "title": "Joins, producto cartesiano y operadores derivados",
+    "section": "",
+    "text": "Las relaciones separan información por temas. Para responder consultas reales necesitamos combinarlas. El operador central es el join: une tuplas que son compatibles en los atributos que comparten. (Riveros 2026a)\nPor ejemplo:\n\nEstudiante(rut, nombre, carrera)\nInscribe(rut, codigo, semestre)\n\ncomparten el atributo rut. Un join permite asociar cada estudiante con sus inscripciones.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Joins y operadores derivados"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/joins-operadores.html#intuición-y-concepto",
+    "href": "teoria-consultas/joins-operadores.html#intuición-y-concepto",
+    "title": "Joins, producto cartesiano y operadores derivados",
+    "section": "",
+    "text": "Las relaciones separan información por temas. Para responder consultas reales necesitamos combinarlas. El operador central es el join: une tuplas que son compatibles en los atributos que comparten. (Riveros 2026a)\nPor ejemplo:\n\nEstudiante(rut, nombre, carrera)\nInscribe(rut, codigo, semestre)\n\ncomparten el atributo rut. Un join permite asociar cada estudiante con sus inscripciones.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Joins y operadores derivados"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/joins-operadores.html#compatibilidad-de-tuplas",
+    "href": "teoria-consultas/joins-operadores.html#compatibilidad-de-tuplas",
+    "title": "Joins, producto cartesiano y operadores derivados",
+    "section": "Compatibilidad de tuplas",
+    "text": "Compatibilidad de tuplas\nSean (_1) y (_2) tuplas nombradas. El curso define que son compatibles, escrito (_1_2), si coinciden en todos los atributos compartidos:\n[ _1_2 Aatt(_1)att(_2),; _1(A)=_2(A). ]\nSi son compatibles, se pueden fusionar en una tupla con atributos\n[ att(_1)att(_2). ]\n(Riveros 2026a)",
+    "crumbs": [
+      "Teoría de consultas",
+      "Joins y operadores derivados"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/joins-operadores.html#natural-join",
+    "href": "teoria-consultas/joins-operadores.html#natural-join",
+    "title": "Joins, producto cartesiano y operadores derivados",
+    "section": "Natural join",
+    "text": "Natural join\n\n\n\n\n\n\nNotaDefinición formal\n\n\n\nPara relaciones (R) y (S), el natural join es\n[ RS := {_1_2 _1R, _2S,  _1_2}. ]\nAdemás,\n[ att(RS)=att(R)att(S). ]\n(Riveros 2026a; Saavedra 2026)\n\n\n\nEjemplo\n[ EstudianteInscribe ]\ncombina una tupla de Estudiante con una de Inscribe exactamente cuando ambas tienen el mismo rut.\n\n\n\n\n\n\nAdvertenciaEl nombre de los atributos importa\n\n\n\nEl natural join compara todos los atributos con nombres comunes. Si dos relaciones comparten accidentalmente un nombre que no representa la misma propiedad, el resultado puede ser incorrecto. En esos casos conviene renombrar o usar un join con condición explícita. (Ramakrishnan y Gehrke 2003; Silberschatz et al. 2020)",
+    "crumbs": [
+      "Teoría de consultas",
+      "Joins y operadores derivados"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/joins-operadores.html#producto-cartesiano",
+    "href": "teoria-consultas/joins-operadores.html#producto-cartesiano",
+    "title": "Joins, producto cartesiano y operadores derivados",
+    "section": "Producto cartesiano",
+    "text": "Producto cartesiano\nCuando\n[ att(R)att(S)=, ]\ntodas las parejas de tuplas son compatibles. En ese caso el join coincide con el producto cartesiano:\n[ RS := {_1_2 _1R, _2S}. ]\nEl curso define (RS) solo para relaciones con atributos disjuntos. (Riveros 2026a)\nEl producto cartesiano suele ser un paso intermedio: genera todas las combinaciones y luego una selección conserva las que cumplen la condición de unión.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Joins y operadores derivados"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/joins-operadores.html#el-join-puede-expresarse-con-operadores-básicos",
+    "href": "teoria-consultas/joins-operadores.html#el-join-puede-expresarse-con-operadores-básicos",
+    "title": "Joins, producto cartesiano y operadores derivados",
+    "section": "El join puede expresarse con operadores básicos",
+    "text": "El join puede expresarse con operadores básicos\nLa Clase 02 demuestra el caso\n[ att(R_1)={A,B}, att(R_2)={B,C}. ]\nRenombrando temporalmente el segundo (B) como (B’):\n[ R_1R_2 = {A,B,C} ( {B=B’} ( R_1_{BB’}(R_2) ) ). ]\n(Riveros 2026a)\nLa idea general es:\n\nrenombrar atributos compartidos para poder formar el producto;\nseleccionar parejas donde los valores originales coinciden;\nproyectar para eliminar las copias auxiliares.\n\nEsto muestra que el join es expresable a partir de producto, selección, renombramiento y proyección.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Joins y operadores derivados"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/joins-operadores.html#join",
+    "href": "teoria-consultas/joins-operadores.html#join",
+    "title": "Joins, producto cartesiano y operadores derivados",
+    "section": "()-join",
+    "text": "()-join\nLa Ayudantía 1 define, para relaciones con atributos disjuntos y una condición ():\n[ RS := (RS). ]\n(Saavedra 2026)\nPor ejemplo, si renombramos Inscribe.codigo como codigoIns y Curso.codigo como codigoCurso, podemos unir mediante\n[ Inscribe’_{codigoIns=codigoCurso}Curso’. ]\nSi los atributos no son disjuntos, primero se renombra lo necesario para que el producto sea válido bajo la convención del curso.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Joins y operadores derivados"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/joins-operadores.html#semijoin",
+    "href": "teoria-consultas/joins-operadores.html#semijoin",
+    "title": "Joins, producto cartesiano y operadores derivados",
+    "section": "Semijoin",
+    "text": "Semijoin\nEl semijoin conserva únicamente las tuplas de (R) que tienen algún compañero compatible en (S):\n[ RS := {R S.;}. ]\nLa Ayudantía 1 pide mostrar que puede expresarse como\n[ RS = _{att(R)}(RS). ]\n(Saavedra 2026)\nEjemplo: estudiantes que tienen al menos una inscripción:\n[ EstudianteInscribe. ]",
+    "crumbs": [
+      "Teoría de consultas",
+      "Joins y operadores derivados"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/joins-operadores.html#anti-join",
+    "href": "teoria-consultas/joins-operadores.html#anti-join",
+    "title": "Joins, producto cartesiano y operadores derivados",
+    "section": "Anti-join",
+    "text": "Anti-join\nEl anti-join conserva las tuplas de (R) que no tienen ningún compañero compatible en (S):\n[ RS := {R S.;}. ]\nSe deriva inmediatamente del semijoin:\n[ RS = R(RS). ]\n(Saavedra 2026)\nAsí, los estudiantes sin inscripciones pueden expresarse como\n[ EstudianteInscribe. ]",
+    "crumbs": [
+      "Teoría de consultas",
+      "Joins y operadores derivados"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/joins-operadores.html#correspondencia-con-sql",
+    "href": "teoria-consultas/joins-operadores.html#correspondencia-con-sql",
+    "title": "Joins, producto cartesiano y operadores derivados",
+    "section": "Correspondencia con SQL",
+    "text": "Correspondencia con SQL\nUna combinación explícita mediante condición suele escribirse:\nSELECT E.nombre, I.codigo\nFROM Estudiante AS E\nJOIN Inscribe AS I\n  ON E.rut = I.rut;\nEl SQL básico también presenta NATURAL JOIN, JOIN ... USING (...) y la forma con múltiples relaciones en FROM más una condición en WHERE, tal como aparecen en la Clase 04. (Riveros 2026b)\n\nResumen\n\nEl natural join combina tuplas compatibles en atributos compartidos.\nEl producto cartesiano es el caso en que los atributos son disjuntos.\nUn join puede construirse con producto, selección, renombramiento y proyección.\nEl ()-join incorpora una condición explícita.\nSemijoin y anti-join expresan «tiene compañero» y «no tiene compañero» sin ampliar el poder expresivo del álgebra base.",
+    "crumbs": [
+      "Teoría de consultas",
+      "Joins y operadores derivados"
+    ]
+  },
+  {
+    "objectID": "teoria-consultas/joins-operadores.html#conceptos-relacionados",
+    "href": "teoria-consultas/joins-operadores.html#conceptos-relacionados",
+    "title": "Joins, producto cartesiano y operadores derivados",
+    "section": "Conceptos relacionados",
+    "text": "Conceptos relacionados\n\nÁlgebra relacional\nEquivalencia y patrones de consulta\nSELECT-FROM-WHERE, joins y conjuntos\nOuter joins",
+    "crumbs": [
+      "Teoría de consultas",
+      "Joins y operadores derivados"
+    ]
+  }
+]
