@@ -1,0 +1,246 @@
+---
+title: "Descomposiciones y pérdida de información"
+description: "Proyecciones de una relación, reconstrucción mediante join, tuplas espurias y dependencias proyectadas."
+---
+
+## Intuición y concepto
+
+Las dependencias funcionales explican por qué una relación redundante puede sufrir anomalías. Una estrategia de diseño es **descomponerla** en relaciones más pequeñas. El riesgo es que al separar atributos perdamos la capacidad de reconstruir exactamente la información original. La Clase 08 formaliza esta tensión mediante descomposiciones y joins. [@riveros2026-clase08]
+
+## Relación redundante de ejemplo
+
+Consideremos:
+
+\[
+InscripcionDetallada(rut,nombreEst,carrera,codigo,nombreCurso,creditos,semestre)
+\]
+
+con dependencias del dominio como
+
+\[
+rut\to nombreEst\ carrera,
+\qquad
+codigo\to nombreCurso\ creditos.
+\]
+
+La relación repite datos de estudiante y de curso en cada inscripción.
+
+## Descomposición binaria
+
+::: {.callout-note title="Definición de Clase 08"}
+Una descomposición de una relación \(R\) en listas de atributos \(\bar A\) y \(\bar B\) consiste en
+
+\[
+att(R)=\{\bar A\}\cup\{\bar B\},
+\]
+
+\[
+S=\pi_{\bar A}(R),
+\qquad
+T=\pi_{\bar B}(R).
+\]
+
+[@riveros2026-clase08]
+:::
+
+Una descomposición con más de dos relaciones puede obtenerse aplicando sucesivamente descomposiciones binarias.
+
+## Un primer paso útil
+
+Tomemos
+
+\[
+\bar A=(rut,nombreEst,carrera),
+\]
+
+\[
+\bar B=(rut,codigo,nombreCurso,creditos,semestre).
+\]
+
+Entonces:
+
+\[
+S=\pi_{rut,nombreEst,carrera}(InscripcionDetallada),
+\]
+
+\[
+T=\pi_{rut,codigo,nombreCurso,creditos,semestre}(InscripcionDetallada).
+\]
+
+La proyección elimina repeticiones idénticas porque el álgebra relacional usa conjuntos.
+
+## Reconstrucción y tuplas espurias
+
+Una vez separadas las relaciones intentamos reconstruir con
+
+\[
+S\bowtie T.
+\]
+
+Siempre recuperaremos las tuplas originales en esta construcción por proyección, pero el join **puede producir tuplas adicionales** cuando los atributos compartidos no conservan suficiente información para emparejar correctamente las partes. Esas combinaciones adicionales se conocen como tuplas espurias en la bibliografía de diseño relacional. [@silberschatz2020; @garciamolina2009]
+
+### Ejemplo de una mala elección
+
+Supongamos que de una relación con
+
+::: {.table-responsive}
+| rut | nombreEst | codigo | nombreCurso |
+|---|---|---|---|
+| r2 | Ben | IIC2233 | Programación Avanzada |
+| r2 | Ben | IIC2413 | Bases de Datos |
+:::
+
+formamos:
+
+\[
+X=\pi_{rut,nombreEst,codigo}(R)
+\]
+
+y
+
+\[
+Y=\pi_{rut,nombreCurso}(R).
+\]
+
+El atributo compartido es solo `rut`. Al hacer \(X\bowtie Y\), cada código de Ben puede combinarse con **cada** nombre de curso de Ben. Aparecen asociaciones falsas como `IIC2233` con `Bases de Datos`.
+
+La información no desapareció de las proyecciones, pero la separación olvidó qué nombre de curso correspondía a qué código.
+
+## Descomposición sin pérdida
+
+::: {.callout-note title="Definición de Clase 08"}
+Sean \(S=\pi_{\bar A}(R)\) y \(T=\pi_{\bar B}(R)\). La descomposición es **sin pérdida** para \(R\) si
+
+\[
+R=S\bowtie T.
+\]
+
+[@riveros2026-clase08]
+:::
+
+Esta igualdad exige dos cosas:
+
+- el join recupere todas las tuplas originales;
+- no genere ninguna tupla espuria.
+
+::: {.callout-warning title="Nivel de generalidad"}
+La Clase 08 define aquí la propiedad respecto de una relación \(R\) concreta. La teoría de normalización estudia condiciones para garantizar pérdida cero para **todas** las relaciones que satisfacen ciertas dependencias. Como las formas normales todavía no aparecen en el material disponible, no adelantamos esas condiciones en esta página.
+:::
+
+## Dependencias después de descomponer
+
+No basta con conocer las dependencias escritas originalmente dentro de cada lado. También debemos considerar las que están **implicadas** por \(F\) y usan solo atributos de la nueva relación.
+
+La Clase 08 define, para el lado \(S\) con atributos \(\bar A\):
+
+\[
+F_S
+:=
+\{\bar X\to\bar Y
+\mid
+F\models\bar X\to\bar Y,
+\{\bar X\}\subseteq\{\bar A\},
+\{\bar Y\}\subseteq\{\bar A\}
+\}.
+\]
+
+Análogamente, para \(T\):
+
+\[
+F_T
+:=
+\{\bar Z\to\bar U
+\mid
+F\models\bar Z\to\bar U,
+\{\bar Z\}\subseteq\{\bar B\},
+\{\bar U\}\subseteq\{\bar B\}
+\}.
+\]
+
+[@riveros2026-clase08]
+
+Esta operación suele llamarse **proyección de dependencias** sobre los atributos de una relación.
+
+## Ejemplo de dependencias proyectadas
+
+Sea
+
+\[
+R(rut,nombreEst,codigo,nombreCurso)
+\]
+
+con
+
+\[
+F=\{rut\to nombreEst,\;codigo\to nombreCurso\}.
+\]
+
+Si descomponemos en
+
+\[
+A=\{rut,nombreEst,codigo\}
+\]
+
+y
+
+\[
+B=\{codigo,nombreCurso\},
+\]
+
+entonces, entre otras dependencias triviales:
+
+\[
+rut\to nombreEst\in F_A,
+\]
+
+\[
+codigo\to nombreCurso\in F_B.
+\]
+
+Las reglas de cada componente deben obtenerse a partir de **todas las consecuencias de \(F\)** que permanecen dentro de sus atributos, no solo copiando textualmente dependencias originales.
+
+## Algoritmo presentado en Clase 08
+
+Para calcular \(F_S\), la clase propone enumerar subconjuntos no vacíos \(\bar X\) de los atributos de \(S\), calcular \(\bar X^+\) bajo \(F\), y agregar la parte de la clausura que permanece dentro de \(S\). [@riveros2026-clase08]
+
+En forma conceptual:
+
+```text
+reglas <- conjunto vacío
+para cada X no vacío contenido en atributos(S):
+  calcular X+ según F
+  Y <- (X+ - X) intersección atributos(S)
+  si Y no es vacío:
+    agregar X -> Y a reglas
+retornar reglas
+```
+
+Este algoritmo reutiliza directamente la [clausura de atributos](implicacion-clausura.qmd).
+
+## Qué falta para normalización
+
+Con el material actual ya podemos formular tres preguntas de diseño:
+
+1. ¿qué redundancias sugieren las dependencias funcionales?
+2. ¿la descomposición permite reconstruir la relación sin información espuria?
+3. ¿qué dependencias quedan vigentes en cada componente?
+
+El paso siguiente será estudiar formas normales y algoritmos sistemáticos de descomposición. Ese contenido aparece en el programa, pero aún no está desarrollado en las clases disponibles, así que no se incorpora todavía. [@riveros2026-programa]
+
+::: {.summary-box}
+### Resumen
+
+- Una descomposición binaria se obtiene proyectando una relación sobre dos conjuntos de atributos cuya unión cubre el esquema original.
+- El join de las proyecciones puede producir combinaciones espurias.
+- Una descomposición es sin pérdida para \(R\) cuando \(R=S\bowtie T\).
+- Las dependencias de cada componente incluyen todas las consecuencias de \(F\) que solo mencionan sus atributos.
+- La clausura permite calcular esas dependencias proyectadas.
+:::
+
+::: {.related-links}
+## Conceptos relacionados
+
+- [Dependencias funcionales y llaves](dependencias-llaves.qmd)
+- [Implicación y clausura](implicacion-clausura.qmd)
+- [Joins y operadores derivados](../teoria-consultas/joins-operadores.qmd)
+:::

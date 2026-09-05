@@ -1,0 +1,216 @@
+---
+title: "Lógica de primer orden y consultas"
+description: "Sintaxis y semántica de las consultas de primer orden sobre bases de datos relacionales."
+---
+
+## Intuición y concepto
+
+Una consulta debe depender de la **forma** de la base de datos y no de enumerar manualmente su contenido. La Clase 01 introduce la lógica de primer orden como primer lenguaje formal para declarar propiedades de los datos. [@riveros2026-clase01]
+
+Por ejemplo, sobre
+
+::: {.schema-box}
+**Estudiante**(`rut`, `nombre`, `carrera`)  
+**Curso**(`codigo`, `nombre`, `creditos`)  
+**Inscribe**(`rut`, `codigo`, `semestre`)
+:::
+
+podemos expresar «estudiantes inscritos en IIC2413» diciendo que **existe** una tupla de `Inscribe` que conecta el RUT del estudiante con ese código.
+
+## Datos, variables y términos
+
+El curso fija:
+
+- `Data`: conjunto de datos o constantes;
+- `Var`: conjunto de variables, con \(Data\cap Var=\varnothing\);
+- un **término** es un elemento de \(Data\cup Var\). [@riveros2026-clase01]
+
+Usaremos \(a,b,c,\ldots\) para constantes y \(x,y,z,\ldots\) para variables.
+
+## Sintaxis
+
+Sea \(S=(N,ar)\) un esquema posicional. Una fórmula \(\varphi\) sobre \(S\) se construye recursivamente a partir de: [@riveros2026-clase01]
+
+\[
+\begin{aligned}
+\varphi ::= {} & x=a
+\mid x=y
+\mid R(t_1,\ldots,t_k) \\
+&\mid \varphi_1\lor\varphi_2
+\mid \varphi_1\land\varphi_2
+\mid \neg\psi \\
+&\mid \exists x.\psi
+\mid \forall x.\psi,
+\end{aligned}
+\]
+
+donde \(R\in N\), \(k=ar(R)\) y cada \(t_i\in Data\cup Var\).
+
+Las tres primeras formas son **atómicas**; las restantes construyen fórmulas compuestas.
+
+::: {.callout-note title="Comparaciones usadas en el curso"}
+La Ayudantía 1 extiende las fórmulas atómicas con comparaciones
+
+\[
+x\sim a,\qquad x\sim y,
+\quad
+\sim\in\{<,>,\le,\ge\},
+\]
+
+con la semántica esperada. Esta extensión es útil para mantener una correspondencia directa con selecciones comparativas del álgebra relacional. [@saavedra2026-ayudantia1]
+:::
+
+## Variables libres y cuantificadas
+
+Una variable es **libre** si su valor debe venir dado por una asignación externa; queda **cuantificada** cuando está bajo \(\exists\) o \(\forall\).
+
+Por ejemplo,
+
+\[
+\varphi(x)=\exists c\exists s.\; Inscribe(x,c,s)\land c=\text{IIC2413}
+\]
+
+tiene a \(x\) libre y a \(c,s\) cuantificadas.
+
+El curso denota por \(FV(\varphi)\) el conjunto de variables libres y por \(Const(\varphi)\) las constantes mencionadas por la fórmula. [@riveros2026-clase01]
+
+## Semántica
+
+Sea \(D\) una base de datos del esquema. Una asignación \(\alpha\) de \(\varphi\) sobre \(D\) asigna a cada variable libre un elemento de
+
+\[
+Dom(D)\cup Const(\varphi).
+\]
+
+El curso adopta además \(\alpha(a)=a\) para constantes \(a\in Data\). [@riveros2026-clase01]
+
+La relación de satisfacción \((D,\alpha)\models\varphi\) se define inductivamente. Los casos centrales son:
+
+\[
+(D,\alpha)\models x=a
+\iff
+\alpha(x)=a,
+\]
+
+\[
+(D,\alpha)\models x=y
+\iff
+\alpha(x)=\alpha(y),
+\]
+
+\[
+(D,\alpha)\models R(t_1,\ldots,t_k)
+\iff
+(\alpha(t_1),\ldots,\alpha(t_k))\in D(R).
+\]
+
+Para los conectivos:
+
+\[
+(D,\alpha)\models\varphi\land\psi
+\iff
+(D,\alpha)\models\varphi
+\text{ y }
+(D,\alpha)\models\psi,
+\]
+
+con definiciones análogas para \(\lor\) y \(\neg\).
+
+Para los cuantificadores, el curso cuantifica sobre el dominio activo más las constantes de la fórmula:
+
+\[
+(D,\alpha)\models\exists x.\varphi
+\iff
+(D,\alpha_{x/a})\models\varphi
+\text{ para algún }a\in Dom(D)\cup Const(\varphi),
+\]
+
+\[
+(D,\alpha)\models\forall x.\varphi
+\iff
+(D,\alpha_{x/a})\models\varphi
+\text{ para todo }a\in Dom(D)\cup Const(\varphi).
+\]
+
+Esta elección de semántica activa es importante cuando más adelante relacionemos lógica y álgebra relacional. [@riveros2026-clase01; @arenas2022]
+
+## Consultas de primer orden
+
+::: {.callout-note title="Definición del curso"}
+Una consulta de primer orden tiene la forma
+
+\[
+Q(x_1,\ldots,x_n)\leftarrow\varphi,
+\]
+
+con \(FV(\varphi)\subseteq\{x_1,\ldots,x_n\}\). Su respuesta sobre \(D\) es
+
+\[
+Q(D)=
+\{(\alpha(x_1),\ldots,\alpha(x_n))
+\mid
+(D,\alpha)\models\varphi\}.
+\]
+
+[@riveros2026-clase01]
+:::
+
+::: {.callout-warning title="Detalle de la definición"}
+Las diapositivas escriben la condición \(FV(\varphi)\subseteq\{x_1,\ldots,x_n\}\). La definición semántica usa valores para todas las variables de la cabeza. Para evitar el caso límite no desarrollado en el material, todos los ejemplos de este sitio harán que cada variable de la cabeza ocurra libremente en la fórmula.
+:::
+
+### Ejemplo: estudiantes inscritos en IIC2413
+
+\[
+\begin{aligned}
+Q(n)\leftarrow\;&\exists r\exists c\exists s.\\
+&Estudiante(r,n,c)\land
+Inscribe(r,\text{IIC2413},s).
+\end{aligned}
+\]
+
+La consulta retorna los nombres de estudiantes para los cuales existe una inscripción compatible.
+
+### Ejemplo: cursos sin prerrequisitos
+
+\[
+Q(n)\leftarrow
+\exists c\exists cr.\;
+Curso(c,n,cr)\land
+\neg\exists p.\;Requisito(c,p).
+\]
+
+Aquí la negación de un existencial expresa «no existe ningún prerrequisito».
+
+## Universal como ausencia de contraejemplo
+
+La equivalencia
+
+\[
+\forall x.\varphi
+\equiv
+\neg\exists x.\neg\varphi
+\]
+
+es especialmente útil para consultas de tipo «para todos». La Ayudantía 1 la destaca como patrón central de traducción entre lógica y álgebra. [@saavedra2026-ayudantia1]
+
+La idea práctica es buscar un **contraejemplo**: una condición universal se cumple cuando no existe ningún elemento que la viole.
+
+::: {.summary-box}
+### Resumen
+
+- Las relaciones de una base de datos se interpretan como predicados.
+- Una fórmula combina átomos mediante conectivos y cuantificadores.
+- La semántica del curso cuantifica sobre \(Dom(D)\cup Const(\varphi)\).
+- Una consulta \(Q(\bar x)\leftarrow\varphi\) produce una relación con las asignaciones que satisfacen \(\varphi\).
+- «No existe» y «para todos» son patrones fundamentales para formular consultas.
+:::
+
+::: {.related-links}
+## Conceptos relacionados
+
+- [Modelo relacional](../fundamentos/modelo-relacional.qmd)
+- [Álgebra relacional](algebra-relacional.qmd)
+- [Equivalencia y patrones de consulta](equivalencia-patrones.qmd)
+- [Subconsultas SQL](../sql/subconsultas.qmd)
+:::

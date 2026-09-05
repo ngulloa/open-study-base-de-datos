@@ -1,0 +1,207 @@
+---
+title: "Álgebra relacional"
+description: "Operadores fundamentales del álgebra relacional sobre relaciones nombradas."
+---
+
+## Intuición y concepto
+
+El álgebra relacional es un lenguaje de consultas **composicional**: cada operador recibe relaciones y devuelve una relación. Por lo tanto, el resultado de una operación puede usarse como entrada de otra. Esta propiedad permite construir consultas complejas a partir de operadores simples. [@riveros2026-clase02; @arenas2022]
+
+Trabajaremos sobre [relaciones nombradas](../fundamentos/relaciones-nombradas.qmd). El esquema transversal será:
+
+::: {.schema-box}
+**Estudiante**(`rut`, `nombre`, `carrera`)  
+**Curso**(`codigo`, `nombre`, `creditos`)  
+**Inscribe**(`rut`, `codigo`, `semestre`)
+:::
+
+## Operadores de conjuntos
+
+Sean \(R\) y \(S\) relaciones con los mismos atributos. El curso define: [@riveros2026-clase02]
+
+\[
+R\cup S=\{\bar\tau\mid \bar\tau\in R\lor\bar\tau\in S\},
+\]
+
+\[
+R\cap S=\{\bar\tau\mid \bar\tau\in R\land\bar\tau\in S\},
+\]
+
+\[
+R\setminus S=\{\bar\tau\mid \bar\tau\in R\land\bar\tau\notin S\}.
+\]
+
+Los tres operadores están definidos solo cuando
+
+\[
+att(R)=att(S).
+\]
+
+Además,
+
+\[
+att(R\cup S)=att(R\cap S)=att(R\setminus S)=att(R).
+\]
+
+### Ejemplo
+
+Si
+
+\[
+C=\pi_{rut}(\sigma_{carrera=\text{Computación}}(Estudiante))
+\]
+
+y \(I\) contiene los RUT inscritos en IIC2413, entonces \(C\cap I\) identifica estudiantes de Computación que además están inscritos en el curso.
+
+## Selección
+
+La **selección** conserva las tuplas que cumplen una condición.
+
+Para \(A\in att(R)\) y \(a\in Data\):
+
+\[
+\sigma_{A=a}(R)
+:=
+\{\bar\tau\in R\mid \bar\tau(A)=a\}.
+\]
+
+Para \(A,B\in att(R)\):
+
+\[
+\sigma_{A=B}(R)
+:=
+\{\bar\tau\in R\mid \bar\tau(A)=\bar\tau(B)\}.
+\]
+
+La selección no cambia los atributos:
+
+\[
+att(\sigma_\theta(R))=att(R).
+\]
+
+El curso generaliza \(\sigma_\theta\) a fórmulas booleanas y también utiliza comparaciones \(<,>,\le,\ge\). [@riveros2026-clase02]
+
+### Ejemplo
+
+\[
+\sigma_{carrera=\text{Computación}}(Estudiante)
+\]
+
+retiene solo estudiantes de esa carrera.
+
+## Proyección
+
+La **proyección** conserva un subconjunto de atributos.
+
+Para una lista \(B_1,\ldots,B_k\subseteq att(R)\):
+
+\[
+\pi_{B_1,\ldots,B_k}(R)
+:=
+\{\pi_{B_1,\ldots,B_k}(\bar\tau)\mid \bar\tau\in R\}.
+\]
+
+Por lo tanto,
+
+\[
+att(\pi_{B_1,\ldots,B_k}(R))=\{B_1,\ldots,B_k\}.
+\]
+
+Como el resultado sigue siendo un **conjunto**, dos tuplas distintas pueden convertirse en la misma tupla proyectada y el duplicado desaparece. [@riveros2026-clase02]
+
+### Ejemplo
+
+\[
+\pi_{carrera}(Estudiante)
+\]
+
+retorna cada carrera presente una sola vez bajo la semántica del álgebra relacional.
+
+::: {.callout-warning title="Álgebra relacional y SQL difieren aquí"}
+En SQL, `SELECT carrera FROM Estudiante` puede conservar duplicados. Para reproducir la semántica de conjuntos de la proyección se usa `SELECT DISTINCT carrera ...`. [@riveros2026-clase03]
+:::
+
+## Renombramiento
+
+Si \(A\in att(R)\) y \(B\notin att(R)\), el operador
+
+\[
+\rho_{A\to B}(R)
+\]
+
+cambia el nombre del atributo \(A\) por \(B\). Su esquema resultante es
+
+\[
+att(\rho_{A\to B}(R))=
+(att(R)\setminus\{A\})\cup\{B\}.
+\]
+
+[@riveros2026-clase02]
+
+El renombramiento es crucial cuando necesitamos usar **dos copias de la misma relación** sin forzar coincidencias no deseadas entre atributos con el mismo nombre.
+
+## Composición
+
+Una consulta típica combina varios operadores. Por ejemplo, los nombres de estudiantes de Computación son:
+
+\[
+\pi_{nombre}
+\left(
+\sigma_{carrera=\text{Computación}}(Estudiante)
+\right).
+\]
+
+El operador interior filtra tuplas; la proyección exterior conserva solo `nombre`.
+
+En SQL:
+
+```sql
+SELECT DISTINCT nombre
+FROM Estudiante
+WHERE carrera = 'Computación';
+```
+
+## Propiedades útiles
+
+La Ayudantía 1 trabaja propiedades algebraicas que permiten reescribir consultas. Dos ejemplos son: [@saavedra2026-ayudantia1]
+
+### Conmutatividad de selecciones
+
+\[
+\sigma_{\theta_1}(\sigma_{\theta_2}(R))
+=
+\sigma_{\theta_2}(\sigma_{\theta_1}(R))
+=
+\sigma_{\theta_1\land\theta_2}(R).
+\]
+
+### Proyección sobre unión
+
+Si \(att(R)=att(S)\):
+
+\[
+\pi_{\bar B}(R\cup S)
+=
+\pi_{\bar B}(R)\cup\pi_{\bar B}(S).
+\]
+
+Estas igualdades son importantes porque una consulta puede tener muchas expresiones algebraicas equivalentes, base conceptual de la optimización de consultas que aparecerá más adelante en el curso.
+
+::: {.summary-box}
+### Resumen
+
+- \(\cup,\cap,\setminus\) combinan relaciones con el mismo conjunto de atributos.
+- \(\sigma\) filtra tuplas sin cambiar atributos.
+- \(\pi\) conserva atributos y elimina duplicados por semántica de conjuntos.
+- \(\rho\) cambia nombres de atributos.
+- La composición permite construir expresiones complejas y reescribirlas mediante propiedades algebraicas.
+:::
+
+::: {.related-links}
+## Conceptos relacionados
+
+- [Atributos y relaciones nombradas](../fundamentos/relaciones-nombradas.qmd)
+- [Joins y operadores derivados](joins-operadores.qmd)
+- [Equivalencia y patrones de consulta](equivalencia-patrones.qmd)
+- [`SELECT-FROM-WHERE`, joins y conjuntos](../sql/consultas-basicas.qmd)
+:::

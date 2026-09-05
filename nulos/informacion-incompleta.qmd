@@ -1,0 +1,191 @@
+---
+title: "Información incompleta y mundos posibles"
+description: "Tablas de Codd, valuaciones, posibles mundos y consultas sobre bases de datos incompletas."
+---
+
+## Intuición y concepto
+
+Un `NULL` indica que la información disponible no determina completamente un dato. Una forma formal de entender esa incertidumbre es pensar que la tabla observada representa **muchas bases de datos completas posibles**. La Clase 06 introduce esta perspectiva mediante tablas de Codd y mundos posibles. [@riveros2026-clase06]
+
+El material hace una simplificación explícita: desarrolla la teoría para una base con **una sola relación**, señalando que el enfoque se extiende a esquemas con varias relaciones. Mantendremos esa misma presentación. [@riveros2026-clase06]
+
+## Tablas de Codd
+
+Sea `Data` el conjunto de datos, `Att` un conjunto infinito de atributos y `Var` un conjunto infinito de variables.
+
+::: {.callout-note title="Definición del curso"}
+Una **tabla de Codd** \(T\) es un subconjunto finito de tuplas con los mismos atributos, cuyos valores pertenecen a \(Data\cup Var\), y donde cada variable aparece una sola vez. [@riveros2026-clase06]
+:::
+
+Ejemplo universitario:
+
+::: {.table-responsive}
+| rut | nombre | carrera |
+|---|---|---|
+| r1 | Ana | \(x\) |
+| \(y\) | Ben | Computación |
+| r3 | Zoe | \(z\) |
+:::
+
+Las variables \(x,y,z\) representan datos aún no determinados.
+
+## Variables de una tabla
+
+El curso define
+
+\[
+Var(T)
+=
+\{\bar\tau(A)\in Var
+\mid
+\bar\tau\in T,\ A\in att(T)\}.
+\]
+
+Una **valuación** es una función
+
+\[
+\nu:Var(T)\cup Data\to Data
+\]
+
+tal que
+
+\[
+\nu(a)=a
+\qquad
+\text{para todo }a\in Data.
+\]
+
+Es decir, la valuación elige un dato concreto para cada variable y deja intactas las constantes. [@riveros2026-clase06]
+
+## Aplicar una valuación
+
+Para una valuación \(\nu\), la relación completa obtenida es
+
+\[
+\nu(T)=\{\nu\circ\bar\tau\mid\bar\tau\in T\}.
+\]
+
+Por ejemplo, con
+
+\[
+\nu(x)=\text{IngenieríaCivil},
+\quad
+\nu(y)=r2,
+\quad
+\nu(z)=\text{Computación},
+\]
+
+obtenemos una relación ordinaria completamente determinada.
+
+## Mundos posibles
+
+::: {.callout-note title="Definición formal"}
+Los **posibles mundos** representados por una tabla de Codd \(T\) son
+
+\[
+Worlds(T)
+=
+\{\nu(T)\mid \nu\text{ es una valuación de }T\}.
+\]
+
+[@riveros2026-clase06]
+:::
+
+`T` es una representación finita de un conjunto potencialmente muy grande —incluso infinito— de relaciones completas.
+
+Esta idea es una base clásica para estudiar información incompleta. *Foundations of Databases* trata formalmente bases de datos incompletas y representaciones de posibles mundos; *Database Theory* incluye una parte dedicada a incertidumbre e información incompleta. [@abiteboul1995; @arenas2022]
+
+## Base de datos incompleta
+
+La Clase 06 generaliza:
+
+::: {.callout-note title="Definición del curso"}
+Una **base de datos incompleta** \(I\) es un conjunto de relaciones ordinarias que comparten los mismos atributos:
+
+\[
+\forall R_1,R_2\in I,
+\qquad
+att(R_1)=att(R_2).
+\]
+
+[@riveros2026-clase06]
+:::
+
+Ejemplos:
+
+- \(Worlds(T)\) para una tabla de Codd \(T\);
+- \(\{R\}\) para una relación completa \(R\);
+- \(\varnothing\).
+
+## Consultas sobre información incompleta
+
+Para una consulta \(Q\), el curso define:
+
+\[
+Q(I)=\{Q(R)\mid R\in I\}.
+\]
+
+Es decir, aplicamos la consulta a **cada mundo posible**. El resultado vuelve a ser una base de datos incompleta. [@riveros2026-clase06]
+
+### Proyección
+
+Si \(I=Worlds(T)\), entonces
+
+\[
+\pi_{nombre}(I)
+=
+\{\pi_{nombre}(R)\mid R\in Worlds(T)\}.
+\]
+
+Cada mundo genera su propio resultado.
+
+## ¿Toda consulta puede representarse otra vez con una tabla de Codd?
+
+La Clase 06 formula la pregunta de cierre:
+
+\[
+\text{¿existe siempre }T'
+\text{ tal que }
+Q(Worlds(T))=Worlds(T')?
+\]
+
+La respuesta es **no**. El curso entrega un contraejemplo con selección donde el conjunto de resultados posibles contiene tanto la relación vacía como una relación no vacía específica, y pide demostrar que ninguna tabla de Codd puede representar exactamente ese conjunto. [@riveros2026-clase06]
+
+Esto muestra una diferencia importante:
+
+- una representación puede ser finita y útil;
+- pero una clase de representaciones no tiene por qué ser cerrada bajo todas las consultas.
+
+## Relación con `NULL`
+
+Una celda con `NULL` en SQL no es literalmente una variable de Codd. La teoría de mundos posibles se introduce para **formalizar la intuición de información desconocida**, no para afirmar que el estándar SQL implemente directamente `Worlds(T)`. [@riveros2026-clase06]
+
+::: {.callout-warning title="No confundir dos niveles"}
+- `NULL` y la lógica de tres valores describen la evaluación concreta de SQL.
+- Tablas de Codd, valuaciones y mundos posibles forman un modelo teórico de información incompleta.
+
+Ambos temas están relacionados, pero no son la misma semántica operacional.
+:::
+
+## Qué queda fuera por ahora
+
+La teoría de información incompleta incluye preguntas sobre respuestas ciertas, poder expresivo y representaciones más generales. El material disponible las señala como un área de investigación, pero no las desarrolla todavía. No las incorporaremos como páginas adicionales hasta contar con material suficiente del curso. [@riveros2026-clase06; @arenas2022]
+
+::: {.summary-box}
+### Resumen
+
+- Una tabla de Codd contiene constantes y variables que aparecen una sola vez.
+- Una valuación reemplaza variables por datos concretos.
+- `Worlds(T)` reúne todas las relaciones completas compatibles con la tabla.
+- Una consulta sobre una base incompleta se aplica a cada mundo posible.
+- Las tablas de Codd no son cerradas bajo todas las consultas.
+- Esta teoría formaliza información incompleta, pero no debe identificarse sin más con la ejecución de `NULL` en SQL.
+:::
+
+::: {.related-links}
+## Conceptos relacionados
+
+- [`NULL` y lógica de tres valores](null-tres-valores.qmd)
+- [Lógica de primer orden](../teoria-consultas/logica-primer-orden.qmd)
+- [Outer joins](outer-joins.qmd)
+:::

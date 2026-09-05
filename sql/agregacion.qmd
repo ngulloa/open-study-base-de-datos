@@ -1,0 +1,210 @@
+---
+title: "Agregación, GROUP BY y HAVING"
+description: "Funciones agregadas, agrupación y filtros sobre grupos en SQL."
+---
+
+## Intuición y concepto
+
+Las consultas vistas hasta ahora transforman filas o combinaciones de filas. La agregación responde preguntas sobre **colecciones**: cuántos elementos hay, cuál es el mínimo, el máximo, la suma o el promedio. La Clase 05 desarrolla agregación, `GROUP BY` y `HAVING`. [@riveros2026-clase05]
+
+Usaremos:
+
+::: {.schema-box}
+**Inscribe**(`rut`, `codigo`, `semestre`)
+:::
+
+## Funciones agregadas
+
+Las funciones principales del curso son: [@riveros2026-clase05]
+
+- `COUNT`: cuenta valores;
+- `SUM`: suma valores;
+- `MAX`: obtiene el máximo;
+- `MIN`: obtiene el mínimo;
+- `AVG`: calcula el promedio.
+
+Ejemplo: número de registros de inscripción.
+
+```sql
+SELECT COUNT(*) AS inscripciones
+FROM Inscribe;
+```
+
+Una consulta agregada sin `GROUP BY` produce, conceptualmente, un único grupo formado por las filas que sobreviven a `FROM` y `WHERE`.
+
+## `COUNT(*)` y `COUNT(atributo)`
+
+No son equivalentes si hay `NULL`:
+
+```sql
+SELECT COUNT(*)
+FROM Profesor;
+```
+
+cuenta filas, mientras
+
+```sql
+SELECT COUNT(departamento)
+FROM Profesor;
+```
+
+cuenta solo valores de `departamento` que no son `NULL`. La Clase 05 destaca este comportamiento. [@riveros2026-clase05]
+
+## Agregación y `DISTINCT`
+
+Para contar códigos distintos:
+
+```sql
+SELECT COUNT(DISTINCT codigo) AS cursos_con_inscripciones
+FROM Inscribe;
+```
+
+El `DISTINCT` está **dentro** del agregado. La Clase 05 contrasta esto con
+
+```sql
+SELECT DISTINCT COUNT(codigo)
+FROM Inscribe;
+```
+
+que no elimina duplicados antes del conteo y, al producir una sola fila agregada, no cumple la intención de contar valores distintos. [@riveros2026-clase05]
+
+## Más de un agregado
+
+Podemos calcular varios agregados sobre el mismo conjunto:
+
+```sql
+SELECT MIN(creditos) AS minimo,
+       MAX(creditos) AS maximo,
+       AVG(creditos) AS promedio
+FROM Curso;
+```
+
+## Atributos no agregados
+
+Una consulta como
+
+```sql
+SELECT codigo, MIN(creditos)
+FROM Curso;
+```
+
+mezcla un atributo no agregado con una agregación sin definir cómo se relaciona `codigo` con el único valor agregado.
+
+::: {.callout-warning title="No depender del comportamiento permisivo de SQLite"}
+La Clase 05 muestra que SQLite puede aceptar algunas consultas con «bare columns» que otros motores, como PostgreSQL, rechazan. El curso recomienda considerar este tipo de consulta como incorrecta en general. [@riveros2026-clase05]
+
+Para escribir SQL portable, todo atributo seleccionado en una consulta agrupada debe estar justificado por la agrupación o por una agregación según las reglas del motor y del estándar aplicable.
+:::
+
+## `GROUP BY`
+
+`GROUP BY` divide las filas en grupos según uno o más atributos y calcula agregados por grupo.
+
+Número de inscripciones por curso:
+
+```sql
+SELECT codigo, COUNT(*) AS n
+FROM Inscribe
+GROUP BY codigo;
+```
+
+La idea del curso es equivalente a ejecutar una consulta agregada por cada valor distinto del atributo de agrupación y unir los resultados. [@riveros2026-clase05]
+
+### Agrupación por varios atributos
+
+```sql
+SELECT codigo, semestre, COUNT(*) AS n
+FROM Inscribe
+GROUP BY codigo, semestre;
+```
+
+Cada combinación distinta de `codigo` y `semestre` define un grupo.
+
+## `WHERE` versus `HAVING`
+
+`WHERE` filtra **filas antes de agrupar**; `HAVING` filtra **grupos**. [@riveros2026-clase05]
+
+Ejemplo: cursos con al menos dos inscripciones en 2025-2.
+
+```sql
+SELECT codigo, COUNT(*) AS n
+FROM Inscribe
+WHERE semestre = '2025-2'
+GROUP BY codigo
+HAVING COUNT(*) >= 2;
+```
+
+- `WHERE semestre = '2025-2'` elimina filas de otros semestres;
+- `GROUP BY codigo` forma grupos;
+- `HAVING COUNT(*) >= 2` descarta grupos pequeños.
+
+## Orden lógico de procesamiento
+
+La Clase 05 introduce el orden conceptual
+
+\[
+FROM\to WHERE\to GROUP\ BY\to SELECT.
+\]
+
+Al incorporar `HAVING`, la lectura pedagógica queda:
+
+\[
+FROM\to WHERE\to GROUP\ BY\to HAVING\to SELECT.
+\]
+
+`ORDER BY` se aplica posteriormente a la presentación ordenada del resultado. Esta secuencia ayuda a entender por qué `WHERE` no puede filtrar directamente sobre un agregado calculado después de agrupar. [@riveros2026-clase05; @silberschatz2020]
+
+## Cuándo mover una condición de `HAVING` a `WHERE`
+
+La Clase 05 observa que, si una condición de `HAVING` depende solo de un atributo de agrupación, a menudo puede moverse a `WHERE`. [@riveros2026-clase05]
+
+Estas dos consultas expresan la misma intención:
+
+```sql
+SELECT codigo, COUNT(*)
+FROM Inscribe
+GROUP BY codigo
+HAVING codigo = 'IIC2413';
+```
+
+```sql
+SELECT codigo, COUNT(*)
+FROM Inscribe
+WHERE codigo = 'IIC2413'
+GROUP BY codigo;
+```
+
+La segunda filtra antes de formar grupos y deja más clara la separación entre condición de fila y condición agregada.
+
+El propósito principal de `HAVING` aparece cuando la condición depende de un agregado:
+
+```sql
+SELECT codigo, COUNT(*) AS n
+FROM Inscribe
+GROUP BY codigo
+HAVING COUNT(*) >= 2;
+```
+
+## Agregación y álgebra relacional
+
+La agregación no forma parte del conjunto básico de operadores algebraicos desarrollado en Clase 02. Por eso, el sitio no fuerza una traducción a ese álgebra clásica. *Database Theory* trata agregados y agrupación como una extensión expresiva posterior. [@arenas2022]
+
+::: {.summary-box}
+### Resumen
+
+- Los agregados calculan información sobre conjuntos de filas.
+- `COUNT(*)` cuenta filas; `COUNT(A)` ignora `NULL` en `A`.
+- `AGG(DISTINCT A)` elimina duplicados antes de agregar.
+- `GROUP BY` crea grupos; `HAVING` los filtra.
+- `WHERE` actúa antes de la agrupación.
+- Evita consultas no portables que mezclen columnas no agrupadas con agregados.
+:::
+
+::: {.related-links}
+## Conceptos relacionados
+
+- [`NULL` y lógica de tres valores](../nulos/null-tres-valores.qmd)
+- [Funciones, filtros, orden y dialectos](funciones-filtros.qmd)
+- [Subconsultas](subconsultas.qmd)
+- [`SELECT-FROM-WHERE`, joins y conjuntos](consultas-basicas.qmd)
+:::

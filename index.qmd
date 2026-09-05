@@ -1,0 +1,79 @@
+---
+title: "Bases de Datos"
+description: "Sitio de estudio conceptual para IIC2413"
+toc: false
+---
+
+::: {.hero-db}
+## Modelo relacional, consultas, SQL y diseño
+
+Este sitio organiza el material disponible de **IIC2413 — Bases de Datos** por conceptos. La prioridad editorial es mantener las definiciones y convenciones del curso, y utilizar bibliografía académica para formalizar y profundizar cuando aporta claridad. [@riveros2026-programa]
+
+La primera versión cubre el material desarrollado hasta dependencias funcionales y descomposiciones. Temas anunciados en el programa pero todavía no desarrollados en el material del curso —como formas normales, E/R, procesamiento de consultas o transacciones— no se adelantan artificialmente.
+:::
+
+## Ejemplo transversal
+
+La mayor parte del sitio utiliza un dominio universitario común:
+
+::: {.schema-box}
+**Estudiante**(`rut`, `nombre`, `carrera`)  
+**Curso**(`codigo`, `nombre`, `creditos`)  
+**Profesor**(`pid`, `nombre`, `departamento`)  
+**Inscribe**(`rut`, `codigo`, `semestre`)  
+**Dicta**(`pid`, `codigo`, `semestre`)  
+**Requisito**(`codigo`, `prerrequisito`)
+:::
+
+Los ejemplos oficiales del curso se conservan cuando son necesarios para explicar fielmente una definición, una advertencia o un argumento.
+
+## Mapa de contenidos
+
+:::: {.topic-grid}
+::: {.topic-card}
+### Fundamentos
+
+Del concepto de RDBMS a tuplas, relaciones, esquemas, atributos y relaciones nombradas.
+
+[Comenzar por el modelo relacional](fundamentos/modelo-relacional.qmd)
+:::
+
+::: {.topic-card}
+### Teoría de consultas
+
+Lógica de primer orden, álgebra relacional, joins, composición y equivalencia expresiva.
+
+[Ir a teoría de consultas](teoria-consultas/logica-primer-orden.qmd)
+:::
+
+::: {.topic-card}
+### SQL
+
+DDL, DML, `SELECT-FROM-WHERE`, joins, conjuntos, subconsultas, agregación y dialectos.
+
+[Ir a SQL](sql/ddl-dml.qmd)
+:::
+
+::: {.topic-card}
+### Nulos e información incompleta
+
+`NULL`, lógica de tres valores, mundos posibles, tablas de Codd y outer joins.
+
+[Ir a nulos](nulos/null-tres-valores.qmd)
+:::
+
+::: {.topic-card}
+### Diseño relacional
+
+Redundancia, dependencias funcionales, llaves, implicación, clausura y descomposiciones.
+
+[Ir a diseño](diseno/dependencias-llaves.qmd)
+:::
+::::
+
+## Convenciones editoriales
+
+- La notación del curso tiene prioridad; cuando existe una ambigüedad, se explicita.
+- SQL se presenta como lenguaje real con semántica de duplicados y particularidades de motor, distinguiéndolo del modelo de conjuntos del álgebra relacional.
+- Las definiciones formales, teoremas y propiedades importantes se contrastan con bibliografía de teoría y sistemas de bases de datos. [@arenas2022; @abiteboul1995; @garciamolina2009; @silberschatz2020; @ramakrishnan2003]
+- Una definición se desarrolla en su página principal y, en el resto del sitio, se enlaza en vez de repetirse extensamente.

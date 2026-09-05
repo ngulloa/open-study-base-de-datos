@@ -1,0 +1,246 @@
+---
+title: "Equivalencia y patrones de consulta"
+description: "Relación entre lógica de primer orden, álgebra relacional y el fragmento relacional de SQL."
+---
+
+## Una consulta, varios lenguajes
+
+El curso desarrolla en paralelo tres formas de expresar consultas:
+
+- lógica de primer orden;
+- álgebra relacional;
+- SQL.
+
+La utilidad pedagógica no es solo poder traducir sintaxis. El objetivo es reconocer la **misma intención declarativa** detrás de expresiones distintas. [@riveros2026-clase04; @arenas2022]
+
+## Teorema de Codd
+
+::: {.callout-note title="Resultado central"}
+La Clase 04 presenta el **Teorema de Codd**: álgebra relacional y lógica de primer orden son igualmente expresivas, considerando el fragmento apropiado de consultas de primer orden independientes del dominio. [@riveros2026-clase04; @arenas2022]
+:::
+
+En la notación resumida del curso:
+
+\[
+SQL^*\;=\;\text{Álgebra relacional}\;=\;\text{Lógica de primer orden}^{\dagger},
+\]
+
+donde:
+
+- \(SQL^*\) es el fragmento de SQL estudiado hasta ese punto;
+- \(\dagger\) restringe la lógica a consultas independientes del dominio; la semántica activa adoptada en Clase 01 evita resultados que dependan de elementos arbitrarios externos a la base de datos. [@riveros2026-clase01; @riveros2026-clase04]
+
+::: {.callout-warning title="Qué no afirma esta equivalencia"}
+No significa que **todo SQL moderno** sea equivalente a la lógica de primer orden o al álgebra relacional clásica. Agregación, recursión, ventanas y otras extensiones agregan construcciones que deben analizarse por separado. La igualdad anterior se refiere al fragmento especificado por el curso.
+:::
+
+## Patrón base: selección, proyección y join
+
+Una consulta del tipo
+
+```sql
+SELECT DISTINCT <atributos>
+FROM R1, ..., Rk
+WHERE <condición>;
+```
+
+puede verse algebraicamente como
+
+\[
+\pi_{\text{atributos}}
+\left(
+\sigma_{\text{condición}}
+(R_1\times\cdots\times R_k)
+\right),
+\]
+
+con renombramientos cuando sean necesarios. En lógica, el patrón correspondiente es una consulta conjuntiva:
+
+\[
+Q(\bar x)\leftarrow
+\exists\bar y.\;
+R_1\land\cdots\land R_k\land\theta.
+\]
+
+[@riveros2026-clase04]
+
+### Ejemplo: estudiantes inscritos en IIC2413
+
+**Lógica**
+
+\[
+Q(n)\leftarrow
+\exists r\exists c\exists s.\;
+Estudiante(r,n,c)\land
+Inscribe(r,\text{IIC2413},s).
+\]
+
+**Álgebra**
+
+\[
+\pi_{nombre}
+\left(
+Estudiante\bowtie
+\sigma_{codigo=\text{IIC2413}}(Inscribe)
+\right).
+\]
+
+**SQL**
+
+```sql
+SELECT DISTINCT E.nombre
+FROM Estudiante AS E
+JOIN Inscribe AS I
+  ON E.rut = I.rut
+WHERE I.codigo = 'IIC2413';
+```
+
+## Patrón «existe»
+
+En lógica:
+
+\[
+\exists y.\;\varphi(x,y).
+\]
+
+En álgebra, suele corresponder a combinar con otra relación y proyectar los atributos de interés. En SQL, `EXISTS`, `IN` o un join pueden expresar la idea según el contexto.
+
+Ejemplo: cursos que tienen al menos un profesor asignado.
+
+```sql
+SELECT DISTINCT C.nombre
+FROM Curso AS C
+WHERE EXISTS (
+  SELECT 1
+  FROM Dicta AS D
+  WHERE D.codigo = C.codigo
+);
+```
+
+## Patrón «no existe ninguno»
+
+La lógica usa negación de un existencial:
+
+\[
+\neg\exists y.\;\varphi(x,y).
+\]
+
+En álgebra aparece una diferencia o un anti-join. En SQL, el patrón más directo suele ser `NOT EXISTS`.
+
+Ejemplo: cursos sin prerrequisitos.
+
+```sql
+SELECT C.nombre
+FROM Curso AS C
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM Requisito AS R
+  WHERE R.codigo = C.codigo
+);
+```
+
+Álgebra:
+
+\[
+\pi_{codigo,nombre,creditos}(Curso)
+\triangleright
+Requisito.
+\]
+
+## Patrón «dos o más distintos»
+
+La Ayudantía 1 destaca que se necesitan **dos testigos distintos**. [@saavedra2026-ayudantia1]
+
+Para cursos dictados por más de un profesor **en un mismo semestre**:
+
+\[
+\begin{aligned}
+Q(c)\leftarrow\;&
+\exists p_1\exists p_2\exists s.\\
+&Dicta(p_1,c,s)\land Dicta(p_2,c,s)\land\neg(p_1=p_2).
+\end{aligned}
+\]
+
+En álgebra se usan dos copias renombradas de `Dicta`; sin renombramiento, los atributos compartidos obligarían a igualar valores que queremos comparar como testigos diferentes.
+
+En SQL:
+
+```sql
+SELECT DISTINCT D1.codigo
+FROM Dicta AS D1
+JOIN Dicta AS D2
+  ON D1.codigo = D2.codigo
+ AND D1.semestre = D2.semestre
+ AND D1.pid <> D2.pid;
+```
+
+## Patrón «A y B»
+
+Para condiciones que deben cumplirse ambas pero pueden tener testigos distintos, una estrategia es usar dos existenciales, dos `EXISTS` o una intersección.
+
+Ejemplo: estudiantes inscritos tanto en IIC2413 como en IIC2233:
+
+```sql
+SELECT E.nombre
+FROM Estudiante AS E
+WHERE EXISTS (
+  SELECT 1 FROM Inscribe AS I
+  WHERE I.rut = E.rut AND I.codigo = 'IIC2413'
+)
+AND EXISTS (
+  SELECT 1 FROM Inscribe AS I
+  WHERE I.rut = E.rut AND I.codigo = 'IIC2233'
+);
+```
+
+## Patrón «para todos»
+
+La equivalencia
+
+\[
+\forall x.\varphi
+\equiv
+\neg\exists x.\neg\varphi
+\]
+
+sugiere buscar **ausencia de contraejemplos**. [@saavedra2026-ayudantia1]
+
+Para una consulta del tipo «estudiantes que cumplen una condición para todos los cursos de un conjunto», la estructura lógica es:
+
+\[
+\neg\exists c.\;CursoObjetivo(c)\land\neg Cumple(estudiante,c).
+\]
+
+En álgebra, la Ayudantía señala que este patrón suele requerir diferencias anidadas y se relaciona con el operador de división. No desarrollaremos división como operador primitivo porque todavía no forma parte del núcleo definido en clase; el patrón de contraejemplo es suficiente para razonar las consultas actuales. [@saavedra2026-ayudantia1]
+
+## Equivalencia no significa igualdad sintáctica
+
+Dos consultas pueden ser equivalentes aunque su forma sea muy distinta. Para demostrar una igualdad algebraica suele ser necesario verificar:
+
+1. que ambos lados tienen los mismos atributos;
+2. que toda tupla del lado izquierdo pertenece al derecho;
+3. que toda tupla del lado derecho pertenece al izquierdo.
+
+La Ayudantía 1 propone explícitamente pruebas por doble contención o mediante un «si y solo si». [@saavedra2026-ayudantia1]
+
+::: {.callout-warning title="Duplicados al traducir SQL"}
+El álgebra del curso tiene semántica de conjuntos, mientras SQL permite duplicados. Una reescritura que es correcta en álgebra puede necesitar `DISTINCT` para conservar exactamente la misma salida observable en SQL. La Clase 04 advierte especialmente sobre este problema al desanidar consultas. [@riveros2026-clase04]
+:::
+
+::: {.summary-box}
+### Resumen
+
+- El fragmento relacional estudiado de SQL, el álgebra relacional y la lógica de primer orden independiente del dominio expresan las mismas consultas básicas.
+- `SELECT-FROM-WHERE` se interpreta naturalmente como proyección, selección y combinación de relaciones.
+- «Existe», «no existe», «dos distintos» y «para todos» son patrones reutilizables.
+- Las traducciones deben respetar atributos y, al pasar a SQL, también la semántica de duplicados.
+:::
+
+::: {.related-links}
+## Conceptos relacionados
+
+- [Lógica de primer orden y consultas](logica-primer-orden.qmd)
+- [Álgebra relacional](algebra-relacional.qmd)
+- [Joins y operadores derivados](joins-operadores.qmd)
+- [Subconsultas](../sql/subconsultas.qmd)
+:::

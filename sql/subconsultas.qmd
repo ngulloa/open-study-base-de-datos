@@ -1,0 +1,215 @@
+---
+title: "Subconsultas"
+description: "Consultas anidadas en FROM y WHERE, correlación, EXISTS, IN, consultas escalares y ANY/ALL."
+---
+
+## Intuición y concepto
+
+Una subconsulta es una consulta SQL usada dentro de otra consulta. La Clase 04 la conecta con la composición del álgebra relacional y con subfórmulas o consultas auxiliares en lógica de primer orden. [@riveros2026-clase04]
+
+Los casos principales vistos en el curso son:
+
+1. anidación en `FROM`;
+2. anidación en `WHERE` mediante `IN`;
+3. `EXISTS` y `NOT EXISTS`;
+4. subconsultas que producen un valor;
+5. comparaciones con `ANY` y `ALL`. [@riveros2026-clase04]
+
+## Subconsultas en `FROM`
+
+Una consulta puede producir una relación intermedia y darle un alias:
+
+```sql
+SELECT E.nombre, I.codigo
+FROM Estudiante AS E,
+     (
+       SELECT rut, codigo
+       FROM Inscribe
+       WHERE semestre = '2025-2'
+     ) AS I
+WHERE E.rut = I.rut;
+```
+
+Conceptualmente, la subconsulta define primero una relación temporal `I`; la consulta exterior la combina con `Estudiante`.
+
+En álgebra relacional, esto no requiere un operador nuevo: es simplemente una subexpresión.
+
+## `IN`
+
+`IN` pregunta si un valor aparece en el resultado de una subconsulta de una columna:
+
+```sql
+SELECT nombre
+FROM Estudiante
+WHERE rut IN (
+  SELECT rut
+  FROM Inscribe
+  WHERE codigo = 'IIC2413'
+);
+```
+
+En lógica, el valor externo se conecta con un testigo producido por la subconsulta. En álgebra, suele expresarse mediante join o semijoin.
+
+### `NOT IN`
+
+```sql
+SELECT nombre
+FROM Estudiante
+WHERE rut NOT IN (
+  SELECT rut
+  FROM Inscribe
+  WHERE codigo = 'IIC2413'
+);
+```
+
+parece expresar «estudiantes no inscritos en IIC2413», pero hay una advertencia importante: si la subconsulta puede producir `NULL`, la lógica de tres valores puede hacer que `NOT IN` descarte filas inesperadamente. El ejemplo oficial de Clase 06 muestra incluso un caso donde el resultado se vuelve vacío. [@riveros2026-clase06]
+
+::: {.callout-warning title="NOT IN y NULL"}
+Cuando la subconsulta puede contener `NULL`, `NOT EXISTS` suele reflejar con mayor claridad la intención «no existe una coincidencia». Revisa [NULL y lógica de tres valores](../nulos/null-tres-valores.qmd) antes de transformar mecánicamente `NOT IN`.
+:::
+
+## `EXISTS`
+
+`EXISTS` es verdadero si la subconsulta produce al menos una fila.
+
+```sql
+SELECT C.nombre
+FROM Curso AS C
+WHERE EXISTS (
+  SELECT 1
+  FROM Dicta AS D
+  WHERE D.codigo = C.codigo
+);
+```
+
+La subconsulta está **correlacionada**: usa `C.codigo`, un valor de la consulta exterior.
+
+La Clase 04 explica la correlación como la exposición de una variable externa dentro de la subconsulta. [@riveros2026-clase04]
+
+## `NOT EXISTS`
+
+`NOT EXISTS` expresa ausencia de testigos:
+
+```sql
+SELECT C.nombre
+FROM Curso AS C
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM Requisito AS R
+  WHERE R.codigo = C.codigo
+);
+```
+
+En lógica:
+
+\[
+Q(n)\leftarrow
+\exists c\exists cr.\;
+Curso(c,n,cr)\land
+\neg\exists p.\;Requisito(c,p).
+\]
+
+Esta correspondencia hace de `NOT EXISTS` una herramienta natural para consultas «ninguno» o «nunca».
+
+## Subconsultas escalares
+
+Una subconsulta puede usarse donde se espera un solo valor:
+
+```sql
+SELECT nombre
+FROM Curso
+WHERE creditos > (
+  SELECT AVG(creditos)
+  FROM Curso
+);
+```
+
+La Clase 04 advierte que una subconsulta usada como valor debe entregar un resultado apropiadamente único; si devuelve varias filas, el motor puede reportar un error. [@riveros2026-clase04]
+
+El comportamiento exacto ante casos no escalares puede depender del RDBMS, por lo que no debe construirse una consulta suponiendo una selección arbitraria de una fila.
+
+## `ANY` y `ALL`
+
+El curso presenta comparaciones del tipo:
+
+```sql
+expresion > ANY (subconsulta)
+```
+
+y
+
+```sql
+expresion > ALL (subconsulta)
+```
+
+Intuitivamente:
+
+- `> ANY` exige que la comparación sea verdadera para **al menos un** valor;
+- `> ALL` exige que sea verdadera para **todos** los valores relevantes de la subconsulta.
+
+[@riveros2026-clase04]
+
+::: {.callout-warning title="Dialectos"}
+La Clase 04 señala explícitamente que `ANY`/`ALL` no están soportados por SQLite en el contexto usado en el curso. No debe presentarse este comportamiento como universal entre motores. [@riveros2026-clase04]
+:::
+
+## Correlación y desanidamiento
+
+Una consulta correlacionada se evalúa conceptualmente en relación con cada fila de la consulta exterior. Esto no significa que el motor deba implementarla literalmente así: el optimizador puede reescribirla.
+
+La Clase 04 compara un `EXISTS` correlacionado con una versión desanidada mediante join y advierte que **los duplicados pueden cambiar**. [@riveros2026-clase04]
+
+Ejemplo:
+
+```sql
+SELECT E.nombre
+FROM Estudiante AS E
+WHERE EXISTS (
+  SELECT 1
+  FROM Inscribe AS I
+  WHERE I.rut = E.rut
+);
+```
+
+no es observablemente equivalente, bajo semántica de duplicados, a:
+
+```sql
+SELECT E.nombre
+FROM Estudiante AS E
+JOIN Inscribe AS I
+  ON I.rut = E.rut;
+```
+
+si un estudiante tiene varias inscripciones. La segunda consulta puede repetir su nombre. Una reescritura que quiera preservar el resultado necesitaría considerar `DISTINCT` u otra transformación equivalente.
+
+## Elegir una forma
+
+No existe una única sintaxis «correcta» para toda consulta. Una regla útil es expresar directamente la intención:
+
+- pertenencia a un conjunto de valores → `IN`;
+- existencia de una fila relacionada → `EXISTS`;
+- ausencia de una fila relacionada → `NOT EXISTS`;
+- comparación contra un único resultado → subconsulta escalar;
+- relación intermedia reutilizable en `FROM` → subconsulta derivada.
+
+La equivalencia con álgebra y lógica permite justificar estas elecciones en vez de memorizarlas. [@ramakrishnan2003; @silberschatz2020]
+
+::: {.summary-box}
+### Resumen
+
+- Una subconsulta es una consulta usada como componente de otra.
+- Las subconsultas en `FROM` actúan como relaciones intermedias.
+- `IN`, `EXISTS` y `NOT EXISTS` expresan pertenencia, existencia y ausencia.
+- Una subconsulta correlacionada depende de valores de la consulta exterior.
+- Al desanidar hay que controlar duplicados.
+- `NOT IN` requiere especial cuidado cuando interviene `NULL`.
+:::
+
+::: {.related-links}
+## Conceptos relacionados
+
+- [Equivalencia y patrones de consulta](../teoria-consultas/equivalencia-patrones.qmd)
+- [`NULL` y lógica de tres valores](../nulos/null-tres-valores.qmd)
+- [`SELECT-FROM-WHERE`, joins y conjuntos](consultas-basicas.qmd)
+- [Agregación](agregacion.qmd)
+:::

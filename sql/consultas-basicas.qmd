@@ -1,0 +1,272 @@
+---
+title: "Consultas SQL: SELECT-FROM-WHERE, joins y conjuntos"
+description: "El núcleo de DQL y su relación con selección, proyección, producto y join del álgebra relacional."
+---
+
+## Intuición y concepto
+
+SQL es declarativo: especificamos el resultado deseado y el RDBMS decide cómo obtenerlo. La Clase 03 introduce el caso base de DQL con `SELECT`, `FROM` y `WHERE`; la Clase 04 lo extiende con combinaciones de relaciones y operadores de conjuntos. [@riveros2026-clase03; @riveros2026-clase04]
+
+::: {.schema-box}
+**Estudiante**(`rut`, `nombre`, `carrera`)  
+**Curso**(`codigo`, `nombre`, `creditos`)  
+**Inscribe**(`rut`, `codigo`, `semestre`)
+:::
+
+## `SELECT-FROM-WHERE`
+
+La estructura básica es:
+
+```sql
+SELECT [DISTINCT] lista_atributos
+FROM lista_relaciones
+WHERE condicion;
+```
+
+Conceptualmente:
+
+- `FROM` determina las relaciones de entrada;
+- `WHERE` filtra combinaciones de tuplas;
+- `SELECT` determina qué atributos aparecen en la salida;
+- `DISTINCT` elimina duplicados. [@riveros2026-clase03]
+
+### Selección y proyección
+
+```sql
+SELECT nombre
+FROM Estudiante
+WHERE carrera = 'Computación';
+```
+
+corresponde, ignorando por un momento la diferencia de duplicados, a
+
+\[
+\pi_{nombre}
+\left(
+\sigma_{carrera=\text{Computación}}(Estudiante)
+\right).
+\]
+
+## SQL permite duplicados
+
+En el álgebra del curso una relación es un conjunto. SQL, en cambio, puede conservar filas repetidas. La Clase 03 destaca esta diferencia mediante la proyección. [@riveros2026-clase03]
+
+Si dos estudiantes tienen la misma carrera:
+
+```sql
+SELECT carrera
+FROM Estudiante;
+```
+
+puede retornar `Computación` más de una vez.
+
+Para obtener el comportamiento de conjuntos:
+
+```sql
+SELECT DISTINCT carrera
+FROM Estudiante;
+```
+
+::: {.callout-warning title="No insertar DISTINCT por costumbre"}
+`DISTINCT` cambia la semántica de la consulta y puede tener costo. Debe usarse cuando la eliminación de duplicados forma parte del resultado que queremos declarar.
+:::
+
+## Alias
+
+Un alias permite renombrar atributos o relaciones dentro de una consulta:
+
+```sql
+SELECT E.nombre AS estudiante
+FROM Estudiante AS E;
+```
+
+Cuando dos relaciones tienen atributos con el mismo nombre, calificarlos evita ambigüedad:
+
+```sql
+SELECT E.nombre, C.nombre
+FROM Estudiante AS E, Curso AS C;
+```
+
+La Clase 04 relaciona un alias de relación con el renombramiento de todos sus atributos mediante un prefijo, por ejemplo `E.rut`. [@riveros2026-clase04]
+
+## Producto cartesiano en `FROM`
+
+La forma
+
+```sql
+SELECT ...
+FROM R, S;
+```
+
+genera conceptualmente combinaciones de filas de ambas relaciones. Si hay nombres de atributos repetidos, deben calificarse. En álgebra, el curso exige renombramientos para formar un producto cartesiano cuando los conjuntos de atributos no son disjuntos. [@riveros2026-clase04]
+
+En la práctica, un producto cartesiano sin una condición que lo justifique suele producir muchas filas y puede indicar un join incompleto.
+
+## Joins
+
+La Clase 04 presenta varias formas de expresar la combinación de relaciones. [@riveros2026-clase04]
+
+### `NATURAL JOIN`
+
+```sql
+SELECT nombre, codigo, semestre
+FROM Estudiante
+NATURAL JOIN Inscribe;
+```
+
+Compara todos los atributos de igual nombre —aquí `rut`— y mantiene una sola copia de ellos.
+
+### `JOIN ... USING`
+
+```sql
+SELECT E.nombre, I.codigo, I.semestre
+FROM Estudiante AS E
+JOIN Inscribe AS I USING (rut);
+```
+
+Explicita qué atributo compartido debe usarse.
+
+### `JOIN ... ON`
+
+Aunque el curso ilustra con frecuencia la combinación mediante `FROM R, S` y una condición en `WHERE`, en este sitio preferiremos `JOIN ... ON` cuando la condición de unión sea explícita:
+
+```sql
+SELECT E.nombre, I.codigo, I.semestre
+FROM Estudiante AS E
+JOIN Inscribe AS I
+  ON E.rut = I.rut;
+```
+
+La forma equivalente mostrada repetidamente en Clase 04 es:
+
+```sql
+SELECT E.nombre, I.codigo, I.semestre
+FROM Estudiante AS E, Inscribe AS I
+WHERE E.rut = I.rut;
+```
+
+Ambas separan correctamente las copias de atributos mediante alias; `JOIN ... ON` hace más visible qué condición pertenece al join.
+
+## Join más filtro
+
+```sql
+SELECT E.nombre
+FROM Estudiante AS E
+JOIN Inscribe AS I
+  ON E.rut = I.rut
+WHERE I.codigo = 'IIC2413';
+```
+
+En álgebra:
+
+\[
+\pi_{nombre}
+\left(
+\sigma_{codigo=\text{IIC2413}}
+(Estudiante\bowtie Inscribe)
+\right).
+\]
+
+## Operadores de conjuntos en SQL
+
+El fragmento presentado en las clases incluye: [@riveros2026-clase03; @riveros2026-clase04]
+
+```sql
+Q1 UNION Q2
+Q1 UNION ALL Q2
+Q1 INTERSECT Q2
+Q1 INTERSECT ALL Q2
+Q1 EXCEPT Q2
+Q1 EXCEPT ALL Q2
+```
+
+El principio general es que ambos lados deben producir el mismo número de columnas y tipos compatibles. Las variantes `ALL` conservan multiplicidades cuando el dialecto las soporta; su disponibilidad no es uniforme entre motores. [@riveros2026-clase04]
+
+### `UNION` versus `UNION ALL`
+
+`UNION` elimina duplicados del resultado combinado; `UNION ALL` los conserva.
+
+Ejemplo:
+
+```sql
+SELECT rut
+FROM Inscribe
+WHERE codigo = 'IIC2413'
+UNION
+SELECT rut
+FROM Inscribe
+WHERE codigo = 'IIC2233';
+```
+
+retorna cada RUT una sola vez.
+
+### `INTERSECT`
+
+```sql
+SELECT rut
+FROM Inscribe
+WHERE codigo = 'IIC2413'
+INTERSECT
+SELECT rut
+FROM Inscribe
+WHERE codigo = 'IIC2233';
+```
+
+expresa estudiantes inscritos en ambos cursos.
+
+### `EXCEPT`
+
+Una combinación inválida por cantidad de columnas sería, por ejemplo:
+
+```sql
+SELECT rut, nombre
+FROM Estudiante
+EXCEPT
+SELECT rut
+FROM Inscribe;
+```
+
+Los dos lados de un operador de conjuntos deben entregar el mismo número de columnas y tipos compatibles. Para expresar «estudiantes sin ninguna inscripción» proyectamos el RUT en ambos lados:
+
+```sql
+SELECT rut
+FROM Estudiante
+EXCEPT
+SELECT rut
+FROM Inscribe;
+```
+
+Ahora ambos lados producen una sola columna `rut`; el resultado son RUT presentes en `Estudiante` y ausentes en `Inscribe`.
+
+## SQL, álgebra y lógica
+
+El caso básico del curso se resume como:
+
+\[
+\texttt{SELECT-FROM-WHERE}
+\quad\leftrightarrow\quad
+\pi(\sigma(R_1\times\cdots\times R_k))
+\quad\leftrightarrow\quad
+Q(\bar x)\leftarrow\exists\bar y.\;R_1\land\cdots\land R_k\land\theta.
+\]
+
+Esta correspondencia se desarrolla formalmente en [equivalencia y patrones de consulta](../teoria-consultas/equivalencia-patrones.qmd). [@riveros2026-clase04]
+
+::: {.summary-box}
+### Resumen
+
+- `SELECT`, `FROM` y `WHERE` corresponden naturalmente a proyección, combinación y selección.
+- SQL usa semántica de duplicados; `DISTINCT` permite eliminarlos explícitamente.
+- Los alias desambiguan atributos y permiten trabajar con varias copias de relaciones.
+- Los joins pueden escribirse de varias formas; una condición explícita evita combinaciones accidentales.
+- `UNION`, `INTERSECT` y `EXCEPT` conectan SQL con operadores de conjuntos.
+:::
+
+::: {.related-links}
+## Conceptos relacionados
+
+- [Álgebra relacional](../teoria-consultas/algebra-relacional.qmd)
+- [Joins y operadores derivados](../teoria-consultas/joins-operadores.qmd)
+- [Subconsultas](subconsultas.qmd)
+- [Agregación, GROUP BY y HAVING](agregacion.qmd)
+:::

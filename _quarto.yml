@@ -1,0 +1,81 @@
+project:
+  type: website
+  output-dir: _site
+
+lang: es
+bibliography: references.bib
+
+website:
+  title: "Bases de Datos"
+  search: true
+  page-navigation: true
+  back-to-top-navigation: true
+  sidebar:
+    style: docked
+    collapse-level: 1
+    contents:
+      - href: index.qmd
+        text: Inicio
+      - section: "Fundamentos del modelo relacional"
+        contents:
+          - href: fundamentos/sistemas-rdbms.qmd
+            text: Sistemas de bases de datos y RDBMS
+          - href: fundamentos/modelo-relacional.qmd
+            text: Modelo relacional
+          - href: fundamentos/relaciones-nombradas.qmd
+            text: Atributos y relaciones nombradas
+      - section: "Teoría de consultas"
+        contents:
+          - href: teoria-consultas/logica-primer-orden.qmd
+            text: Lógica de primer orden y consultas
+          - href: teoria-consultas/algebra-relacional.qmd
+            text: Álgebra relacional
+          - href: teoria-consultas/joins-operadores.qmd
+            text: Joins y operadores derivados
+          - href: teoria-consultas/equivalencia-patrones.qmd
+            text: Equivalencia y patrones de consulta
+      - section: "SQL"
+        contents:
+          - href: sql/ddl-dml.qmd
+            text: DDL y DML
+          - href: sql/consultas-basicas.qmd
+            text: SELECT-FROM-WHERE, joins y conjuntos
+          - href: sql/subconsultas.qmd
+            text: Subconsultas
+          - href: sql/agregacion.qmd
+            text: Agregación, GROUP BY y HAVING
+          - href: sql/funciones-filtros.qmd
+            text: Funciones, filtros, orden y dialectos
+      - section: "Nulos e información incompleta"
+        contents:
+          - href: nulos/null-tres-valores.qmd
+            text: NULL y lógica de tres valores
+          - href: nulos/informacion-incompleta.qmd
+            text: Información incompleta y mundos posibles
+          - href: nulos/outer-joins.qmd
+            text: Outer joins
+      - section: "Diseño relacional y dependencias"
+        contents:
+          - href: diseno/dependencias-llaves.qmd
+            text: Redundancia, dependencias funcionales y llaves
+          - href: diseno/implicacion-clausura.qmd
+            text: Implicación y clausura
+          - href: diseno/descomposiciones.qmd
+            text: Descomposiciones y pérdida de información
+  page-footer:
+    left: "IIC2413 · Bases de Datos"
+    right: "Sitio de estudio construido con Quarto"
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    toc-depth: 3
+    number-sections: false
+    code-copy: true
+    code-overflow: wrap
+    html-math-method: mathjax
+    link-external-newwindow: true
+    smooth-scroll: true
+

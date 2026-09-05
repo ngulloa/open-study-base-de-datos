@@ -1,0 +1,196 @@
+---
+title: "Funciones, filtros, orden y dialectos SQL"
+description: "Expresiones, funciones, filtros de patrones, ORDER BY, limitación de filas y diferencias entre motores."
+---
+
+## Intuición y concepto
+
+Además del núcleo relacional, SQL ofrece expresiones, funciones, filtros compactos y mecanismos para ordenar o limitar resultados. La Clase 05 enfatiza que muchas de estas construcciones presentan variaciones entre motores. [@riveros2026-clase05]
+
+## Expresiones y funciones
+
+Ejemplos de operaciones numéricas mencionadas en el curso incluyen:
+
+- `+`, `-`, `*`, `/`, `%`;
+- `ABS`, `CEIL`, `FLOOR`, `ROUND`, `SQRT`;
+- otras funciones que dependen del motor. [@riveros2026-clase05]
+
+Ejemplo:
+
+```sql
+SELECT codigo,
+       ABS(creditos - 10) AS diferencia
+FROM Curso;
+```
+
+Entre las funciones de texto, la clase menciona familias como `LOWER`, `UPPER`, `TRIM` y `SUBSTRING`. La firma exacta puede variar.
+
+::: {.callout-warning title="Funciones y portabilidad"}
+No todas las funciones tienen el mismo nombre, número de argumentos o comportamiento en todos los RDBMS. Conviene separar el SQL conceptual de las funciones específicas del motor que se use en una tarea o aplicación. [@riveros2026-clase05]
+:::
+
+## `IN` con una lista
+
+Para comparar contra un conjunto explícito de valores:
+
+```sql
+SELECT nombre
+FROM Estudiante
+WHERE carrera IN ('Computación', 'Ingeniería Civil');
+```
+
+Esto evita escribir una disyunción larga:
+
+```sql
+WHERE carrera = 'Computación'
+   OR carrera = 'Ingeniería Civil'
+```
+
+`IN` también puede recibir una [subconsulta](subconsultas.qmd), caso con semántica adicional en presencia de `NULL`.
+
+## `BETWEEN`
+
+```sql
+SELECT nombre, creditos
+FROM Curso
+WHERE creditos BETWEEN 5 AND 10;
+```
+
+En el uso mostrado por el curso, expresa un intervalo inclusivo entre los límites. [@riveros2026-clase05]
+
+## `LIKE` y patrones
+
+La Clase 05 utiliza `%` como comodín para cualquier secuencia de caracteres: [@riveros2026-clase05]
+
+```sql
+SELECT nombre
+FROM Curso
+WHERE nombre LIKE 'Bases%';
+```
+
+Patrones típicos:
+
+| Patrón | Intuición |
+|---|---|
+| `'pref%'` | empieza con `pref` |
+| `'%suf'` | termina con `suf` |
+| `'%sub%'` | contiene `sub` |
+
+La negación se escribe:
+
+```sql
+WHERE nombre NOT LIKE '%Datos%'
+```
+
+La sensibilidad a mayúsculas, colaciones y caracteres especiales depende del motor y de su configuración.
+
+## `ORDER BY`
+
+Las relaciones matemáticas no tienen orden. SQL solo garantiza un orden de salida cuando la consulta declara `ORDER BY`.
+
+```sql
+SELECT codigo, creditos
+FROM Curso
+ORDER BY creditos DESC, codigo ASC;
+```
+
+Cada clave puede usar:
+
+- `ASC`: ascendente;
+- `DESC`: descendente. [@riveros2026-clase05]
+
+::: {.callout-warning title="Orden sin ORDER BY"}
+Aunque una herramienta muestre filas siempre en el mismo orden durante varias ejecuciones, ese orden no debe considerarse parte de la consulta sin `ORDER BY`.
+:::
+
+## Limitar la cantidad de resultados
+
+Aquí aparecen diferencias claras entre dialectos. La Clase 05 muestra: [@riveros2026-clase05]
+
+### SQLite, PostgreSQL y MySQL
+
+```sql
+SELECT codigo, creditos
+FROM Curso
+ORDER BY creditos DESC
+LIMIT 3;
+```
+
+### SQL Server y Microsoft Access
+
+```sql
+SELECT TOP 3 codigo, creditos
+FROM Curso
+ORDER BY creditos DESC;
+```
+
+### Forma con `FETCH`
+
+```sql
+SELECT codigo, creditos
+FROM Curso
+ORDER BY creditos DESC
+OFFSET 0 ROWS FETCH NEXT 3 ROWS ONLY;
+```
+
+El soporte concreto de `OFFSET`/`FETCH` y sus detalles debe verificarse en el motor utilizado.
+
+::: {.callout-note title="Convención del curso"}
+La Clase 05 presenta `ORDER BY` y los mecanismos de límite dentro de «orden y cantidad de resultados» y los separa conceptualmente del álgebra relacional. En una aplicación real, limitar filas sí cambia qué filas devuelve la consulta; para que «las primeras N» sean reproducibles, debe combinarse con un criterio de orden suficiente. [@riveros2026-clase05]
+:::
+
+## ¿Qué es un dialecto SQL?
+
+El curso define un **dialecto SQL** como una modificación o extensión no incluida en el estándar SQL considerado. Entre las razones para desviarse del estándar menciona innovación, compatibilidad histórica y eficiencia. [@riveros2026-clase05]
+
+La consecuencia práctica es que una consulta puede ser correcta en un motor y no compilar en otro.
+
+### Estrategia editorial del sitio
+
+En los ejemplos principales:
+
+1. preferiremos construcciones ampliamente portables;
+2. indicaremos cuando una sintaxis pertenece a un motor o familia de motores;
+3. no presentaremos el comportamiento permisivo de un motor como regla general de SQL;
+4. cuando el curso use SQLite para mostrar una excepción, la marcaremos como tal.
+
+## Orden y desempates
+
+Si se solicitan los tres cursos con más créditos:
+
+```sql
+SELECT codigo, creditos
+FROM Curso
+ORDER BY creditos DESC
+LIMIT 3;
+```
+
+puede haber varias respuestas igualmente válidas si hay empate en `creditos` alrededor del corte. Para un resultado determinista, agrega una segunda clave:
+
+```sql
+SELECT codigo, creditos
+FROM Curso
+ORDER BY creditos DESC, codigo ASC
+LIMIT 3;
+```
+
+Esta práctica es especialmente importante en pruebas, reportes y paginación.
+
+::: {.summary-box}
+### Resumen
+
+- SQL ofrece funciones y filtros más allá de los operadores relacionales básicos.
+- `IN`, `BETWEEN` y `LIKE` hacen más compactas condiciones frecuentes.
+- `ORDER BY` es necesario para declarar un orden de salida.
+- La sintaxis para limitar filas varía entre motores.
+- Las funciones y extensiones deben documentarse como SQL estándar o dialecto cuando corresponda.
+:::
+
+::: {.related-links}
+## Conceptos relacionados
+
+- [`SELECT-FROM-WHERE`, joins y conjuntos](consultas-basicas.qmd)
+- [Subconsultas](subconsultas.qmd)
+- [Agregación, GROUP BY y HAVING](agregacion.qmd)
+- [`NULL` y lógica de tres valores](../nulos/null-tres-valores.qmd)
+:::
