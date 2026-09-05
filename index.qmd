@@ -1,31 +1,21 @@
 ---
 title: "Bases de Datos"
-description: "Sitio de estudio conceptual para IIC2413"
+description: "Material académico autónomo sobre el modelo relacional, consultas, SQL y diseño de bases de datos."
 toc: false
 ---
 
-::: {.hero-db}
+:::: {.hero-db}
 ## Modelo relacional, consultas, SQL y diseño
 
-Este sitio organiza el material disponible de **IIC2413 — Bases de Datos** por conceptos. La prioridad editorial es mantener las definiciones y convenciones del curso, y utilizar bibliografía académica para formalizar y profundizar cuando aporta claridad. [@riveros2026-programa]
+Este sitio presenta las bases conceptuales y prácticas de las **bases de datos relacionales**. Combina definiciones matemáticas, ejemplos y consultas SQL para estudiar cómo se representa la información, cómo se consulta y cómo se diseña un esquema.
 
-La primera versión cubre el material desarrollado hasta dependencias funcionales y descomposiciones. Temas anunciados en el programa pero todavía no desarrollados en el material del curso —como formas normales, E/R, procesamiento de consultas o transacciones— no se adelantan artificialmente.
+::: {.hero-actions}
+[Comenzar a estudiar](fundamentos/sistemas-rdbms.qmd){.btn .btn-primary}
+[Explorar los temas](#mapa-de-contenidos){.btn .btn-outline-primary}
 :::
 
-## Ejemplo transversal
-
-La mayor parte del sitio utiliza un dominio universitario común:
-
-::: {.schema-box}
-**Estudiante**(`rut`, `nombre`, `carrera`)  
-**Curso**(`codigo`, `nombre`, `creditos`)  
-**Profesor**(`pid`, `nombre`, `departamento`)  
-**Inscribe**(`rut`, `codigo`, `semestre`)  
-**Dicta**(`pid`, `codigo`, `semestre`)  
-**Requisito**(`codigo`, `prerrequisito`)
-:::
-
-Los ejemplos oficiales del curso se conservan cuando son necesarios para explicar fielmente una definición, una advertencia o un argumento.
+El recorrido comprende el modelo relacional, la lógica y el álgebra de consultas, SQL, la información incompleta y el diseño mediante dependencias funcionales y descomposiciones. Las páginas se pueden leer en ese orden o consultar por concepto; cada una incluye ejemplos, un resumen y enlaces a los conocimientos relacionados.
+::::
 
 ## Mapa de contenidos
 
@@ -71,9 +61,24 @@ Redundancia, dependencias funcionales, llaves, implicación, clausura y descompo
 :::
 ::::
 
+## Ejemplo transversal
+
+La mayor parte del sitio utiliza un dominio universitario común:
+
+::: {.schema-box}
+**Estudiante**(`rut`, `nombre`, `carrera`)  
+**Curso**(`codigo`, `nombre`, `creditos`)  
+**Profesor**(`pid`, `nombre`, `departamento`)  
+**Inscribe**(`rut`, `codigo`, `semestre`)  
+**Dicta**(`pid`, `codigo`, `semestre`)  
+**Requisito**(`codigo`, `prerrequisito`)
+:::
+
+Los datos son ficticios. Usaremos `BD101` para Bases de Datos, `PROG101` para Introducción a Programación y `PROG201` para Programación Avanzada. Los identificadores `r1`, `r2`, etc., representan RUT simplificados; `p1`, `p2`, etc., identifican profesores ficticios. Cada ejemplo explicita las restricciones del dominio que necesita.
+
 ## Convenciones editoriales
 
-- La notación del curso tiene prioridad; cuando existe una ambigüedad, se explicita.
+- Las convenciones de notación se definen en el sitio: distinguimos aridades posicionales de conjuntos de atributos y explicitamos el dominio de evaluación de las consultas.
 - SQL se presenta como lenguaje real con semántica de duplicados y particularidades de motor, distinguiéndolo del modelo de conjuntos del álgebra relacional.
-- Las definiciones formales, teoremas y propiedades importantes se contrastan con bibliografía de teoría y sistemas de bases de datos. [@arenas2022; @abiteboul1995; @garciamolina2009; @silberschatz2020; @ramakrishnan2003]
+- La bibliografía principal reúne obras de teoría y sistemas de bases de datos para fundamentar los conceptos y ampliar su estudio. [@arenas2022; @abiteboul1995; @garciamolina2009; @silberschatz2020; @ramakrishnan2003]
 - Una definición se desarrolla en su página principal y, en el resto del sitio, se enlaza en vez de repetirse extensamente.

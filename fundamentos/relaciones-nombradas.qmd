@@ -1,17 +1,17 @@
 ---
 title: "Atributos y relaciones nombradas"
-description: "Tuplas y relaciones con atributos explícitos, base formal para el álgebra relacional del curso."
+description: "Tuplas y relaciones con atributos explícitos, base formal para el álgebra relacional."
 ---
 
 ## Intuición y concepto
 
 Una tupla posicional como
 
-\[
+$$
 (r2,\text{Ben},\text{Computación})
-\]
+$$
 
-solo puede interpretarse si sabemos qué significa cada posición. En la práctica, las relaciones tienen **atributos**: `rut`, `nombre`, `carrera`. La Clase 02 formaliza esta idea mediante tuplas y relaciones nombradas. [@riveros2026-clase02]
+solo puede interpretarse si sabemos qué significa cada posición. En la práctica, las relaciones tienen **atributos**: `rut`, `nombre`, `carrera`. Las tuplas y relaciones nombradas formalizan esta asociación entre atributos y valores.
 
 Los atributos permiten:
 
@@ -19,47 +19,47 @@ Los atributos permiten:
 2. modelar la estructura de los datos;
 3. presentar y combinar relaciones de forma más legible.
 
-A partir de esta página, salvo que se indique lo contrario, la notación del sitio sigue las relaciones nombradas usadas por el curso.
+A partir de esta página, salvo que se indique lo contrario, trabajaremos con relaciones nombradas.
 
 ## Tuplas nombradas
 
 Sea `Data` el conjunto de datos y `Att` un conjunto infinito de atributos.
 
 ::: {.callout-note title="Definición formal"}
-Una **tupla nombrada** \(\bar\tau\) es una función
+Una **tupla nombrada** $\bar\tau$ es una función
 
-\[
+$$
 \bar\tau:\{A_1,\ldots,A_k\}\to Data,
-\]
+$$
 
-donde \(A_1,\ldots,A_k\in Att\). [@riveros2026-clase02]
+donde $A_1,\ldots,A_k\in Att$.
 :::
 
 Su conjunto de atributos se denota
 
-\[
+$$
 att(\bar\tau)=\{A_1,\ldots,A_k\}.
-\]
+$$
 
-El curso utiliza la notación
+En este sitio usaremos la notación
 
-\[
+$$
 \bar\tau=(A_1:a_1,\ldots,A_k:a_k)
-\]
+$$
 
-para indicar que \(\bar\tau(A_i)=a_i\).
+para indicar que $\bar\tau(A_i)=a_i$.
 
 Por ejemplo:
 
-\[
+$$
 \bar\tau=(rut:r2,\ nombre:\text{Ben},\ carrera:\text{Computación}).
-\]
+$$
 
 Como una tupla nombrada es una función cuyo dominio es un conjunto de atributos,
 
-\[
+$$
 (A:a,B:b)=(B:b,A:a).
-\]
+$$
 
 El orden de escritura ya no tiene significado semántico: el nombre del atributo queda unido al dato.
 
@@ -67,30 +67,31 @@ El orden de escritura ya no tiene significado semántico: el nombre del atributo
 
 La tupla vacía es la única función
 
-\[
+$$
 ():\varnothing\to Data.
-\]
+$$
 
-Conserva el mismo papel conceptual que la tupla vacía del modelo posicional. [@riveros2026-clase02]
+Conserva el mismo papel conceptual que la tupla vacía del modelo posicional.
 
 ## Relaciones nombradas
 
 ::: {.callout-note title="Definición formal"}
-Una **relación nombrada** \(R\) es un subconjunto finito de tuplas nombradas que tienen exactamente los mismos atributos:
+Fijado un conjunto de atributos $\{A_1,\ldots,A_k\}$, una **relación nombrada** $R$ es un subconjunto finito de tuplas nombradas sobre esos atributos:
 
-\[
+$$
 R\subseteq
 \{\bar\tau\mid att(\bar\tau)=\{A_1,\ldots,A_k\}\}.
-\]
+$$
 
 Definimos
 
-\[
+$$
 att(R)=\{A_1,\ldots,A_k\}.
-\]
+$$
 
-[@riveros2026-clase02]
 :::
+
+El conjunto de atributos forma parte del esquema y se conoce incluso cuando $R$ es vacía; no se deduce inspeccionando sus tuplas.
 
 Para el dominio universitario:
 
@@ -104,45 +105,45 @@ Para el dominio universitario:
 
 representa la relación
 
-\[
+$$
 \begin{aligned}
 Estudiante=\{&
 (rut:r1,nombre:\text{Ana},carrera:\text{IngenieríaCivil}),\\
 & (rut:r2,nombre:\text{Ben},carrera:\text{Computación}),\\
 & (rut:r3,nombre:\text{Zoe},carrera:\text{Computación})\}.
 \end{aligned}
-\]
+$$
 
 con
 
-\[
+$$
 att(Estudiante)=\{rut,nombre,carrera\}.
-\]
+$$
 
 ## De relaciones posicionales a nombradas
 
-Toda relación posicional puede verse como una relación nombrada asignando atributos `1`, `2`, ..., `k` a sus posiciones. Por ello, las relaciones nombradas generalizan la representación anterior. La Clase 02 adopta desde este punto la convención de llamar simplemente **tupla** y **relación** a las versiones nombradas cuando el contexto lo permite. [@riveros2026-clase02]
+Toda relación posicional puede verse como una relación nombrada asignando atributos `1`, `2`, ..., `k` a sus posiciones. Por ello, las relaciones nombradas generalizan la representación anterior. En adelante llamaremos simplemente **tupla** y **relación** a las versiones nombradas cuando el contexto lo permita.
 
 ::: {.callout-warning title="Convención de notación del sitio"}
-La Clase 01 usa \(ar:N\to\mathbb N\) para la **aridad**. En la Clase 03, al introducir esquemas nombrados, se reutiliza el símbolo `ar` para asociar nombres de relaciones con conjuntos de atributos. [@riveros2026-clase01; @riveros2026-clase03]
+La aridad es un número; el conjunto de atributos contiene nombres. Son objetos distintos y conviene distinguirlos en la notación.
 
 Para evitar ambigüedad, este sitio mantendrá:
 
-- \(ar(R)\) para la aridad cuando se trabaje con el modelo posicional;
-- \(att(R)\) para los atributos de una relación nombrada;
-- cuando sea necesario hablar del esquema nombrado, se describirá explícitamente qué atributos corresponden a cada nombre, sin reutilizar `ar` con un segundo tipo.
+- $ar(R)$ para la aridad cuando se trabaje con el modelo posicional;
+- $att(R)$ para los atributos de una relación nombrada;
+- cuando sea necesario hablar del esquema nombrado, se describirá explícitamente qué atributos corresponden a cada nombre, mediante una asignación de conjuntos de atributos a nombres de relaciones.
 :::
 
 ## Por qué los atributos son esenciales para el álgebra
 
 Los operadores que veremos a continuación se definen sobre atributos:
 
-- selección, por ejemplo \(\sigma_{carrera=\text{Computación}}(Estudiante)\);
-- proyección, por ejemplo \(\pi_{nombre}(Estudiante)\);
-- renombramiento, por ejemplo \(\rho_{nombre\to nombreEst}(Estudiante)\);
+- selección, por ejemplo $\sigma_{carrera=\text{Computación}}(Estudiante)$;
+- proyección, por ejemplo $\pi_{nombre}(Estudiante)$;
+- renombramiento, por ejemplo $\rho_{nombre\to nombreEst}(Estudiante)$;
 - join, que compara automáticamente atributos con el mismo nombre.
 
-Esta es la razón por la que la [álgebra relacional](../teoria-consultas/algebra-relacional.qmd) del curso se construye sobre relaciones nombradas.
+Esta es la razón por la que la [álgebra relacional](../teoria-consultas/algebra-relacional.qmd) que desarrollamos se construye sobre relaciones nombradas.
 
 ::: {.summary-box}
 ### Resumen

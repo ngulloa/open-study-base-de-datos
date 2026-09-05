@@ -5,15 +5,15 @@ description: "Consultas anidadas en FROM y WHERE, correlación, EXISTS, IN, cons
 
 ## Intuición y concepto
 
-Una subconsulta es una consulta SQL usada dentro de otra consulta. La Clase 04 la conecta con la composición del álgebra relacional y con subfórmulas o consultas auxiliares en lógica de primer orden. [@riveros2026-clase04]
+Una subconsulta es una consulta SQL usada dentro de otra consulta. Permite componer consultas, del mismo modo que el álgebra relacional compone expresiones y la lógica combina subfórmulas. [@silberschatz2020]
 
-Los casos principales vistos en el curso son:
+Las formas principales son:
 
 1. anidación en `FROM`;
 2. anidación en `WHERE` mediante `IN`;
 3. `EXISTS` y `NOT EXISTS`;
 4. subconsultas que producen un valor;
-5. comparaciones con `ANY` y `ALL`. [@riveros2026-clase04]
+5. comparaciones con `ANY` y `ALL`.
 
 ## Subconsultas en `FROM`
 
@@ -44,7 +44,7 @@ FROM Estudiante
 WHERE rut IN (
   SELECT rut
   FROM Inscribe
-  WHERE codigo = 'IIC2413'
+  WHERE codigo = 'BD101'
 );
 ```
 
@@ -58,11 +58,11 @@ FROM Estudiante
 WHERE rut NOT IN (
   SELECT rut
   FROM Inscribe
-  WHERE codigo = 'IIC2413'
+  WHERE codigo = 'BD101'
 );
 ```
 
-parece expresar «estudiantes no inscritos en IIC2413», pero hay una advertencia importante: si la subconsulta puede producir `NULL`, la lógica de tres valores puede hacer que `NOT IN` descarte filas inesperadamente. El ejemplo oficial de Clase 06 muestra incluso un caso donde el resultado se vuelve vacío. [@riveros2026-clase06]
+parece expresar «estudiantes no inscritos en BD101», pero hay una advertencia importante: si la subconsulta puede producir `NULL`, la lógica de tres valores puede hacer que `NOT IN` descarte filas inesperadamente. El resultado puede incluso ser vacío: una comparación que queda en `UNKNOWN` no pasa el filtro `WHERE`.
 
 ::: {.callout-warning title="NOT IN y NULL"}
 Cuando la subconsulta puede contener `NULL`, `NOT EXISTS` suele reflejar con mayor claridad la intención «no existe una coincidencia». Revisa [NULL y lógica de tres valores](../nulos/null-tres-valores.qmd) antes de transformar mecánicamente `NOT IN`.
@@ -84,7 +84,7 @@ WHERE EXISTS (
 
 La subconsulta está **correlacionada**: usa `C.codigo`, un valor de la consulta exterior.
 
-La Clase 04 explica la correlación como la exposición de una variable externa dentro de la subconsulta. [@riveros2026-clase04]
+La referencia externa vincula la evaluación de la subconsulta con la fila de la consulta exterior.
 
 ## `NOT EXISTS`
 
@@ -102,12 +102,12 @@ WHERE NOT EXISTS (
 
 En lógica:
 
-\[
+$$
 Q(n)\leftarrow
 \exists c\exists cr.\;
 Curso(c,n,cr)\land
 \neg\exists p.\;Requisito(c,p).
-\]
+$$
 
 Esta correspondencia hace de `NOT EXISTS` una herramienta natural para consultas «ninguno» o «nunca».
 
@@ -124,13 +124,13 @@ WHERE creditos > (
 );
 ```
 
-La Clase 04 advierte que una subconsulta usada como valor debe entregar un resultado apropiadamente único; si devuelve varias filas, el motor puede reportar un error. [@riveros2026-clase04]
+Una subconsulta escalar debe producir una columna y, como máximo, una fila. Si no produce filas, su valor es `NULL`; si produce varias, los motores que exigen cardinalidad escalar reportan un error.
 
 El comportamiento exacto ante casos no escalares puede depender del RDBMS, por lo que no debe construirse una consulta suponiendo una selección arbitraria de una fila.
 
 ## `ANY` y `ALL`
 
-El curso presenta comparaciones del tipo:
+Una comparación puede cuantificarse sobre el resultado de una subconsulta:
 
 ```sql
 expresion > ANY (subconsulta)
@@ -147,17 +147,15 @@ Intuitivamente:
 - `> ANY` exige que la comparación sea verdadera para **al menos un** valor;
 - `> ALL` exige que sea verdadera para **todos** los valores relevantes de la subconsulta.
 
-[@riveros2026-clase04]
-
 ::: {.callout-warning title="Dialectos"}
-La Clase 04 señala explícitamente que `ANY`/`ALL` no están soportados por SQLite en el contexto usado en el curso. No debe presentarse este comportamiento como universal entre motores. [@riveros2026-clase04]
+SQLite no implementa comparaciones cuantificadas de la forma `> ANY (subconsulta)` o `> ALL (subconsulta)`. En ese motor se necesitan otras formulaciones; al traducir, hay que preservar también el comportamiento ante `NULL` y resultados vacíos. Consulta la [sintaxis de expresiones de SQLite](https://www.sqlite.org/lang_expr.html) y las [comparaciones cuantificadas de PostgreSQL](https://www.postgresql.org/docs/current/functions-subquery.html).
 :::
 
 ## Correlación y desanidamiento
 
 Una consulta correlacionada se evalúa conceptualmente en relación con cada fila de la consulta exterior. Esto no significa que el motor deba implementarla literalmente así: el optimizador puede reescribirla.
 
-La Clase 04 compara un `EXISTS` correlacionado con una versión desanidada mediante join y advierte que **los duplicados pueden cambiar**. [@riveros2026-clase04]
+Al sustituir un `EXISTS` correlacionado por un join, **los duplicados pueden cambiar**.
 
 Ejemplo:
 
@@ -180,7 +178,14 @@ JOIN Inscribe AS I
   ON I.rut = E.rut;
 ```
 
-si un estudiante tiene varias inscripciones. La segunda consulta puede repetir su nombre. Una reescritura que quiera preservar el resultado necesitaría considerar `DISTINCT` u otra transformación equivalente.
+si un estudiante tiene varias inscripciones. La segunda consulta puede repetir su nombre. Aplicar `DISTINCT` solo a `E.nombre` tampoco preserva siempre el resultado: eliminaría las repeticiones debidas a estudiantes diferentes con el mismo nombre. Una transformación equivalente une cada estudiante con una sola aparición de su RUT:
+
+```sql
+SELECT E.nombre
+FROM Estudiante AS E
+JOIN (SELECT DISTINCT rut FROM Inscribe) AS I
+  ON I.rut = E.rut;
+```
 
 ## Elegir una forma
 

@@ -5,7 +5,7 @@ description: "Sintaxis y semántica de las consultas de primer orden sobre bases
 
 ## Intuición y concepto
 
-Una consulta debe depender de la **forma** de la base de datos y no de enumerar manualmente su contenido. La Clase 01 introduce la lógica de primer orden como primer lenguaje formal para declarar propiedades de los datos. [@riveros2026-clase01]
+Una consulta debe depender de la **forma** de la base de datos y no de enumerar manualmente su contenido. La lógica de primer orden permite declarar esas propiedades mediante predicados, conectivos y cuantificadores.
 
 Por ejemplo, sobre
 
@@ -15,23 +15,23 @@ Por ejemplo, sobre
 **Inscribe**(`rut`, `codigo`, `semestre`)
 :::
 
-podemos expresar «estudiantes inscritos en IIC2413» diciendo que **existe** una tupla de `Inscribe` que conecta el RUT del estudiante con ese código.
+podemos expresar «estudiantes inscritos en BD101» diciendo que **existe** una tupla de `Inscribe` que conecta el RUT del estudiante con ese código.
 
 ## Datos, variables y términos
 
-El curso fija:
+Fijamos los siguientes conjuntos:
 
 - `Data`: conjunto de datos o constantes;
-- `Var`: conjunto de variables, con \(Data\cap Var=\varnothing\);
-- un **término** es un elemento de \(Data\cup Var\). [@riveros2026-clase01]
+- `Var`: conjunto de variables, con $Data\cap Var=\varnothing$;
+- un **término** es un elemento de $Data\cup Var$.
 
-Usaremos \(a,b,c,\ldots\) para constantes y \(x,y,z,\ldots\) para variables.
+Usaremos $a,b,c,\ldots$ para constantes y $x,y,z,\ldots$ para variables.
 
 ## Sintaxis
 
-Sea \(S=(N,ar)\) un esquema posicional. Una fórmula \(\varphi\) sobre \(S\) se construye recursivamente a partir de: [@riveros2026-clase01]
+Sea $S=(N,ar)$ un esquema posicional. Una fórmula $\varphi$ sobre $S$ se construye recursivamente a partir de:
 
-\[
+$$
 \begin{aligned}
 \varphi ::= {} & x=a
 \mid x=y
@@ -42,143 +42,133 @@ Sea \(S=(N,ar)\) un esquema posicional. Una fórmula \(\varphi\) sobre \(S\) se 
 &\mid \exists x.\psi
 \mid \forall x.\psi,
 \end{aligned}
-\]
+$$
 
-donde \(R\in N\), \(k=ar(R)\) y cada \(t_i\in Data\cup Var\).
+donde $R\in N$, $k=ar(R)$ y cada $t_i\in Data\cup Var$.
 
 Las tres primeras formas son **atómicas**; las restantes construyen fórmulas compuestas.
 
-::: {.callout-note title="Comparaciones usadas en el curso"}
-La Ayudantía 1 extiende las fórmulas atómicas con comparaciones
+::: {.callout-note title="Comparaciones de orden"}
+Cuando los datos poseen un orden definido, podemos extender las fórmulas atómicas con comparaciones
 
-\[
+$$
 x\sim a,\qquad x\sim y,
 \quad
 \sim\in\{<,>,\le,\ge\},
-\]
+$$
 
-con la semántica esperada. Esta extensión es útil para mantener una correspondencia directa con selecciones comparativas del álgebra relacional. [@saavedra2026-ayudantia1]
+interpretadas sobre valores de dominios comparables. Esta extensión es útil para mantener una correspondencia directa con selecciones comparativas del álgebra relacional.
 :::
 
 ## Variables libres y cuantificadas
 
-Una variable es **libre** si su valor debe venir dado por una asignación externa; queda **cuantificada** cuando está bajo \(\exists\) o \(\forall\).
+Una variable es **libre** si su valor debe venir dado por una asignación externa; queda **cuantificada** cuando está bajo $\exists$ o $\forall$.
 
 Por ejemplo,
 
-\[
-\varphi(x)=\exists c\exists s.\; Inscribe(x,c,s)\land c=\text{IIC2413}
-\]
+$$
+\varphi(x)=\exists c\exists s.\; Inscribe(x,c,s)\land c=\text{BD101}
+$$
 
-tiene a \(x\) libre y a \(c,s\) cuantificadas.
+tiene a $x$ libre y a $c,s$ cuantificadas.
 
-El curso denota por \(FV(\varphi)\) el conjunto de variables libres y por \(Const(\varphi)\) las constantes mencionadas por la fórmula. [@riveros2026-clase01]
+Denotaremos por $FV(\varphi)$ el conjunto de variables libres y por $Const(\varphi)$ las constantes mencionadas por la fórmula.
 
 ## Semántica
 
-Sea \(D\) una base de datos del esquema. Una asignación \(\alpha\) de \(\varphi\) sobre \(D\) asigna a cada variable libre un elemento de
+Sea $D$ una base de datos del esquema y $\varphi$ la fórmula completa que queremos evaluar. En este sitio usaremos **semántica de dominio activo**: fijamos
 
-\[
-Dom(D)\cup Const(\varphi).
-\]
+$$
+U=Dom(D)\cup Const(\varphi).
+$$
 
-El curso adopta además \(\alpha(a)=a\) para constantes \(a\in Data\). [@riveros2026-clase01]
+El universo $U$ permanece fijo al evaluar todas las subfórmulas de $\varphi$. Una asignación $\alpha$ da valores en $U$ a las variables libres de la subfórmula evaluada. Para las constantes, extendemos la notación mediante $\alpha(a)=a$.
 
-La relación de satisfacción \((D,\alpha)\models\varphi\) se define inductivamente. Los casos centrales son:
+Escribiremos $(D,\alpha)\models_U\psi$ para indicar que la subfórmula $\psi$ es verdadera con esa asignación y ese universo. Los casos atómicos son:
 
-\[
-(D,\alpha)\models x=a
-\iff
-\alpha(x)=a,
-\]
-
-\[
-(D,\alpha)\models x=y
-\iff
-\alpha(x)=\alpha(y),
-\]
-
-\[
-(D,\alpha)\models R(t_1,\ldots,t_k)
-\iff
-(\alpha(t_1),\ldots,\alpha(t_k))\in D(R).
-\]
+$$
+\begin{aligned}
+(D,\alpha)\models_U x=a
+&\iff \alpha(x)=a,\\
+(D,\alpha)\models_U x=y
+&\iff \alpha(x)=\alpha(y),\\
+(D,\alpha)\models_U R(t_1,\ldots,t_k)
+&\iff (\alpha(t_1),\ldots,\alpha(t_k))\in D(R).
+\end{aligned}
+$$
 
 Para los conectivos:
 
-\[
-(D,\alpha)\models\varphi\land\psi
-\iff
-(D,\alpha)\models\varphi
-\text{ y }
-(D,\alpha)\models\psi,
-\]
+$$
+\begin{aligned}
+(D,\alpha)\models_U\psi\land\chi
+&\iff (D,\alpha)\models_U\psi
+\text{ y }(D,\alpha)\models_U\chi,\\
+(D,\alpha)\models_U\psi\lor\chi
+&\iff (D,\alpha)\models_U\psi
+\text{ o }(D,\alpha)\models_U\chi,\\
+(D,\alpha)\models_U\neg\psi
+&\iff (D,\alpha)\not\models_U\psi.
+\end{aligned}
+$$
 
-con definiciones análogas para \(\lor\) y \(\neg\).
+Denotamos por $\alpha_{x/a}$ la asignación que da a $x$ el valor $a$ y coincide con $\alpha$ en las demás variables. Los cuantificadores se interpretan sobre el mismo $U$:
 
-Para los cuantificadores, el curso cuantifica sobre el dominio activo más las constantes de la fórmula:
+$$
+\begin{aligned}
+(D,\alpha)\models_U\exists x.\psi
+&\iff \text{existe }a\in U\text{ tal que }(D,\alpha_{x/a})\models_U\psi,\\
+(D,\alpha)\models_U\forall x.\psi
+&\iff \text{para todo }a\in U,\ (D,\alpha_{x/a})\models_U\psi.
+\end{aligned}
+$$
 
-\[
-(D,\alpha)\models\exists x.\varphi
-\iff
-(D,\alpha_{x/a})\models\varphi
-\text{ para algún }a\in Dom(D)\cup Const(\varphi),
-\]
-
-\[
-(D,\alpha)\models\forall x.\varphi
-\iff
-(D,\alpha_{x/a})\models\varphi
-\text{ para todo }a\in Dom(D)\cup Const(\varphi).
-\]
-
-Esta elección de semántica activa es importante cuando más adelante relacionemos lógica y álgebra relacional. [@riveros2026-clase01; @arenas2022]
+Si $U$ es vacío, el existencial es falso y el universal verdadero. La semántica activa permite evaluar consultas sobre un universo finito; su relación con el álgebra se desarrolla en [equivalencia y patrones de consulta](equivalencia-patrones.qmd). [@arenas2022]
 
 ## Consultas de primer orden
 
-::: {.callout-note title="Definición del curso"}
+::: {.callout-note title="Definición formal"}
 Una consulta de primer orden tiene la forma
 
-\[
+$$
 Q(x_1,\ldots,x_n)\leftarrow\varphi,
-\]
+$$
 
-con \(FV(\varphi)\subseteq\{x_1,\ldots,x_n\}\). Su respuesta sobre \(D\) es
+con variables de salida distintas y $FV(\varphi)\subseteq X$, donde $X=\{x_1,\ldots,x_n\}$. Su respuesta sobre $D$ es
 
-\[
-Q(D)=
-\{(\alpha(x_1),\ldots,\alpha(x_n))
-\mid
-(D,\alpha)\models\varphi\}.
-\]
-
-[@riveros2026-clase01]
+$$
+\begin{aligned}
+Q(D)=\{&(\alpha(x_1),\ldots,\alpha(x_n))\mid\\
+&\alpha:X\to U,\ (D,\alpha)\models_U\varphi\},
+\qquad U=Dom(D)\cup Const(\varphi).
+\end{aligned}
+$$
 :::
 
-::: {.callout-warning title="Detalle de la definición"}
-Las diapositivas escriben la condición \(FV(\varphi)\subseteq\{x_1,\ldots,x_n\}\). La definición semántica usa valores para todas las variables de la cabeza. Para evitar el caso límite no desarrollado en el material, todos los ejemplos de este sitio harán que cada variable de la cabeza ocurra libremente en la fórmula.
+::: {.callout-note title="Variables de salida"}
+La asignación debe dar valor a **todas** las variables de la cabeza, incluso si alguna no aparece libre en $\varphi$. En ese caso, la variable adicional recorre $U$ sin otra restricción. Normalmente usaremos $FV(\varphi)=X$ para que cada variable de salida participe explícitamente en la condición. Si $n=0$, la respuesta es $\{()\}$ cuando la fórmula es verdadera y $\varnothing$ cuando es falsa.
 :::
 
-### Ejemplo: estudiantes inscritos en IIC2413
+### Ejemplo: estudiantes inscritos en BD101
 
-\[
+$$
 \begin{aligned}
 Q(n)\leftarrow\;&\exists r\exists c\exists s.\\
 &Estudiante(r,n,c)\land
-Inscribe(r,\text{IIC2413},s).
+Inscribe(r,\text{BD101},s).
 \end{aligned}
-\]
+$$
 
 La consulta retorna los nombres de estudiantes para los cuales existe una inscripción compatible.
 
 ### Ejemplo: cursos sin prerrequisitos
 
-\[
+$$
 Q(n)\leftarrow
 \exists c\exists cr.\;
 Curso(c,n,cr)\land
 \neg\exists p.\;Requisito(c,p).
-\]
+$$
 
 Aquí la negación de un existencial expresa «no existe ningún prerrequisito».
 
@@ -186,13 +176,13 @@ Aquí la negación de un existencial expresa «no existe ningún prerrequisito»
 
 La equivalencia
 
-\[
+$$
 \forall x.\varphi
 \equiv
 \neg\exists x.\neg\varphi
-\]
+$$
 
-es especialmente útil para consultas de tipo «para todos». La Ayudantía 1 la destaca como patrón central de traducción entre lógica y álgebra. [@saavedra2026-ayudantia1]
+es especialmente útil para consultas de tipo «para todos». Permite traducir condiciones universales a negación y existencia, y de allí a diferencias en álgebra relacional.
 
 La idea práctica es buscar un **contraejemplo**: una condición universal se cumple cuando no existe ningún elemento que la viole.
 
@@ -201,8 +191,8 @@ La idea práctica es buscar un **contraejemplo**: una condición universal se cu
 
 - Las relaciones de una base de datos se interpretan como predicados.
 - Una fórmula combina átomos mediante conectivos y cuantificadores.
-- La semántica del curso cuantifica sobre \(Dom(D)\cup Const(\varphi)\).
-- Una consulta \(Q(\bar x)\leftarrow\varphi\) produce una relación con las asignaciones que satisfacen \(\varphi\).
+- La semántica activa del sitio cuantifica sobre $Dom(D)\cup Const(\varphi)$.
+- Una consulta $Q(\bar x)\leftarrow\varphi$ produce una relación con las asignaciones que satisfacen $\varphi$.
 - «No existe» y «para todos» son patrones fundamentales para formular consultas.
 :::
 

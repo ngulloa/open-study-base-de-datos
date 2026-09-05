@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Tuplas y relaciones con atributos explícitos, base formal para el álgebra relacional del curso.">
+<meta name="description" content="Tuplas y relaciones con atributos explícitos, base formal para el álgebra relacional.">
 
 <title>Atributos y relaciones nombradas – Bases de Datos</title>
 <style>
@@ -27,26 +27,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -64,10 +45,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -368,7 +349,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    Tuplas y relaciones con atributos explícitos, base formal para el álgebra relacional del curso.
+    Tuplas y relaciones con atributos explícitos, base formal para el álgebra relacional.
   </div>
 </div>
 
@@ -388,15 +369,17 @@ window.Quarto = {
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
 <p>Una tupla posicional como</p>
-<p>[ (r2,,) ]</p>
-<p>solo puede interpretarse si sabemos qué significa cada posición. En la práctica, las relaciones tienen <strong>atributos</strong>: <code>rut</code>, <code>nombre</code>, <code>carrera</code>. La Clase 02 formaliza esta idea mediante tuplas y relaciones nombradas. <span class="citation" data-cites="riveros2026-clase02">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p><span class="math display">\[
+(r2,\text{Ben},\text{Computación})
+\]</span></p>
+<p>solo puede interpretarse si sabemos qué significa cada posición. En la práctica, las relaciones tienen <strong>atributos</strong>: <code>rut</code>, <code>nombre</code>, <code>carrera</code>. Las tuplas y relaciones nombradas formalizan esta asociación entre atributos y valores.</p>
 <p>Los atributos permiten:</p>
 <ol type="1">
 <li>referirse a una columna por nombre;</li>
 <li>modelar la estructura de los datos;</li>
 <li>presentar y combinar relaciones de forma más legible.</li>
 </ol>
-<p>A partir de esta página, salvo que se indique lo contrario, la notación del sitio sigue las relaciones nombradas usadas por el curso.</p>
+<p>A partir de esta página, salvo que se indique lo contrario, trabajaremos con relaciones nombradas.</p>
 </section>
 <section id="tuplas-nombradas" class="level2">
 <h2 class="anchored" data-anchor-id="tuplas-nombradas">Tuplas nombradas</h2>
@@ -411,26 +394,38 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Una <strong>tupla nombrada</strong> () es una función</p>
-<p>[ :{A_1,,A_k}Data, ]</p>
-<p>donde (A_1,,A_kAtt). <span class="citation" data-cites="riveros2026-clase02">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>Una <strong>tupla nombrada</strong> <span class="math inline">\(\bar\tau\)</span> es una función</p>
+<p><span class="math display">\[
+\bar\tau:\{A_1,\ldots,A_k\}\to Data,
+\]</span></p>
+<p>donde <span class="math inline">\(A_1,\ldots,A_k\in Att\)</span>.</p>
 </div>
 </div>
 <p>Su conjunto de atributos se denota</p>
-<p>[ att()={A_1,,A_k}. ]</p>
-<p>El curso utiliza la notación</p>
-<p>[ =(A_1:a_1,,A_k:a_k) ]</p>
-<p>para indicar que ((A_i)=a_i).</p>
+<p><span class="math display">\[
+att(\bar\tau)=\{A_1,\ldots,A_k\}.
+\]</span></p>
+<p>En este sitio usaremos la notación</p>
+<p><span class="math display">\[
+\bar\tau=(A_1:a_1,\ldots,A_k:a_k)
+\]</span></p>
+<p>para indicar que <span class="math inline">\(\bar\tau(A_i)=a_i\)</span>.</p>
 <p>Por ejemplo:</p>
-<p>[ =(rut:r2,&nbsp;nombre:,&nbsp;carrera:). ]</p>
+<p><span class="math display">\[
+\bar\tau=(rut:r2,\ nombre:\text{Ben},\ carrera:\text{Computación}).
+\]</span></p>
 <p>Como una tupla nombrada es una función cuyo dominio es un conjunto de atributos,</p>
-<p>[ (A:a,B:b)=(B:b,A:a). ]</p>
+<p><span class="math display">\[
+(A:a,B:b)=(B:b,A:a).
+\]</span></p>
 <p>El orden de escritura ya no tiene significado semántico: el nombre del atributo queda unido al dato.</p>
 <section id="tupla-nombrada-vacía" class="level3">
 <h3 class="anchored" data-anchor-id="tupla-nombrada-vacía">Tupla nombrada vacía</h3>
 <p>La tupla vacía es la única función</p>
-<p>[ ():Data. ]</p>
-<p>Conserva el mismo papel conceptual que la tupla vacía del modelo posicional. <span class="citation" data-cites="riveros2026-clase02">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p><span class="math display">\[
+():\varnothing\to Data.
+\]</span></p>
+<p>Conserva el mismo papel conceptual que la tupla vacía del modelo posicional.</p>
 </section>
 </section>
 <section id="relaciones-nombradas" class="level2">
@@ -445,13 +440,18 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Una <strong>relación nombrada</strong> (R) es un subconjunto finito de tuplas nombradas que tienen exactamente los mismos atributos:</p>
-<p>[ R {att()={A_1,,A_k}}. ]</p>
+<p>Fijado un conjunto de atributos <span class="math inline">\(\{A_1,\ldots,A_k\}\)</span>, una <strong>relación nombrada</strong> <span class="math inline">\(R\)</span> es un subconjunto finito de tuplas nombradas sobre esos atributos:</p>
+<p><span class="math display">\[
+R\subseteq
+\{\bar\tau\mid att(\bar\tau)=\{A_1,\ldots,A_k\}\}.
+\]</span></p>
 <p>Definimos</p>
-<p>[ att(R)={A_1,,A_k}. ]</p>
-<p><span class="citation" data-cites="riveros2026-clase02">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p><span class="math display">\[
+att(R)=\{A_1,\ldots,A_k\}.
+\]</span></p>
 </div>
 </div>
+<p>El conjunto de atributos forma parte del esquema y se conoce incluso cuando <span class="math inline">\(R\)</span> es vacía; no se deduce inspeccionando sus tuplas.</p>
 <p>Para el dominio universitario:</p>
 <div class="table-responsive">
 <table class="caption-top table">
@@ -482,20 +482,22 @@ window.Quarto = {
 </table>
 </div>
 <p>representa la relación</p>
-[
-<span class="math display">\[\begin{aligned}
+<p><span class="math display">\[
+\begin{aligned}
 Estudiante=\{&amp;
 (rut:r1,nombre:\text{Ana},carrera:\text{IngenieríaCivil}),\\
 &amp; (rut:r2,nombre:\text{Ben},carrera:\text{Computación}),\\
 &amp; (rut:r3,nombre:\text{Zoe},carrera:\text{Computación})\}.
-\end{aligned}\]</span>
-<p>]</p>
+\end{aligned}
+\]</span></p>
 <p>con</p>
-<p>[ att(Estudiante)={rut,nombre,carrera}. ]</p>
+<p><span class="math display">\[
+att(Estudiante)=\{rut,nombre,carrera\}.
+\]</span></p>
 </section>
 <section id="de-relaciones-posicionales-a-nombradas" class="level2">
 <h2 class="anchored" data-anchor-id="de-relaciones-posicionales-a-nombradas">De relaciones posicionales a nombradas</h2>
-<p>Toda relación posicional puede verse como una relación nombrada asignando atributos <code>1</code>, <code>2</code>, …, <code>k</code> a sus posiciones. Por ello, las relaciones nombradas generalizan la representación anterior. La Clase 02 adopta desde este punto la convención de llamar simplemente <strong>tupla</strong> y <strong>relación</strong> a las versiones nombradas cuando el contexto lo permite. <span class="citation" data-cites="riveros2026-clase02">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>Toda relación posicional puede verse como una relación nombrada asignando atributos <code>1</code>, <code>2</code>, …, <code>k</code> a sus posiciones. Por ello, las relaciones nombradas generalizan la representación anterior. En adelante llamaremos simplemente <strong>tupla</strong> y <strong>relación</strong> a las versiones nombradas cuando el contexto lo permita.</p>
 <div class="callout callout-style-default callout-warning callout-titled" title="Convención de notación del sitio">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -506,12 +508,12 @@ Estudiante=\{&amp;
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>La Clase 01 usa (ar:NN) para la <strong>aridad</strong>. En la Clase 03, al introducir esquemas nombrados, se reutiliza el símbolo <code>ar</code> para asociar nombres de relaciones con conjuntos de atributos. <span class="citation" data-cites="riveros2026-clase01 riveros2026-clase03">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026b</a>, <a href="#ref-riveros2026-clase03" role="doc-biblioref">2026c</a>)</span></p>
+<p>La aridad es un número; el conjunto de atributos contiene nombres. Son objetos distintos y conviene distinguirlos en la notación.</p>
 <p>Para evitar ambigüedad, este sitio mantendrá:</p>
 <ul>
-<li>(ar(R)) para la aridad cuando se trabaje con el modelo posicional;</li>
-<li>(att(R)) para los atributos de una relación nombrada;</li>
-<li>cuando sea necesario hablar del esquema nombrado, se describirá explícitamente qué atributos corresponden a cada nombre, sin reutilizar <code>ar</code> con un segundo tipo.</li>
+<li><span class="math inline">\(ar(R)\)</span> para la aridad cuando se trabaje con el modelo posicional;</li>
+<li><span class="math inline">\(att(R)\)</span> para los atributos de una relación nombrada;</li>
+<li>cuando sea necesario hablar del esquema nombrado, se describirá explícitamente qué atributos corresponden a cada nombre, mediante una asignación de conjuntos de atributos a nombres de relaciones.</li>
 </ul>
 </div>
 </div>
@@ -520,12 +522,12 @@ Estudiante=\{&amp;
 <h2 class="anchored" data-anchor-id="por-qué-los-atributos-son-esenciales-para-el-álgebra">Por qué los atributos son esenciales para el álgebra</h2>
 <p>Los operadores que veremos a continuación se definen sobre atributos:</p>
 <ul>
-<li>selección, por ejemplo (_{carrera=}(Estudiante));</li>
-<li>proyección, por ejemplo (_{nombre}(Estudiante));</li>
-<li>renombramiento, por ejemplo (_{nombrenombreEst}(Estudiante));</li>
+<li>selección, por ejemplo <span class="math inline">\(\sigma_{carrera=\text{Computación}}(Estudiante)\)</span>;</li>
+<li>proyección, por ejemplo <span class="math inline">\(\pi_{nombre}(Estudiante)\)</span>;</li>
+<li>renombramiento, por ejemplo <span class="math inline">\(\rho_{nombre\to nombreEst}(Estudiante)\)</span>;</li>
 <li>join, que compara automáticamente atributos con el mismo nombre.</li>
 </ul>
-<p>Esta es la razón por la que la <a href="../teoria-consultas/algebra-relacional.html">álgebra relacional</a> del curso se construye sobre relaciones nombradas.</p>
+<p>Esta es la razón por la que la <a href="../teoria-consultas/algebra-relacional.html">álgebra relacional</a> que desarrollamos se construye sobre relaciones nombradas.</p>
 <section id="resumen" class="level3 summary-box">
 <h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
 <ul>
@@ -549,18 +551,7 @@ Estudiante=\{&amp;
 
 
 
-
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-riveros2026-clase02" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026a. <em>Álgebra relacional</em>.
-</div>
-<div id="ref-riveros2026-clase01" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026b. <em>Modelo relacional y consultas de primer orden</em>.
-</div>
-<div id="ref-riveros2026-clase03" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026c. <em>SQL (Parte I)</em>.
-</div>
-</div></section></div></main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -982,7 +973,7 @@ Riveros, Cristian. 2026c. <em>SQL (Parte I)</em>.
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

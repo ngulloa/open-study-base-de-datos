@@ -5,7 +5,7 @@ description: "Qué problema resuelve un sistema de manejo de bases de datos rela
 
 ## Intuición y concepto
 
-Una aplicación que almacena datos necesita más que archivos: debe poder **persistir**, consultar, modificar y administrar información de manera controlada. Un sistema de manejo de bases de datos (DBMS) ofrece esa capa de software. Cuando el sistema organiza los datos mediante el modelo relacional, hablamos de un **RDBMS** (*Relational Database Management System*). La Clase 03 lo presenta como el motor encargado del almacenamiento, gestión y optimización del acceso a datos organizados en relaciones. [@riveros2026-clase03]
+Una aplicación que almacena datos necesita más que archivos: debe poder **persistir**, consultar, modificar y administrar información de manera controlada. Un sistema de manejo de bases de datos (DBMS) ofrece esa capa de software. Cuando el sistema organiza los datos mediante el modelo relacional, hablamos de un **RDBMS** (*Relational Database Management System*). El motor administra el almacenamiento y el acceso a esos datos.
 
 La idea central es separar dos responsabilidades:
 
@@ -14,23 +14,23 @@ La idea central es separar dos responsabilidades:
 
 Esta separación permite trabajar con una representación lógica estable aunque cambie la implementación interna del sistema. Es una de las ideas fundamentales de los sistemas de bases de datos modernos. [@abiteboul1995; @silberschatz2020; @ramakrishnan2003]
 
-::: {.callout-note title="Definición del curso"}
-Un **RDBMS** es un software —el motor de bases de datos— encargado del almacenamiento, gestión y optimización del acceso a datos organizados en relaciones. [@riveros2026-clase03]
+::: {.callout-note title="Definición"}
+Un **RDBMS** es un software —el motor de bases de datos— encargado del almacenamiento, gestión y optimización del acceso a datos organizados en relaciones.
 :::
 
 ## RDBMS, relaciones y SQL
 
-En el curso, SQL se introduce como el **lenguaje de acciones al RDBMS**. El usuario envía una instrucción SQL y el motor produce o modifica relaciones según corresponda. [@riveros2026-clase03]
+SQL permite **definir, consultar y modificar datos**, además de administrar permisos en un RDBMS. El usuario envía una instrucción SQL y el motor produce o modifica relaciones según corresponda.
 
 Una vista simplificada es:
 
-\[
+$$
 \text{usuario/aplicación}
 \xrightarrow{\text{SQL}}
 \text{RDBMS}
 \xrightarrow{\text{gestiona}}
 \text{datos relacionales}.
-\]
+$$
 
 Esto conecta tres niveles que se desarrollan en páginas distintas:
 
@@ -40,7 +40,7 @@ Esto conecta tres niveles que se desarrollan en páginas distintas:
 
 ## Lenguajes dentro de SQL
 
-La Clase 03 distingue varios sublenguajes. [@riveros2026-clase03]
+Las instrucciones SQL pueden agruparse por su propósito:
 
 | Sublenguaje | Propósito | Comandos típicos |
 |---|---|---|
@@ -49,20 +49,20 @@ La Clase 03 distingue varios sublenguajes. [@riveros2026-clase03]
 | DQL | consultar datos | `SELECT` |
 | DCL | controlar permisos | `GRANT`, `REVOKE` |
 
-Esta clasificación es útil pedagógicamente, aunque la frontera entre DML y DQL no siempre se trata igual en toda la literatura. En este sitio mantendremos la clasificación usada en el curso.
+Esta clasificación es útil pedagógicamente, aunque la frontera entre DML y DQL no siempre se trata igual en toda la literatura. Como convención pedagógica del sitio, distinguiremos DQL para las consultas y DML para las modificaciones.
 
 ## Arquitecturas de aplicación
 
-El material del curso menciona arquitecturas **cliente-servidor** y **tres niveles** como ejemplos del uso de un RDBMS. [@riveros2026-clase03] Por ahora basta con la intuición:
+Un RDBMS puede integrarse en arquitecturas **cliente-servidor** o de **tres niveles**:
 
 - en cliente-servidor, una aplicación se conecta a un servidor de bases de datos;
 - en una arquitectura de tres niveles, una capa intermedia contiene la lógica de aplicación y se comunica con la base de datos.
 
-La conexión de aplicaciones mediante drivers y cursores aparece en el programa, pero todavía no hay material suficiente del curso para desarrollarla como página propia. [@riveros2026-programa]
+Las aplicaciones se comunican con el motor mediante interfaces o drivers. Un cursor permite recorrer los resultados de una consulta desde el programa cliente.
 
 ## SQL es declarativo
 
-Una consulta SQL expresa **qué resultado** se busca, no el algoritmo exacto para obtenerlo. La Clase 04 resume esta idea señalando que el RDBMS transforma la consulta en un algoritmo eficiente. [@riveros2026-clase04]
+Una consulta SQL expresa **qué resultado** se busca, no el algoritmo exacto para obtenerlo. El RDBMS transforma la consulta en un plan de ejecución y busca estrategias eficientes para evaluarla.
 
 Por ejemplo:
 
@@ -72,13 +72,13 @@ FROM Estudiante
 WHERE carrera = 'Computación';
 ```
 
-La consulta no especifica si el motor debe recorrer todas las filas, usar un índice o aplicar otra estrategia. Esas decisiones pertenecen al procesamiento y optimización de consultas, una unidad posterior del curso.
+La consulta no especifica si el motor debe recorrer todas las filas, usar un índice o aplicar otra estrategia. Esas decisiones pertenecen al procesamiento y la optimización de consultas.
 
 ::: {.summary-box}
 ### Resumen
 
 - Un DBMS administra datos persistentes; un **RDBMS** lo hace usando el modelo relacional.
-- SQL es el lenguaje principal para interactuar con un RDBMS en este curso.
+- SQL es el lenguaje principal para interactuar con un RDBMS en los ejemplos del sitio.
 - El usuario declara operaciones lógicas; el motor se ocupa de su ejecución.
 - DDL, DML y DQL separan, pedagógicamente, definición de esquema, modificación y consulta.
 :::

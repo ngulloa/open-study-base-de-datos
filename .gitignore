@@ -3,3 +3,5 @@
 .DS_Store
 
 **/*.quarto_ipynb
+
+AGENTS.md

@@ -99,10 +99,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -132,6 +132,35 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -403,7 +432,7 @@ div.csl-indent {
 
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>El álgebra relacional es un lenguaje de consultas <strong>composicional</strong>: cada operador recibe relaciones y devuelve una relación. Por lo tanto, el resultado de una operación puede usarse como entrada de otra. Esta propiedad permite construir consultas complejas a partir de operadores simples. <span class="citation" data-cites="riveros2026-clase02 arenas2022">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>; <a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
+<p>El álgebra relacional es un lenguaje de consultas <strong>composicional</strong>: cada operador recibe relaciones y devuelve una relación. Por lo tanto, el resultado de una operación puede usarse como entrada de otra. Esta propiedad permite construir consultas complejas a partir de operadores simples. <span class="citation" data-cites="arenas2022">(<a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
 <p>Trabajaremos sobre <a href="../fundamentos/relaciones-nombradas.html">relaciones nombradas</a>. El esquema transversal será:</p>
 <div class="schema-box">
 <p><strong>Estudiante</strong>(<code>rut</code>, <code>nombre</code>, <code>carrera</code>)<br>
@@ -413,48 +442,80 @@ div.csl-indent {
 </section>
 <section id="operadores-de-conjuntos" class="level2">
 <h2 class="anchored" data-anchor-id="operadores-de-conjuntos">Operadores de conjuntos</h2>
-<p>Sean (R) y (S) relaciones con los mismos atributos. El curso define: <span class="citation" data-cites="riveros2026-clase02">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>)</span></p>
-<p>[ RS={RS}, ]</p>
-<p>[ RS={RS}, ]</p>
-<p>[ RS={RS}. ]</p>
+<p>Sean <span class="math inline">\(R\)</span> y <span class="math inline">\(S\)</span> relaciones con los mismos atributos. Definimos:</p>
+<p><span class="math display">\[
+R\cup S=\{\bar\tau\mid \bar\tau\in R\lor\bar\tau\in S\},
+\]</span></p>
+<p><span class="math display">\[
+R\cap S=\{\bar\tau\mid \bar\tau\in R\land\bar\tau\in S\},
+\]</span></p>
+<p><span class="math display">\[
+R\setminus S=\{\bar\tau\mid \bar\tau\in R\land\bar\tau\notin S\}.
+\]</span></p>
 <p>Los tres operadores están definidos solo cuando</p>
-<p>[ att(R)=att(S). ]</p>
+<p><span class="math display">\[
+att(R)=att(S).
+\]</span></p>
 <p>Además,</p>
-<p>[ att(RS)=att(RS)=att(RS)=att(R). ]</p>
+<p><span class="math display">\[
+att(R\cup S)=att(R\cap S)=att(R\setminus S)=att(R).
+\]</span></p>
 <section id="ejemplo" class="level3">
 <h3 class="anchored" data-anchor-id="ejemplo">Ejemplo</h3>
 <p>Si</p>
-<p>[ C=<em>{rut}(</em>{carrera=}(Estudiante)) ]</p>
-<p>y (I) contiene los RUT inscritos en IIC2413, entonces (CI) identifica estudiantes de Computación que además están inscritos en el curso.</p>
+<p><span class="math display">\[
+C=\pi_{rut}(\sigma_{carrera=\text{Computación}}(Estudiante))
+\]</span></p>
+<p>y <span class="math inline">\(I\)</span> contiene los RUT inscritos en BD101, entonces <span class="math inline">\(C\cap I\)</span> identifica estudiantes de Computación que además tienen una inscripción en <code>BD101</code>.</p>
 </section>
 </section>
 <section id="selección" class="level2">
 <h2 class="anchored" data-anchor-id="selección">Selección</h2>
 <p>La <strong>selección</strong> conserva las tuplas que cumplen una condición.</p>
-<p>Para (Aatt(R)) y (aData):</p>
-<p>[ _{A=a}(R) := {R(A)=a}. ]</p>
-<p>Para (A,Batt(R)):</p>
-<p>[ _{A=B}(R) := {R(A)=(B)}. ]</p>
+<p>Para <span class="math inline">\(A\in att(R)\)</span> y <span class="math inline">\(a\in Data\)</span>:</p>
+<p><span class="math display">\[
+\sigma_{A=a}(R)
+:=
+\{\bar\tau\in R\mid \bar\tau(A)=a\}.
+\]</span></p>
+<p>Para <span class="math inline">\(A,B\in att(R)\)</span>:</p>
+<p><span class="math display">\[
+\sigma_{A=B}(R)
+:=
+\{\bar\tau\in R\mid \bar\tau(A)=\bar\tau(B)\}.
+\]</span></p>
 <p>La selección no cambia los atributos:</p>
-<p>[ att(_(R))=att(R). ]</p>
-<p>El curso generaliza (_) a fórmulas booleanas y también utiliza comparaciones (&lt;,&gt;,,). <span class="citation" data-cites="riveros2026-clase02">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p><span class="math display">\[
+att(\sigma_\theta(R))=att(R).
+\]</span></p>
+<p>La notación <span class="math inline">\(\sigma_\theta\)</span> admite condiciones booleanas que también pueden usar comparaciones <span class="math inline">\(&lt;,&gt;,\le,\ge\)</span> sobre dominios comparables.</p>
 <section id="ejemplo-1" class="level3">
 <h3 class="anchored" data-anchor-id="ejemplo-1">Ejemplo</h3>
-<p>[ _{carrera=}(Estudiante) ]</p>
+<p><span class="math display">\[
+\sigma_{carrera=\text{Computación}}(Estudiante)
+\]</span></p>
 <p>retiene solo estudiantes de esa carrera.</p>
 </section>
 </section>
 <section id="proyección" class="level2">
 <h2 class="anchored" data-anchor-id="proyección">Proyección</h2>
 <p>La <strong>proyección</strong> conserva un subconjunto de atributos.</p>
-<p>Para una lista (B_1,,B_katt(R)):</p>
-<p>[ <em>{B_1,,B_k}(R) := {</em>{B_1,,B_k}()R}. ]</p>
+<p>Para atributos distintos con <span class="math inline">\(\{B_1,\ldots,B_k\}\subseteq att(R)\)</span>, la proyección de una tupla es su restricción a esos atributos. Sobre una relación:</p>
+<p><span class="math display">\[
+\pi_{B_1,\ldots,B_k}(R)
+:=
+\{\pi_{B_1,\ldots,B_k}(\bar\tau)\mid \bar\tau\in R\}.
+\]</span></p>
 <p>Por lo tanto,</p>
-<p>[ att(_{B_1,,B_k}(R))={B_1,,B_k}. ]</p>
-<p>Como el resultado sigue siendo un <strong>conjunto</strong>, dos tuplas distintas pueden convertirse en la misma tupla proyectada y el duplicado desaparece. <span class="citation" data-cites="riveros2026-clase02">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p><span class="math display">\[
+att(\pi_{B_1,\ldots,B_k}(R))=\{B_1,\ldots,B_k\}.
+\]</span></p>
+<p>Como el resultado sigue siendo un <strong>conjunto</strong>, dos tuplas distintas pueden convertirse en la misma tupla proyectada y el duplicado desaparece.</p>
 <section id="ejemplo-2" class="level3">
 <h3 class="anchored" data-anchor-id="ejemplo-2">Ejemplo</h3>
-<p>[ _{carrera}(Estudiante) ]</p>
+<p><span class="math display">\[
+\pi_{carrera}(Estudiante)
+\]</span></p>
 <p>retorna cada carrera presente una sola vez bajo la semántica del álgebra relacional.</p>
 <div class="callout callout-style-default callout-warning callout-titled" title="Álgebra relacional y SQL difieren aquí">
 <div class="callout-header d-flex align-content-center">
@@ -466,24 +527,33 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>En SQL, <code>SELECT carrera FROM Estudiante</code> puede conservar duplicados. Para reproducir la semántica de conjuntos de la proyección se usa <code>SELECT DISTINCT carrera ...</code>. <span class="citation" data-cites="riveros2026-clase03">(<a href="#ref-riveros2026-clase03" role="doc-biblioref">Riveros 2026b</a>)</span></p>
+<p>En SQL, <code>SELECT carrera FROM Estudiante</code> puede conservar duplicados. Para reproducir la semántica de conjuntos de la proyección se usa <code>SELECT DISTINCT carrera ...</code>.</p>
 </div>
 </div>
 </section>
 </section>
 <section id="renombramiento" class="level2">
 <h2 class="anchored" data-anchor-id="renombramiento">Renombramiento</h2>
-<p>Si (Aatt(R)) y (Batt(R)), el operador</p>
-<p>[ _{AB}(R) ]</p>
-<p>cambia el nombre del atributo (A) por (B). Su esquema resultante es</p>
-<p>[ att(_{AB}(R))= (att(R){A}){B}. ]</p>
-<p><span class="citation" data-cites="riveros2026-clase02">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>Si <span class="math inline">\(A\in att(R)\)</span> y <span class="math inline">\(B\notin att(R)\)</span>, el operador</p>
+<p><span class="math display">\[
+\rho_{A\to B}(R)
+\]</span></p>
+<p>cambia el nombre del atributo <span class="math inline">\(A\)</span> por <span class="math inline">\(B\)</span>. Su esquema resultante es</p>
+<p><span class="math display">\[
+att(\rho_{A\to B}(R))=
+(att(R)\setminus\{A\})\cup\{B\}.
+\]</span></p>
 <p>El renombramiento es crucial cuando necesitamos usar <strong>dos copias de la misma relación</strong> sin forzar coincidencias no deseadas entre atributos con el mismo nombre.</p>
 </section>
 <section id="composición" class="level2">
 <h2 class="anchored" data-anchor-id="composición">Composición</h2>
 <p>Una consulta típica combina varios operadores. Por ejemplo, los nombres de estudiantes de Computación son:</p>
-<p>[ <em>{nombre} ( </em>{carrera=}(Estudiante) ). ]</p>
+<p><span class="math display">\[
+\pi_{nombre}
+\left(
+\sigma_{carrera=\text{Computación}}(Estudiante)
+\right).
+\]</span></p>
 <p>El operador interior filtra tuplas; la proyección exterior conserva solo <code>nombre</code>.</p>
 <p>En SQL:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> nombre</span>
@@ -492,24 +562,34 @@ div.csl-indent {
 </section>
 <section id="propiedades-útiles" class="level2">
 <h2 class="anchored" data-anchor-id="propiedades-útiles">Propiedades útiles</h2>
-<p>La Ayudantía 1 trabaja propiedades algebraicas que permiten reescribir consultas. Dos ejemplos son: <span class="citation" data-cites="saavedra2026-ayudantia1">(<a href="#ref-saavedra2026-ayudantia1" role="doc-biblioref">Saavedra 2026</a>)</span></p>
+<p>Las propiedades algebraicas permiten reescribir consultas conservando su resultado. Dos ejemplos son:</p>
 <section id="conmutatividad-de-selecciones" class="level3">
 <h3 class="anchored" data-anchor-id="conmutatividad-de-selecciones">Conmutatividad de selecciones</h3>
-<p>[ _{<em>1}(</em>{<em>2}(R)) = </em>{<em>2}(</em>{<em>1}(R)) = </em>{_1_2}(R). ]</p>
+<p><span class="math display">\[
+\sigma_{\theta_1}(\sigma_{\theta_2}(R))
+=
+\sigma_{\theta_2}(\sigma_{\theta_1}(R))
+=
+\sigma_{\theta_1\land\theta_2}(R).
+\]</span></p>
 </section>
 <section id="proyección-sobre-unión" class="level3">
 <h3 class="anchored" data-anchor-id="proyección-sobre-unión">Proyección sobre unión</h3>
-<p>Si (att(R)=att(S)):</p>
-<p>[ <em>{B}(RS) = </em>{B}(R)_{B}(S). ]</p>
-<p>Estas igualdades son importantes porque una consulta puede tener muchas expresiones algebraicas equivalentes, base conceptual de la optimización de consultas que aparecerá más adelante en el curso.</p>
+<p>Si <span class="math inline">\(att(R)=att(S)\)</span>:</p>
+<p><span class="math display">\[
+\pi_{\bar B}(R\cup S)
+=
+\pi_{\bar B}(R)\cup\pi_{\bar B}(S).
+\]</span></p>
+<p>Estas igualdades son importantes porque una consulta puede tener muchas expresiones algebraicas equivalentes, base conceptual de la optimización de consultas.</p>
 </section>
 <section id="resumen" class="level3 summary-box">
 <h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
 <ul>
-<li>(,,) combinan relaciones con el mismo conjunto de atributos.</li>
-<li>() filtra tuplas sin cambiar atributos.</li>
-<li>() conserva atributos y elimina duplicados por semántica de conjuntos.</li>
-<li>() cambia nombres de atributos.</li>
+<li><span class="math inline">\(\cup,\cap,\setminus\)</span> combinan relaciones con el mismo conjunto de atributos.</li>
+<li><span class="math inline">\(\sigma\)</span> filtra tuplas sin cambiar atributos.</li>
+<li><span class="math inline">\(\pi\)</span> conserva atributos y elimina duplicados por semántica de conjuntos.</li>
+<li><span class="math inline">\(\rho\)</span> cambia nombres de atributos.</li>
 <li>La composición permite construir expresiones complejas y reescribirlas mediante propiedades algebraicas.</li>
 </ul>
 </section>
@@ -529,16 +609,7 @@ div.csl-indent {
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-arenas2022" class="csl-entry" role="listitem">
-Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>.
-</div>
-<div id="ref-riveros2026-clase02" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026a. <em>Álgebra relacional</em>.
-</div>
-<div id="ref-riveros2026-clase03" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026b. <em>SQL (Parte I)</em>.
-</div>
-<div id="ref-saavedra2026-ayudantia1" class="csl-entry" role="listitem">
-Saavedra, Benjamin. 2026. <em>Ayudantía 1: Álgebra Relacional y Consultas de Primer Orden</em>.
+Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>. <a href="https://github.com/pdm-book/community">https://github.com/pdm-book/community</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -962,7 +1033,7 @@ Saavedra, Benjamin. 2026. <em>Ayudantía 1: Álgebra Relacional y Consultas de P
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

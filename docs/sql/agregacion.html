@@ -99,10 +99,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -132,6 +132,35 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -399,7 +428,7 @@ div.csl-indent {
 
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>Las consultas vistas hasta ahora transforman filas o combinaciones de filas. La agregación responde preguntas sobre <strong>colecciones</strong>: cuántos elementos hay, cuál es el mínimo, el máximo, la suma o el promedio. La Clase 05 desarrolla agregación, <code>GROUP BY</code> y <code>HAVING</code>. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Las consultas vistas hasta ahora transforman filas o combinaciones de filas. La agregación responde preguntas sobre <strong>colecciones</strong>: cuántos elementos hay, cuál es el mínimo, el máximo, la suma o el promedio. Las funciones agregadas, <code>GROUP BY</code> y <code>HAVING</code> permiten formular estas consultas. <span class="citation" data-cites="silberschatz2020">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>)</span></p>
 <p>Usaremos:</p>
 <div class="schema-box">
 <p><strong>Inscribe</strong>(<code>rut</code>, <code>codigo</code>, <code>semestre</code>)</p>
@@ -407,7 +436,7 @@ div.csl-indent {
 </section>
 <section id="funciones-agregadas" class="level2">
 <h2 class="anchored" data-anchor-id="funciones-agregadas">Funciones agregadas</h2>
-<p>Las funciones principales del curso son: <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Entre las funciones agregadas más comunes están:</p>
 <ul>
 <li><code>COUNT</code>: cuenta valores;</li>
 <li><code>SUM</code>: suma valores;</li>
@@ -428,17 +457,17 @@ div.csl-indent {
 <p>cuenta filas, mientras</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">COUNT</span>(departamento)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Profesor;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>cuenta solo valores de <code>departamento</code> que no son <code>NULL</code>. La Clase 05 destaca este comportamiento. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>cuenta solo valores de <code>departamento</code> que no son <code>NULL</code>.</p>
 </section>
 <section id="agregación-y-distinct" class="level2">
 <h2 class="anchored" data-anchor-id="agregación-y-distinct">Agregación y <code>DISTINCT</code></h2>
 <p>Para contar códigos distintos:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> codigo) <span class="kw">AS</span> cursos_con_inscripciones</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Inscribe;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>El <code>DISTINCT</code> está <strong>dentro</strong> del agregado. La Clase 05 contrasta esto con</p>
+<p>El <code>DISTINCT</code> está <strong>dentro</strong> del agregado. Compáralo con</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> <span class="fu">COUNT</span>(codigo)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Inscribe;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>que no elimina duplicados antes del conteo y, al producir una sola fila agregada, no cumple la intención de contar valores distintos. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>que no elimina duplicados antes del conteo y, al producir una sola fila agregada, no cumple la intención de contar valores distintos.</p>
 </section>
 <section id="más-de-un-agregado" class="level2">
 <h2 class="anchored" data-anchor-id="más-de-un-agregado">Más de un agregado</h2>
@@ -464,7 +493,7 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>La Clase 05 muestra que SQLite puede aceptar algunas consultas con «bare columns» que otros motores, como PostgreSQL, rechazan. El curso recomienda considerar este tipo de consulta como incorrecta en general. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>SQLite acepta columnas no agrupadas ni agregadas, llamadas «bare columns», en consultas como la anterior; PostgreSQL rechaza este ejemplo. En SQLite, un único <code>MIN</code> o <code>MAX</code> incorporado vincula esas columnas con una fila que alcanza el extremo, pero los empates pueden dejar ambigüedad. Esta regla particular no debe asumirse en SQL portable. Véanse las reglas de <a href="https://www.sqlite.org/lang_select.html#bareagg">columnas no agrupadas de SQLite</a> y de <a href="https://www.postgresql.org/docs/current/sql-select.html#SQL-GROUPBY">agrupación de PostgreSQL</a>.</p>
 <p>Para escribir SQL portable, todo atributo seleccionado en una consulta agrupada debe estar justificado por la agrupación o por una agregación según las reglas del motor y del estándar aplicable.</p>
 </div>
 </div>
@@ -476,7 +505,7 @@ div.csl-indent {
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> codigo, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Inscribe</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> codigo;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>La idea del curso es equivalente a ejecutar una consulta agregada por cada valor distinto del atributo de agrupación y unir los resultados. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Conceptualmente, cada grupo se evalúa por separado y aporta una fila de resultados agregados.</p>
 <section id="agrupación-por-varios-atributos" class="level3">
 <h3 class="anchored" data-anchor-id="agrupación-por-varios-atributos">Agrupación por varios atributos</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> codigo, semestre, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n</span>
@@ -487,7 +516,7 @@ div.csl-indent {
 </section>
 <section id="where-versus-having" class="level2">
 <h2 class="anchored" data-anchor-id="where-versus-having"><code>WHERE</code> versus <code>HAVING</code></h2>
-<p><code>WHERE</code> filtra <strong>filas antes de agrupar</strong>; <code>HAVING</code> filtra <strong>grupos</strong>. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p><code>WHERE</code> filtra <strong>filas antes de agrupar</strong>; <code>HAVING</code> filtra <strong>grupos</strong>.</p>
 <p>Ejemplo: cursos con al menos dos inscripciones en 2025-2.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> codigo, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> n</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Inscribe</span>
@@ -502,23 +531,30 @@ div.csl-indent {
 </section>
 <section id="orden-lógico-de-procesamiento" class="level2">
 <h2 class="anchored" data-anchor-id="orden-lógico-de-procesamiento">Orden lógico de procesamiento</h2>
-<p>La Clase 05 introduce el orden conceptual</p>
-<p>[ FROMWHEREGROUP&nbsp;BYSELECT. ]</p>
+<p>Sin <code>HAVING</code>, el orden conceptual es</p>
+<p><span class="math display">\[
+\texttt{FROM}\to\texttt{WHERE}\to\texttt{GROUP BY}\to\texttt{SELECT}.
+\]</span></p>
 <p>Al incorporar <code>HAVING</code>, la lectura pedagógica queda:</p>
-<p>[ FROMWHEREGROUP&nbsp;BYHAVINGSELECT. ]</p>
-<p><code>ORDER BY</code> se aplica posteriormente a la presentación ordenada del resultado. Esta secuencia ayuda a entender por qué <code>WHERE</code> no puede filtrar directamente sobre un agregado calculado después de agrupar. <span class="citation" data-cites="riveros2026-clase05 silberschatz2020">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>; <a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>)</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+\texttt{FROM}&amp;\to\texttt{WHERE}\to\texttt{GROUP BY}\\
+&amp;\to\texttt{HAVING}\to\texttt{SELECT}.
+\end{aligned}
+\]</span></p>
+<p><code>ORDER BY</code> se aplica posteriormente a la presentación ordenada del resultado. Esta secuencia ayuda a entender por qué <code>WHERE</code> no puede filtrar directamente sobre un agregado calculado después de agrupar. <span class="citation" data-cites="silberschatz2020">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>)</span></p>
 </section>
 <section id="cuándo-mover-una-condición-de-having-a-where" class="level2">
 <h2 class="anchored" data-anchor-id="cuándo-mover-una-condición-de-having-a-where">Cuándo mover una condición de <code>HAVING</code> a <code>WHERE</code></h2>
-<p>La Clase 05 observa que, si una condición de <code>HAVING</code> depende solo de un atributo de agrupación, a menudo puede moverse a <code>WHERE</code>. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Una condición sobre un atributo de agrupación puede aplicarse antes de agrupar cuando selecciona grupos completos y no depende de agregados. El siguiente caso usa una igualdad sobre <code>codigo</code>:</p>
 <p>Estas dos consultas expresan la misma intención:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> codigo, <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Inscribe</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> codigo</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> codigo <span class="op">=</span> <span class="st">'IIC2413'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> codigo <span class="op">=</span> <span class="st">'BD101'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> codigo, <span class="fu">COUNT</span>(<span class="op">*</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Inscribe</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> codigo <span class="op">=</span> <span class="st">'IIC2413'</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> codigo <span class="op">=</span> <span class="st">'BD101'</span></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> codigo;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>La segunda filtra antes de formar grupos y deja más clara la separación entre condición de fila y condición agregada.</p>
 <p>El propósito principal de <code>HAVING</code> aparece cuando la condición depende de un agregado:</p>
@@ -529,7 +565,7 @@ div.csl-indent {
 </section>
 <section id="agregación-y-álgebra-relacional" class="level2">
 <h2 class="anchored" data-anchor-id="agregación-y-álgebra-relacional">Agregación y álgebra relacional</h2>
-<p>La agregación no forma parte del conjunto básico de operadores algebraicos desarrollado en Clase 02. Por eso, el sitio no fuerza una traducción a ese álgebra clásica. <em>Database Theory</em> trata agregados y agrupación como una extensión expresiva posterior. <span class="citation" data-cites="arenas2022">(<a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
+<p>La agregación no forma parte de los operadores del <a href="../teoria-consultas/algebra-relacional.html">álgebra relacional clásica</a>. Para representarla algebraicamente se necesitan operadores adicionales. <em>Database Theory</em> trata agregados y agrupación como una extensión expresiva posterior. <span class="citation" data-cites="arenas2022">(<a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
 <section id="resumen" class="level3 summary-box">
 <h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
 <ul>
@@ -557,10 +593,7 @@ div.csl-indent {
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-arenas2022" class="csl-entry" role="listitem">
-Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>.
-</div>
-<div id="ref-riveros2026-clase05" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026. <em>SQL avanzado</em>.
+Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>. <a href="https://github.com/pdm-book/community">https://github.com/pdm-book/community</a>.
 </div>
 <div id="ref-silberschatz2020" class="csl-entry" role="listitem">
 Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System Concepts</em>. 7.ª ed. McGraw-Hill Education.
@@ -987,7 +1020,7 @@ Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

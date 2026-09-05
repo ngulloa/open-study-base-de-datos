@@ -5,7 +5,7 @@ description: "Compatibilidad de tuplas, natural join, producto cartesiano, theta
 
 ## Intuición y concepto
 
-Las relaciones separan información por temas. Para responder consultas reales necesitamos **combinarlas**. El operador central es el join: une tuplas que son compatibles en los atributos que comparten. [@riveros2026-clase02]
+Las relaciones separan información por temas. Para responder consultas reales necesitamos **combinarlas**. El operador central es el join: une tuplas que son compatibles en los atributos que comparten.
 
 Por ejemplo:
 
@@ -18,51 +18,48 @@ comparten el atributo `rut`. Un join permite asociar cada estudiante con sus ins
 
 ## Compatibilidad de tuplas
 
-Sean \(\bar\tau_1\) y \(\bar\tau_2\) tuplas nombradas. El curso define que son **compatibles**, escrito \(\bar\tau_1\sim\bar\tau_2\), si coinciden en todos los atributos compartidos:
+Sean $\bar\tau_1$ y $\bar\tau_2$ tuplas nombradas. Diremos que son **compatibles**, escrito $\bar\tau_1\sim\bar\tau_2$, si coinciden en todos los atributos compartidos:
 
-\[
+$$
 \bar\tau_1\sim\bar\tau_2
 \iff
 \forall A\in att(\bar\tau_1)\cap att(\bar\tau_2),\;
 \bar\tau_1(A)=\bar\tau_2(A).
-\]
+$$
 
 Si son compatibles, se pueden fusionar en una tupla con atributos
 
-\[
+$$
 att(\bar\tau_1)\cup att(\bar\tau_2).
-\]
-
-[@riveros2026-clase02]
+$$
 
 ## Natural join
 
 ::: {.callout-note title="Definición formal"}
-Para relaciones \(R\) y \(S\), el **natural join** es
+Para relaciones $R$ y $S$, el **natural join** es
 
-\[
+$$
 R\bowtie S
 :=
 \{\bar\tau_1\bowtie\bar\tau_2
 \mid
 \bar\tau_1\in R,\ \bar\tau_2\in S,
 \ \bar\tau_1\sim\bar\tau_2\}.
-\]
+$$
 
 Además,
 
-\[
+$$
 att(R\bowtie S)=att(R)\cup att(S).
-\]
+$$
 
-[@riveros2026-clase02; @saavedra2026-ayudantia1]
 :::
 
 ### Ejemplo
 
-\[
+$$
 Estudiante\bowtie Inscribe
-\]
+$$
 
 combina una tupla de `Estudiante` con una de `Inscribe` exactamente cuando ambas tienen el mismo `rut`.
 
@@ -74,37 +71,37 @@ El natural join compara **todos** los atributos con nombres comunes. Si dos rela
 
 Cuando
 
-\[
+$$
 att(R)\cap att(S)=\varnothing,
-\]
+$$
 
 todas las parejas de tuplas son compatibles. En ese caso el join coincide con el producto cartesiano:
 
-\[
+$$
 R\times S
 :=
 \{\bar\tau_1\bowtie\bar\tau_2
 \mid
 \bar\tau_1\in R,\ \bar\tau_2\in S\}.
-\]
+$$
 
-El curso define \(R\times S\) solo para relaciones con atributos disjuntos. [@riveros2026-clase02]
+En este sitio definimos $R\times S$ solo para relaciones con atributos disjuntos.
 
 El producto cartesiano suele ser un paso intermedio: genera todas las combinaciones y luego una selección conserva las que cumplen la condición de unión.
 
 ## El join puede expresarse con operadores básicos
 
-La Clase 02 demuestra el caso
+Consideremos el caso
 
-\[
+$$
 att(R_1)=\{A,B\},
 \qquad
 att(R_2)=\{B,C\}.
-\]
+$$
 
-Renombrando temporalmente el segundo \(B\) como \(B'\):
+Renombrando temporalmente el segundo $B$ como $B'$:
 
-\[
+$$
 R_1\bowtie R_2
 =
 \pi_{A,B,C}
@@ -114,9 +111,7 @@ R_1\bowtie R_2
 R_1\times\rho_{B\to B'}(R_2)
 \right)
 \right).
-\]
-
-[@riveros2026-clase02]
+$$
 
 La idea general es:
 
@@ -126,81 +121,75 @@ La idea general es:
 
 Esto muestra que el join es expresable a partir de producto, selección, renombramiento y proyección.
 
-## \(\theta\)-join
+## $\theta$-join
 
-La Ayudantía 1 define, para relaciones con atributos disjuntos y una condición \(\theta\):
+Para relaciones con atributos disjuntos y una condición $\theta$:
 
-\[
+$$
 R\bowtie_\theta S
 :=
 \sigma_\theta(R\times S).
-\]
-
-[@saavedra2026-ayudantia1]
+$$
 
 Por ejemplo, si renombramos `Inscribe.codigo` como `codigoIns` y `Curso.codigo` como `codigoCurso`, podemos unir mediante
 
-\[
+$$
 Inscribe'\bowtie_{codigoIns=codigoCurso}Curso'.
-\]
+$$
 
-Si los atributos no son disjuntos, primero se renombra lo necesario para que el producto sea válido bajo la convención del curso.
+Si los atributos no son disjuntos, primero se renombra lo necesario para que el producto sea válido bajo la convención de atributos disjuntos.
 
 ## Semijoin
 
-El **semijoin** conserva únicamente las tuplas de \(R\) que tienen algún compañero compatible en \(S\):
+El **semijoin** conserva únicamente las tuplas de $R$ que tienen algún compañero compatible en $S$:
 
-\[
+$$
 R\ltimes S
 :=
 \{\bar\tau\in R
 \mid
 \exists\bar\sigma\in S.\;\bar\tau\sim\bar\sigma\}.
-\]
+$$
 
-La Ayudantía 1 pide mostrar que puede expresarse como
+Puede expresarse mediante join y proyección:
 
-\[
+$$
 R\ltimes S
 =
 \pi_{att(R)}(R\bowtie S).
-\]
-
-[@saavedra2026-ayudantia1]
+$$
 
 Ejemplo: estudiantes que tienen al menos una inscripción:
 
-\[
+$$
 Estudiante\ltimes Inscribe.
-\]
+$$
 
 ## Anti-join
 
-El **anti-join** conserva las tuplas de \(R\) que no tienen ningún compañero compatible en \(S\):
+El **anti-join** conserva las tuplas de $R$ que no tienen ningún compañero compatible en $S$:
 
-\[
+$$
 R\triangleright S
 :=
 \{\bar\tau\in R
 \mid
 \nexists\bar\sigma\in S.\;\bar\tau\sim\bar\sigma\}.
-\]
+$$
 
 Se deriva inmediatamente del semijoin:
 
-\[
+$$
 R\triangleright S
 =
 R\setminus(R\ltimes S).
-\]
-
-[@saavedra2026-ayudantia1]
+$$
 
 Así, los estudiantes sin inscripciones pueden expresarse como
 
-\[
+$$
 Estudiante\triangleright Inscribe.
-\]
+$$
 
 ## Correspondencia con SQL
 
@@ -213,7 +202,7 @@ JOIN Inscribe AS I
   ON E.rut = I.rut;
 ```
 
-El [SQL básico](../sql/consultas-basicas.qmd) también presenta `NATURAL JOIN`, `JOIN ... USING (...)` y la forma con múltiples relaciones en `FROM` más una condición en `WHERE`, tal como aparecen en la Clase 04. [@riveros2026-clase04]
+El [SQL básico](../sql/consultas-basicas.qmd) también presenta `NATURAL JOIN`, `JOIN ... USING (...)` y la forma con múltiples relaciones en `FROM` más una condición en `WHERE`.
 
 ::: {.summary-box}
 ### Resumen
@@ -221,7 +210,7 @@ El [SQL básico](../sql/consultas-basicas.qmd) también presenta `NATURAL JOIN`,
 - El natural join combina tuplas compatibles en atributos compartidos.
 - El producto cartesiano es el caso en que los atributos son disjuntos.
 - Un join puede construirse con producto, selección, renombramiento y proyección.
-- El \(\theta\)-join incorpora una condición explícita.
+- El $\theta$-join incorpora una condición explícita.
 - Semijoin y anti-join expresan «tiene compañero» y «no tiene compañero» sin ampliar el poder expresivo del álgebra base.
 :::
 

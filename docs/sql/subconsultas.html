@@ -99,10 +99,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -132,6 +132,35 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -397,14 +426,14 @@ div.csl-indent {
 
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>Una subconsulta es una consulta SQL usada dentro de otra consulta. La Clase 04 la conecta con la composición del álgebra relacional y con subfórmulas o consultas auxiliares en lógica de primer orden. <span class="citation" data-cites="riveros2026-clase04">(<a href="#ref-riveros2026-clase04" role="doc-biblioref">Riveros 2026b</a>)</span></p>
-<p>Los casos principales vistos en el curso son:</p>
+<p>Una subconsulta es una consulta SQL usada dentro de otra consulta. Permite componer consultas, del mismo modo que el álgebra relacional compone expresiones y la lógica combina subfórmulas. <span class="citation" data-cites="silberschatz2020">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>)</span></p>
+<p>Las formas principales son:</p>
 <ol type="1">
 <li>anidación en <code>FROM</code>;</li>
 <li>anidación en <code>WHERE</code> mediante <code>IN</code>;</li>
 <li><code>EXISTS</code> y <code>NOT EXISTS</code>;</li>
 <li>subconsultas que producen un valor;</li>
-<li>comparaciones con <code>ANY</code> y <code>ALL</code>. <span class="citation" data-cites="riveros2026-clase04">(<a href="#ref-riveros2026-clase04" role="doc-biblioref">Riveros 2026b</a>)</span></li>
+<li>comparaciones con <code>ANY</code> y <code>ALL</code>.</li>
 </ol>
 </section>
 <section id="subconsultas-en-from" class="level2">
@@ -429,7 +458,7 @@ div.csl-indent {
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> rut <span class="kw">IN</span> (</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span> rut</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span> Inscribe</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">WHERE</span> codigo <span class="op">=</span> <span class="st">'IIC2413'</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">WHERE</span> codigo <span class="op">=</span> <span class="st">'BD101'</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>En lógica, el valor externo se conecta con un testigo producido por la subconsulta. En álgebra, suele expresarse mediante join o semijoin.</p>
 <section id="not-in" class="level3">
@@ -439,9 +468,9 @@ div.csl-indent {
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> rut <span class="kw">NOT</span> <span class="kw">IN</span> (</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span> rut</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span> Inscribe</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">WHERE</span> codigo <span class="op">=</span> <span class="st">'IIC2413'</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">WHERE</span> codigo <span class="op">=</span> <span class="st">'BD101'</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>parece expresar «estudiantes no inscritos en IIC2413», pero hay una advertencia importante: si la subconsulta puede producir <code>NULL</code>, la lógica de tres valores puede hacer que <code>NOT IN</code> descarte filas inesperadamente. El ejemplo oficial de Clase 06 muestra incluso un caso donde el resultado se vuelve vacío. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>parece expresar «estudiantes no inscritos en BD101», pero hay una advertencia importante: si la subconsulta puede producir <code>NULL</code>, la lógica de tres valores puede hacer que <code>NOT IN</code> descarte filas inesperadamente. El resultado puede incluso ser vacío: una comparación que queda en <code>UNKNOWN</code> no pasa el filtro <code>WHERE</code>.</p>
 <div class="callout callout-style-default callout-warning callout-titled" title="NOT IN y NULL">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -468,7 +497,7 @@ div.csl-indent {
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">WHERE</span> D.codigo <span class="op">=</span> C.codigo</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>La subconsulta está <strong>correlacionada</strong>: usa <code>C.codigo</code>, un valor de la consulta exterior.</p>
-<p>La Clase 04 explica la correlación como la exposición de una variable externa dentro de la subconsulta. <span class="citation" data-cites="riveros2026-clase04">(<a href="#ref-riveros2026-clase04" role="doc-biblioref">Riveros 2026b</a>)</span></p>
+<p>La referencia externa vincula la evaluación de la subconsulta con la fila de la consulta exterior.</p>
 </section>
 <section id="not-exists" class="level2">
 <h2 class="anchored" data-anchor-id="not-exists"><code>NOT EXISTS</code></h2>
@@ -481,7 +510,12 @@ div.csl-indent {
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">WHERE</span> R.codigo <span class="op">=</span> C.codigo</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>En lógica:</p>
-<p>[ Q(n) ccr.; Curso(c,n,cr) p.;Requisito(c,p). ]</p>
+<p><span class="math display">\[
+Q(n)\leftarrow
+\exists c\exists cr.\;
+Curso(c,n,cr)\land
+\neg\exists p.\;Requisito(c,p).
+\]</span></p>
 <p>Esta correspondencia hace de <code>NOT EXISTS</code> una herramienta natural para consultas «ninguno» o «nunca».</p>
 </section>
 <section id="subconsultas-escalares" class="level2">
@@ -493,12 +527,12 @@ div.csl-indent {
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span> <span class="fu">AVG</span>(creditos)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span> Curso</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>La Clase 04 advierte que una subconsulta usada como valor debe entregar un resultado apropiadamente único; si devuelve varias filas, el motor puede reportar un error. <span class="citation" data-cites="riveros2026-clase04">(<a href="#ref-riveros2026-clase04" role="doc-biblioref">Riveros 2026b</a>)</span></p>
+<p>Una subconsulta escalar debe producir una columna y, como máximo, una fila. Si no produce filas, su valor es <code>NULL</code>; si produce varias, los motores que exigen cardinalidad escalar reportan un error.</p>
 <p>El comportamiento exacto ante casos no escalares puede depender del RDBMS, por lo que no debe construirse una consulta suponiendo una selección arbitraria de una fila.</p>
 </section>
 <section id="any-y-all" class="level2">
 <h2 class="anchored" data-anchor-id="any-y-all"><code>ANY</code> y <code>ALL</code></h2>
-<p>El curso presenta comparaciones del tipo:</p>
+<p>Una comparación puede cuantificarse sobre el resultado de una subconsulta:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>expresion <span class="op">&gt;</span> <span class="kw">ANY</span> (subconsulta)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>y</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>expresion <span class="op">&gt;</span> <span class="kw">ALL</span> (subconsulta)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
@@ -507,7 +541,6 @@ div.csl-indent {
 <li><code>&gt; ANY</code> exige que la comparación sea verdadera para <strong>al menos un</strong> valor;</li>
 <li><code>&gt; ALL</code> exige que sea verdadera para <strong>todos</strong> los valores relevantes de la subconsulta.</li>
 </ul>
-<p><span class="citation" data-cites="riveros2026-clase04">(<a href="#ref-riveros2026-clase04" role="doc-biblioref">Riveros 2026b</a>)</span></p>
 <div class="callout callout-style-default callout-warning callout-titled" title="Dialectos">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -518,14 +551,14 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>La Clase 04 señala explícitamente que <code>ANY</code>/<code>ALL</code> no están soportados por SQLite en el contexto usado en el curso. No debe presentarse este comportamiento como universal entre motores. <span class="citation" data-cites="riveros2026-clase04">(<a href="#ref-riveros2026-clase04" role="doc-biblioref">Riveros 2026b</a>)</span></p>
+<p>SQLite no implementa comparaciones cuantificadas de la forma <code>&gt; ANY (subconsulta)</code> o <code>&gt; ALL (subconsulta)</code>. En ese motor se necesitan otras formulaciones; al traducir, hay que preservar también el comportamiento ante <code>NULL</code> y resultados vacíos. Consulta la <a href="https://www.sqlite.org/lang_expr.html">sintaxis de expresiones de SQLite</a> y las <a href="https://www.postgresql.org/docs/current/functions-subquery.html">comparaciones cuantificadas de PostgreSQL</a>.</p>
 </div>
 </div>
 </section>
 <section id="correlación-y-desanidamiento" class="level2">
 <h2 class="anchored" data-anchor-id="correlación-y-desanidamiento">Correlación y desanidamiento</h2>
 <p>Una consulta correlacionada se evalúa conceptualmente en relación con cada fila de la consulta exterior. Esto no significa que el motor deba implementarla literalmente así: el optimizador puede reescribirla.</p>
-<p>La Clase 04 compara un <code>EXISTS</code> correlacionado con una versión desanidada mediante join y advierte que <strong>los duplicados pueden cambiar</strong>. <span class="citation" data-cites="riveros2026-clase04">(<a href="#ref-riveros2026-clase04" role="doc-biblioref">Riveros 2026b</a>)</span></p>
+<p>Al sustituir un <code>EXISTS</code> correlacionado por un join, <strong>los duplicados pueden cambiar</strong>.</p>
 <p>Ejemplo:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> E.nombre</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Estudiante <span class="kw">AS</span> E</span>
@@ -539,7 +572,11 @@ div.csl-indent {
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Estudiante <span class="kw">AS</span> E</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> Inscribe <span class="kw">AS</span> I</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> I.rut <span class="op">=</span> E.rut;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>si un estudiante tiene varias inscripciones. La segunda consulta puede repetir su nombre. Una reescritura que quiera preservar el resultado necesitaría considerar <code>DISTINCT</code> u otra transformación equivalente.</p>
+<p>si un estudiante tiene varias inscripciones. La segunda consulta puede repetir su nombre. Aplicar <code>DISTINCT</code> solo a <code>E.nombre</code> tampoco preserva siempre el resultado: eliminaría las repeticiones debidas a estudiantes diferentes con el mismo nombre. Una transformación equivalente une cada estudiante con una sola aparición de su RUT:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> E.nombre</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Estudiante <span class="kw">AS</span> E</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> (<span class="kw">SELECT</span> <span class="kw">DISTINCT</span> rut <span class="kw">FROM</span> Inscribe) <span class="kw">AS</span> I</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> I.rut <span class="op">=</span> E.rut;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="elegir-una-forma" class="level2">
 <h2 class="anchored" data-anchor-id="elegir-una-forma">Elegir una forma</h2>
@@ -580,12 +617,6 @@ div.csl-indent {
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-ramakrishnan2003" class="csl-entry" role="listitem">
 Ramakrishnan, Raghu, y Johannes Gehrke. 2003. <em>Database Management Systems</em>. 3.ª ed. McGraw-Hill.
-</div>
-<div id="ref-riveros2026-clase06" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026a. <em>Nulos</em>.
-</div>
-<div id="ref-riveros2026-clase04" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026b. <em>SQL (Parte II)</em>.
 </div>
 <div id="ref-silberschatz2020" class="csl-entry" role="listitem">
 Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System Concepts</em>. 7.ª ed. McGraw-Hill Education.
@@ -1012,7 +1043,7 @@ Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

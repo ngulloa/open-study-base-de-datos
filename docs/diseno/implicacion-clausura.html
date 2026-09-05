@@ -64,10 +64,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -97,6 +97,35 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -318,7 +347,7 @@ div.csl-indent {
   <li><a href="#satisfacción-de-un-conjunto-de-dependencias" id="toc-satisfacción-de-un-conjunto-de-dependencias" class="nav-link" data-scroll-target="#satisfacción-de-un-conjunto-de-dependencias">Satisfacción de un conjunto de dependencias</a></li>
   <li><a href="#implicación" id="toc-implicación" class="nav-link" data-scroll-target="#implicación">Implicación</a></li>
   <li><a href="#equivalencia-de-conjuntos" id="toc-equivalencia-de-conjuntos" class="nav-link" data-scroll-target="#equivalencia-de-conjuntos">Equivalencia de conjuntos</a></li>
-  <li><a href="#reglas-trabajadas-en-clase" id="toc-reglas-trabajadas-en-clase" class="nav-link" data-scroll-target="#reglas-trabajadas-en-clase">Reglas trabajadas en clase</a>
+  <li><a href="#reglas-de-razonamiento" id="toc-reglas-de-razonamiento" class="nav-link" data-scroll-target="#reglas-de-razonamiento">Reglas de razonamiento</a>
   <ul class="collapse">
   <li><a href="#dividir-y-juntar" id="toc-dividir-y-juntar" class="nav-link" data-scroll-target="#dividir-y-juntar">Dividir y juntar</a></li>
   <li><a href="#transitividad" id="toc-transitividad" class="nav-link" data-scroll-target="#transitividad">Transitividad</a></li>
@@ -368,15 +397,21 @@ div.csl-indent {
 
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>Una base de datos rara vez tiene una sola dependencia funcional. Cuando conocemos un conjunto (F), algunas dependencias adicionales se siguen lógicamente de él. La Clase 08 formaliza este razonamiento y presenta la <strong>clausura de atributos</strong> como herramienta algorítmica. <span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Una base de datos rara vez tiene una sola dependencia funcional. Cuando conocemos un conjunto <span class="math inline">\(F\)</span>, algunas dependencias adicionales se siguen lógicamente de él. La <strong>clausura de atributos</strong> permite calcular esas consecuencias y decidir si ciertos atributos forman una superllave.</p>
 </section>
 <section id="satisfacción-de-un-conjunto-de-dependencias" class="level2">
 <h2 class="anchored" data-anchor-id="satisfacción-de-un-conjunto-de-dependencias">Satisfacción de un conjunto de dependencias</h2>
-<p>Sea (F) un conjunto de dependencias funcionales.</p>
-<p>[ RF ]</p>
-<p>significa que (R) satisface <strong>cada</strong> dependencia de (F):</p>
-<p>[ RF (AB)F, ;RAB. ]</p>
-<p><span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Fijemos un esquema de atributos. Sea <span class="math inline">\(F\)</span> un conjunto de dependencias funcionales sobre ese esquema; todas las relaciones consideradas a continuación tienen esos mismos atributos.</p>
+<p><span class="math display">\[
+R\models F
+\]</span></p>
+<p>significa que <span class="math inline">\(R\)</span> satisface <strong>cada</strong> dependencia de <span class="math inline">\(F\)</span>:</p>
+<p><span class="math display">\[
+R\models F
+\iff
+\forall(\bar A\to\bar B)\in F,
+\;R\models\bar A\to\bar B.
+\]</span></p>
 </section>
 <section id="implicación" class="level2">
 <h2 class="anchored" data-anchor-id="implicación">Implicación</h2>
@@ -390,49 +425,76 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Decimos que (F) <strong>implica</strong> (F’), escrito</p>
-<p>[ FF’, ]</p>
-<p>si para toda relación (R):</p>
-<p>[ RF RF’. ]</p>
-<p><span class="citation" data-cites="riveros2026-clase08 arenas2022">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026</a>; <a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
+<p>Decimos que <span class="math inline">\(F\)</span> <strong>implica</strong> <span class="math inline">\(F'\)</span>, escrito</p>
+<p><span class="math display">\[
+F\models F',
+\]</span></p>
+<p>si para toda relación <span class="math inline">\(R\)</span>:</p>
+<p><span class="math display">\[
+R\models F
+\quad\Longrightarrow\quad
+R\models F'.
+\]</span></p>
+<p><span class="citation" data-cites="arenas2022">(<a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
 </div>
 </div>
 <p>Para una sola dependencia escribimos, por ejemplo,</p>
-<p>[ FAC. ]</p>
-<p>Esto no pregunta si una instancia concreta satisface (AC), sino si <strong>toda</strong> relación que respete (F) necesariamente debe respetarla.</p>
+<p><span class="math display">\[
+F\models A\to C.
+\]</span></p>
+<p>Esto no pregunta si una instancia concreta satisface <span class="math inline">\(A\to C\)</span>, sino si <strong>toda</strong> relación que respete <span class="math inline">\(F\)</span> necesariamente debe respetarla.</p>
 </section>
 <section id="equivalencia-de-conjuntos" class="level2">
 <h2 class="anchored" data-anchor-id="equivalencia-de-conjuntos">Equivalencia de conjuntos</h2>
-<p>(F) y (F’) son equivalentes cuando tienen exactamente los mismos modelos:</p>
-<p>[ FF’ R, RF RF’. ]</p>
-<p><span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p><span class="math inline">\(F\)</span> y <span class="math inline">\(F'\)</span> son equivalentes cuando tienen exactamente los mismos modelos:</p>
+<p><span class="math display">\[
+F\equiv F'
+\iff
+\forall R,
+\quad
+R\models F
+\text{ si y solo si }
+R\models F'.
+\]</span></p>
 </section>
-<section id="reglas-trabajadas-en-clase" class="level2">
-<h2 class="anchored" data-anchor-id="reglas-trabajadas-en-clase">Reglas trabajadas en clase</h2>
-<p>La Clase 08 introduce explícitamente dos reglas de razonamiento. <span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<section id="reglas-de-razonamiento" class="level2">
+<h2 class="anchored" data-anchor-id="reglas-de-razonamiento">Reglas de razonamiento</h2>
+<p>Dos reglas útiles permiten descomponer dependencias y encadenarlas:</p>
 <section id="dividir-y-juntar" class="level3">
 <h3 class="anchored" data-anchor-id="dividir-y-juntar">Dividir y juntar</h3>
-<p>[ {AB_1B_m} {AB_1,,AB_m}. ]</p>
+<p><span class="math display">\[
+\{\bar A\to B_1\cdots B_m\}
+\equiv
+\{\bar A\to B_1,\ldots,\bar A\to B_m\}.
+\]</span></p>
 <p>Por ejemplo:</p>
-<p>[ codigonombre&nbsp;creditos ]</p>
+<p><span class="math display">\[
+codigo\to nombre\ creditos
+\]</span></p>
 <p>es equivalente a</p>
-<p>[ {codigonombre,;codigocreditos}. ]</p>
+<p><span class="math display">\[
+\{codigo\to nombre,\;codigo\to creditos\}.
+\]</span></p>
 </section>
 <section id="transitividad" class="level3">
 <h3 class="anchored" data-anchor-id="transitividad">Transitividad</h3>
-<p>[ {AB,;BC} AC. ]</p>
+<p><span class="math display">\[
+\{\bar A\to\bar B,\;\bar B\to\bar C\}
+\models
+\bar A\to\bar C.
+\]</span></p>
 <p>Si un atributo determina otro, y ese segundo determina un tercero, el primero determina el tercero.</p>
-<p>La bibliografía presenta sistemas axiomáticos completos para dependencias funcionales, pero el material del curso disponible hasta Clase 08 solo necesita estas reglas y el algoritmo de clausura. No adelantaremos una página separada de axiomas de Armstrong todavía. <span class="citation" data-cites="silberschatz2020 garciamolina2009">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>; <a href="#ref-garciamolina2009" role="doc-biblioref">Garcia-Molina et&nbsp;al. 2009</a>)</span></p>
+<p>Estas reglas forman parte del razonamiento con dependencias funcionales. Los axiomas de Armstrong proporcionan un sistema completo de deducción; aquí usaremos la clausura para decidir implicación de forma algorítmica. <span class="citation" data-cites="silberschatz2020 garciamolina2009">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>; <a href="#ref-garciamolina2009" role="doc-biblioref">Garcia-Molina et&nbsp;al. 2009</a>)</span></p>
 </section>
 </section>
 <section id="dos-problemas-algorítmicos" class="level2">
 <h2 class="anchored" data-anchor-id="dos-problemas-algorítmicos">Dos problemas algorítmicos</h2>
-<p>La Clase 08 plantea: dado (F), <span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Dado <span class="math inline">\(F\)</span>, queremos resolver:</p>
 <ol type="1">
-<li>¿es (A) una superllave?</li>
-<li>¿se cumple (FAB)?</li>
+<li>¿es <span class="math inline">\(\bar A\)</span> una superllave?</li>
+<li>¿se cumple <span class="math inline">\(F\models\bar A\to\bar B\)</span>?</li>
 </ol>
-<p>Ambos se resuelven calculando la clausura de (A).</p>
+<p>Ambos se resuelven calculando la clausura de <span class="math inline">\(\bar A\)</span>.</p>
 </section>
 <section id="clausura-de-atributos" class="level2">
 <h2 class="anchored" data-anchor-id="clausura-de-atributos">Clausura de atributos</h2>
@@ -446,88 +508,120 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>La <strong>clausura</strong> de (A) bajo (F) es</p>
-<p>[ A^+ := {BFAB}. ]</p>
-<p><span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>La <strong>clausura</strong> de <span class="math inline">\(\bar A\)</span> bajo <span class="math inline">\(F\)</span> es</p>
+<p><span class="math display">\[
+\bar A^+
+:=
+\{B\mid F\models\bar A\to B\}.
+\]</span></p>
 </div>
 </div>
-<p>Contiene exactamente los atributos individuales que están funcionalmente determinados por (A) según (F).</p>
+<p>Contiene exactamente los atributos individuales que están funcionalmente determinados por <span class="math inline">\(\bar A\)</span> según <span class="math inline">\(F\)</span>.</p>
 </section>
 <section id="ejemplo-universitario" class="level2">
 <h2 class="anchored" data-anchor-id="ejemplo-universitario">Ejemplo universitario</h2>
 <p>Supongamos una relación auxiliar</p>
-<p>[ InscripcionDetallada(rut,nombreEst,carrera,codigo,nombreCurso,creditos) ]</p>
+<p><span class="math display">\[
+InscripcionDetallada(rut,nombreEst,carrera,codigo,nombreCurso,creditos)
+\]</span></p>
 <p>con</p>
-<p>[ F={ rutnombreEst&nbsp;carrera, codigonombreCurso&nbsp;creditos }. ]</p>
+<p><span class="math display">\[
+F=\{
+rut\to nombreEst\ carrera,
+codigo\to nombreCurso\ creditos
+\}.
+\]</span></p>
 <p>Entonces:</p>
-<p>[ {rut,codigo}^+ = {rut,codigo,nombreEst,carrera,nombreCurso,creditos}. ]</p>
-<p>Por lo tanto, <code>rut codigo</code> determina todos los atributos de esta relación y es una superllave bajo (F).</p>
+<p><span class="math display">\[
+\{rut,codigo\}^+
+=
+\{rut,codigo,nombreEst,carrera,nombreCurso,creditos\}.
+\]</span></p>
+<p>Por lo tanto, <code>rut codigo</code> determina todos los atributos de esta relación y es una superllave bajo <span class="math inline">\(F\)</span>.</p>
 <p>En cambio:</p>
-<p>[ {rut}^+ = {rut,nombreEst,carrera}, ]</p>
+<p><span class="math display">\[
+\{rut\}^+
+=
+\{rut,nombreEst,carrera\},
+\]</span></p>
 <p>por lo que <code>rut</code> no es superllave de <code>InscripcionDetallada</code>.</p>
 </section>
 <section id="algoritmo-de-clausura" class="level2">
 <h2 class="anchored" data-anchor-id="algoritmo-de-clausura">Algoritmo de clausura</h2>
-<p>La Clase 08 presenta el siguiente procedimiento: <span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>El procedimiento aplica dependencias hasta alcanzar un punto fijo:</p>
 <pre class="text"><code>entrada: F y un conjunto de atributos A
 clausura &lt;- A
 reglas   &lt;- F
 
-repetir
-  si existe B -&gt; C en reglas con B contenido en clausura:
-    clausura &lt;- clausura union C
-    eliminar B -&gt; C de reglas
-hasta que no haya cambios
+mientras exista B -&gt; C en reglas con B contenido en clausura:
+  clausura &lt;- clausura union C
+  eliminar B -&gt; C de reglas
 
 retornar clausura</code></pre>
-<p>La idea es simple: cada vez que ya conocemos todos los atributos del lado izquierdo de una dependencia, podemos agregar los del lado derecho.</p>
+<p>Cada vez que ya conocemos todos los atributos del lado izquierdo de una dependencia, podemos agregar los del lado derecho. Incluso si una regla no agrega atributos, seguimos buscando otras aplicables. El proceso termina porque cada iteración elimina una regla de un conjunto finito.</p>
 <section id="ejecución-sobre-el-ejemplo" class="level3">
 <h3 class="anchored" data-anchor-id="ejecución-sobre-el-ejemplo">Ejecución sobre el ejemplo</h3>
 <p>Inicio:</p>
-<p>[ clausura={rut,codigo}. ]</p>
+<p><span class="math display">\[
+clausura=\{rut,codigo\}.
+\]</span></p>
 <p>Por <code>rut → nombreEst carrera</code>:</p>
-<p>[ clausura= {rut,codigo,nombreEst,carrera}. ]</p>
+<p><span class="math display">\[
+clausura=
+\{rut,codigo,nombreEst,carrera\}.
+\]</span></p>
 <p>Por <code>codigo → nombreCurso creditos</code>:</p>
-<p>[ clausura= {rut,codigo,nombreEst,carrera,nombreCurso,creditos}. ]</p>
+<p><span class="math display">\[
+clausura=
+\{rut,codigo,nombreEst,carrera,nombreCurso,creditos\}.
+\]</span></p>
 <p>No quedan reglas aplicables que agreguen atributos nuevos; el algoritmo termina.</p>
 </section>
 </section>
 <section id="corrección-del-algoritmo" class="level2">
 <h2 class="anchored" data-anchor-id="corrección-del-algoritmo">Corrección del algoritmo</h2>
-<p>La Clase 08 bosqueja una demostración en dos direcciones: <span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>La corrección requiere demostrar dos direcciones:</p>
 <ol type="1">
-<li>si un atributo entra a <code>clausura</code>, entonces realmente pertenece a (A^+);</li>
-<li>si un atributo no entra al finalizar, puede construirse una relación que satisface (F) pero viola (AB), por lo que (BA^+).</li>
+<li>si un atributo entra a <code>clausura</code>, entonces realmente pertenece a <span class="math inline">\(\bar A^+\)</span>;</li>
+<li>si un atributo no entra al finalizar, puede construirse una relación que satisface <span class="math inline">\(F\)</span> pero viola <span class="math inline">\(\bar A\to B\)</span>, por lo que <span class="math inline">\(B\notin\bar A^+\)</span>.</li>
 </ol>
 <p>El primer punto se demuestra inductivamente sobre las iteraciones. El segundo usa dos tuplas que coinciden en los atributos de la clausura y difieren en los demás.</p>
-<p>No expandiremos aquí los detalles que el propio material deja como ejercicio, pero mantendremos el resultado que la clase establece.</p>
+<p>Sea <span class="math inline">\(C\)</span> el conjunto final. Para la primera dirección, inicialmente <span class="math inline">\(\bar A\subseteq C\)</span> y sus atributos están determinados trivialmente por <span class="math inline">\(\bar A\)</span>. Si todos los atributos de <span class="math inline">\(X\)</span> ya están determinados y <span class="math inline">\(X\to Y\in F\)</span>, la transitividad justifica incorporar <span class="math inline">\(Y\)</span>.</p>
+<p>Para la segunda, supongamos <span class="math inline">\(B\notin C\)</span> y un dominio con al menos dos valores distintos, <span class="math inline">\(a\)</span> y <span class="math inline">\(b\)</span>. Construyamos dos tuplas sobre el esquema: <span class="math inline">\(t_1\)</span> vale <span class="math inline">\(a\)</span> en todos los atributos; <span class="math inline">\(t_2\)</span> vale <span class="math inline">\(a\)</span> en <span class="math inline">\(C\)</span> y <span class="math inline">\(b\)</span> fuera de <span class="math inline">\(C\)</span>. La relación <span class="math inline">\(\{t_1,t_2\}\)</span> satisface <span class="math inline">\(F\)</span>: si ambas coinciden en el antecedente <span class="math inline">\(X\)</span> de una regla, entonces <span class="math inline">\(X\subseteq C\)</span>; como el algoritmo terminó, su consecuente también está en <span class="math inline">\(C\)</span>, y ambas tuplas coinciden en él. Sin embargo, coinciden en <span class="math inline">\(\bar A\)</span> y difieren en <span class="math inline">\(B\)</span>. Por tanto, <span class="math inline">\(F\not\models\bar A\to B\)</span>.</p>
 </section>
 <section id="resolver-los-dos-problemas" class="level2">
 <h2 class="anchored" data-anchor-id="resolver-los-dos-problemas">Resolver los dos problemas</h2>
-<div class="callout callout-style-default callout-note callout-titled" title="Proposición de Clase 08">
+<div class="callout callout-style-default callout-note callout-titled" title="Implicación y superllaves bajo F">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Proposición de Clase 08
+<span class="screen-reader-only">Nota</span>Implicación y superllaves bajo F
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>La clausura permite decidir:</p>
-<p>[ A A^+=att(R), ]</p>
-<p>[ FAB {B}A^+. ]</p>
-<p><span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p><span class="math display">\[
+\bar A\text{ es superllave bajo }F
+\iff
+\bar A^+=att(R),
+\]</span></p>
+<p><span class="math display">\[
+F\models\bar A\to\bar B
+\iff
+\{\bar B\}\subseteq\bar A^+.
+\]</span></p>
 </div>
 </div>
 <p>Esta es una de las herramientas algorítmicas más importantes del diseño relacional.</p>
 <section id="resumen" class="level3 summary-box">
 <h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
 <ul>
-<li>(FF’) significa que toda relación que satisface (F) también satisface (F’).</li>
+<li><span class="math inline">\(F\models F'\)</span> significa que toda relación que satisface <span class="math inline">\(F\)</span> también satisface <span class="math inline">\(F'\)</span>.</li>
 <li>Dos conjuntos son equivalentes si tienen exactamente las mismas consecuencias sobre todas las relaciones.</li>
 <li>Dividir/juntar y transitividad permiten deducir dependencias.</li>
-<li>(A^+) reúne todos los atributos determinados por (A).</li>
+<li><span class="math inline">\(\bar A^+\)</span> reúne todos los atributos determinados por <span class="math inline">\(\bar A\)</span>.</li>
 <li>Con la clausura podemos decidir implicación y superllaves.</li>
 </ul>
 </section>
@@ -546,13 +640,10 @@ retornar clausura</code></pre>
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-arenas2022" class="csl-entry" role="listitem">
-Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>.
+Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>. <a href="https://github.com/pdm-book/community">https://github.com/pdm-book/community</a>.
 </div>
 <div id="ref-garciamolina2009" class="csl-entry" role="listitem">
 Garcia-Molina, Hector, Jeffrey D. Ullman, y Jennifer Widom. 2009. <em>Database Systems: The Complete Book</em>. 2.ª ed. Pearson Prentice Hall.
-</div>
-<div id="ref-riveros2026-clase08" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026. <em>Dependencias y descomposiciones</em>.
 </div>
 <div id="ref-silberschatz2020" class="csl-entry" role="listitem">
 Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System Concepts</em>. 7.ª ed. McGraw-Hill Education.
@@ -979,7 +1070,7 @@ Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

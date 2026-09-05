@@ -5,15 +5,15 @@ description: "Expresiones, funciones, filtros de patrones, ORDER BY, limitación
 
 ## Intuición y concepto
 
-Además del núcleo relacional, SQL ofrece expresiones, funciones, filtros compactos y mecanismos para ordenar o limitar resultados. La Clase 05 enfatiza que muchas de estas construcciones presentan variaciones entre motores. [@riveros2026-clase05]
+Además del núcleo relacional, SQL ofrece expresiones, funciones, filtros compactos y mecanismos para ordenar o limitar resultados. Muchas de estas construcciones presentan variaciones entre motores.
 
 ## Expresiones y funciones
 
-Ejemplos de operaciones numéricas mencionadas en el curso incluyen:
+Entre las operaciones y funciones numéricas habituales se encuentran:
 
 - `+`, `-`, `*`, `/`, `%`;
 - `ABS`, `CEIL`, `FLOOR`, `ROUND`, `SQRT`;
-- otras funciones que dependen del motor. [@riveros2026-clase05]
+- otras funciones que dependen del motor.
 
 Ejemplo:
 
@@ -23,10 +23,10 @@ SELECT codigo,
 FROM Curso;
 ```
 
-Entre las funciones de texto, la clase menciona familias como `LOWER`, `UPPER`, `TRIM` y `SUBSTRING`. La firma exacta puede variar.
+Entre las funciones de texto se encuentran `LOWER`, `UPPER`, `TRIM` y `SUBSTRING`. La firma exacta puede variar.
 
 ::: {.callout-warning title="Funciones y portabilidad"}
-No todas las funciones tienen el mismo nombre, número de argumentos o comportamiento en todos los RDBMS. Conviene separar el SQL conceptual de las funciones específicas del motor que se use en una tarea o aplicación. [@riveros2026-clase05]
+No todas las funciones tienen el mismo nombre, número de argumentos o comportamiento en todos los RDBMS. Conviene separar el SQL conceptual de las funciones específicas del motor que se use en una tarea o aplicación.
 :::
 
 ## `IN` con una lista
@@ -56,11 +56,11 @@ FROM Curso
 WHERE creditos BETWEEN 5 AND 10;
 ```
 
-En el uso mostrado por el curso, expresa un intervalo inclusivo entre los límites. [@riveros2026-clase05]
+`BETWEEN` incluye ambos límites: aquí equivale a `creditos >= 5 AND creditos <= 10`.
 
 ## `LIKE` y patrones
 
-La Clase 05 utiliza `%` como comodín para cualquier secuencia de caracteres: [@riveros2026-clase05]
+`LIKE` utiliza `%` como comodín para cualquier secuencia de caracteres, incluida la secuencia vacía:
 
 ```sql
 SELECT nombre
@@ -97,7 +97,7 @@ ORDER BY creditos DESC, codigo ASC;
 Cada clave puede usar:
 
 - `ASC`: ascendente;
-- `DESC`: descendente. [@riveros2026-clase05]
+- `DESC`: descendente.
 
 ::: {.callout-warning title="Orden sin ORDER BY"}
 Aunque una herramienta muestre filas siempre en el mismo orden durante varias ejecuciones, ese orden no debe considerarse parte de la consulta sin `ORDER BY`.
@@ -105,7 +105,7 @@ Aunque una herramienta muestre filas siempre en el mismo orden durante varias ej
 
 ## Limitar la cantidad de resultados
 
-Aquí aparecen diferencias claras entre dialectos. La Clase 05 muestra: [@riveros2026-clase05]
+La sintaxis para limitar resultados varía entre dialectos:
 
 ### SQLite, PostgreSQL y MySQL
 
@@ -135,13 +135,13 @@ OFFSET 0 ROWS FETCH NEXT 3 ROWS ONLY;
 
 El soporte concreto de `OFFSET`/`FETCH` y sus detalles debe verificarse en el motor utilizado.
 
-::: {.callout-note title="Convención del curso"}
-La Clase 05 presenta `ORDER BY` y los mecanismos de límite dentro de «orden y cantidad de resultados» y los separa conceptualmente del álgebra relacional. En una aplicación real, limitar filas sí cambia qué filas devuelve la consulta; para que «las primeras N» sean reproducibles, debe combinarse con un criterio de orden suficiente. [@riveros2026-clase05]
+::: {.callout-note title="Orden y selección de filas"}
+El álgebra relacional clásica opera sobre conjuntos sin orden. `ORDER BY` introduce un orden de presentación, mientras que un límite selecciona cuántas filas se devuelven. Para que «las primeras N» sean reproducibles, el criterio de orden debe resolver los empates.
 :::
 
 ## ¿Qué es un dialecto SQL?
 
-El curso define un **dialecto SQL** como una modificación o extensión no incluida en el estándar SQL considerado. Entre las razones para desviarse del estándar menciona innovación, compatibilidad histórica y eficiencia. [@riveros2026-clase05]
+Un **dialecto SQL** es la variante del lenguaje implementada por un motor: comprende la parte del estándar que admite, sus extensiones y sus reglas particulares. Las diferencias pueden responder a innovación, compatibilidad histórica o decisiones de implementación.
 
 La consecuencia práctica es que una consulta puede ser correcta en un motor y no compilar en otro.
 
@@ -152,7 +152,7 @@ En los ejemplos principales:
 1. preferiremos construcciones ampliamente portables;
 2. indicaremos cuando una sintaxis pertenece a un motor o familia de motores;
 3. no presentaremos el comportamiento permisivo de un motor como regla general de SQL;
-4. cuando el curso use SQLite para mostrar una excepción, la marcaremos como tal.
+4. explicaremos las excepciones de SQLite u otros motores junto al ejemplo correspondiente.
 
 ## Orden y desempates
 

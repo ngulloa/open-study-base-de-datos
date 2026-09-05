@@ -64,10 +64,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -97,6 +97,35 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -326,7 +355,7 @@ div.csl-indent {
   </ul></li>
   <li><a href="#toda-consulta-puede-representarse-otra-vez-con-una-tabla-de-codd" id="toc-toda-consulta-puede-representarse-otra-vez-con-una-tabla-de-codd" class="nav-link" data-scroll-target="#toda-consulta-puede-representarse-otra-vez-con-una-tabla-de-codd">¿Toda consulta puede representarse otra vez con una tabla de Codd?</a></li>
   <li><a href="#relación-con-null" id="toc-relación-con-null" class="nav-link" data-scroll-target="#relación-con-null">Relación con <code>NULL</code></a></li>
-  <li><a href="#qué-queda-fuera-por-ahora" id="toc-qué-queda-fuera-por-ahora" class="nav-link" data-scroll-target="#qué-queda-fuera-por-ahora">Qué queda fuera por ahora</a>
+  <li><a href="#alcance-del-modelo" id="toc-alcance-del-modelo" class="nav-link" data-scroll-target="#alcance-del-modelo">Alcance del modelo</a>
   <ul class="collapse">
   <li><a href="#resumen" id="toc-resumen" class="nav-link" data-scroll-target="#resumen">Resumen</a></li>
   </ul></li>
@@ -363,23 +392,23 @@ div.csl-indent {
 
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>Un <code>NULL</code> indica que la información disponible no determina completamente un dato. Una forma formal de entender esa incertidumbre es pensar que la tabla observada representa <strong>muchas bases de datos completas posibles</strong>. La Clase 06 introduce esta perspectiva mediante tablas de Codd y mundos posibles. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></p>
-<p>El material hace una simplificación explícita: desarrolla la teoría para una base con <strong>una sola relación</strong>, señalando que el enfoque se extiende a esquemas con varias relaciones. Mantendremos esa misma presentación. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Un <code>NULL</code> indica que la información disponible no determina completamente un dato. Una forma formal de entender esa incertidumbre es pensar que la tabla observada representa <strong>muchas bases de datos completas posibles</strong>. Las tablas de Codd y la semántica de mundos posibles formalizan esta perspectiva.</p>
+<p>Para concentrarnos en la incertidumbre, trabajaremos con un esquema de <strong>una sola relación</strong>. Con varias relaciones, cada mundo sería una instancia completa del esquema y una valuación se aplicaría de manera coherente a todas sus tablas.</p>
 </section>
 <section id="tablas-de-codd" class="level2">
 <h2 class="anchored" data-anchor-id="tablas-de-codd">Tablas de Codd</h2>
-<p>Sea <code>Data</code> el conjunto de datos, <code>Att</code> un conjunto infinito de atributos y <code>Var</code> un conjunto infinito de variables.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Definición del curso">
+<p>Sea <code>Data</code> el conjunto de datos, <code>Att</code> un conjunto infinito de atributos y <code>Var</code> un conjunto infinito de variables, disjunto de <code>Data</code>. El esquema de atributos de cada tabla se fija explícitamente, incluso para una tabla vacía.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Definición formal">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Definición del curso
+<span class="screen-reader-only">Nota</span>Definición formal
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Una <strong>tabla de Codd</strong> (T) es un subconjunto finito de tuplas con los mismos atributos, cuyos valores pertenecen a (DataVar), y donde cada variable aparece una sola vez. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Una <strong>tabla de Codd</strong> <span class="math inline">\(T\)</span> es un subconjunto finito de tuplas con los mismos atributos, cuyos valores pertenecen a <span class="math inline">\(Data\cup Var\)</span>, y donde cada variable aparece una sola vez.</p>
 </div>
 </div>
 <p>Ejemplo universitario:</p>
@@ -396,39 +425,59 @@ div.csl-indent {
 <tr class="odd">
 <td>r1</td>
 <td>Ana</td>
-<td>(x)</td>
+<td><span class="math inline">\(x\)</span></td>
 </tr>
 <tr class="even">
-<td>(y)</td>
+<td><span class="math inline">\(y\)</span></td>
 <td>Ben</td>
 <td>Computación</td>
 </tr>
 <tr class="odd">
 <td>r3</td>
 <td>Zoe</td>
-<td>(z)</td>
+<td><span class="math inline">\(z\)</span></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>Las variables (x,y,z) representan datos aún no determinados.</p>
+<p>Las variables <span class="math inline">\(x,y,z\)</span> representan datos aún no determinados.</p>
 </section>
 <section id="variables-de-una-tabla" class="level2">
 <h2 class="anchored" data-anchor-id="variables-de-una-tabla">Variables de una tabla</h2>
-<p>El curso define</p>
-<p>[ Var(T) = {(A)Var T,&nbsp;Aatt(T)}. ]</p>
+<p>Definimos</p>
+<p><span class="math display">\[
+Var(T)
+=
+\{\bar\tau(A)\in Var
+\mid
+\bar\tau\in T,\ A\in att(T)\}.
+\]</span></p>
 <p>Una <strong>valuación</strong> es una función</p>
-<p>[ :Var(T)DataData ]</p>
+<p><span class="math display">\[
+\nu:Var(T)\cup Data\to Data
+\]</span></p>
 <p>tal que</p>
-<p>[ (a)=a aData. ]</p>
-<p>Es decir, la valuación elige un dato concreto para cada variable y deja intactas las constantes. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p><span class="math display">\[
+\nu(a)=a
+\qquad
+\text{para todo }a\in Data.
+\]</span></p>
+<p>Es decir, la valuación elige un dato concreto para cada variable y deja intactas las constantes.</p>
 </section>
 <section id="aplicar-una-valuación" class="level2">
 <h2 class="anchored" data-anchor-id="aplicar-una-valuación">Aplicar una valuación</h2>
-<p>Para una valuación (), la relación completa obtenida es</p>
-<p>[ (T)={T}. ]</p>
+<p>Para una valuación <span class="math inline">\(\nu\)</span>, la relación completa obtenida es</p>
+<p><span class="math display">\[
+\nu(T)=\{\nu\circ\bar\tau\mid\bar\tau\in T\}.
+\]</span></p>
 <p>Por ejemplo, con</p>
-<p>[ (x)=, (y)=r2, (z)=, ]</p>
+<p><span class="math display">\[
+\nu(x)=\text{IngenieríaCivil},
+\quad
+\nu(y)=r2,
+\quad
+\nu(z)=\text{Computación},
+\]</span></p>
 <p>obtenemos una relación ordinaria completamente determinada.</p>
 </section>
 <section id="mundos-posibles" class="level2">
@@ -443,9 +492,12 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Los <strong>posibles mundos</strong> representados por una tabla de Codd (T) son</p>
-<p>[ Worlds(T) = {(T)T}. ]</p>
-<p><span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Los <strong>posibles mundos</strong> representados por una tabla de Codd <span class="math inline">\(T\)</span> son</p>
+<p><span class="math display">\[
+Worlds(T)
+=
+\{\nu(T)\mid \nu\text{ es una valuación de }T\}.
+\]</span></p>
 </div>
 </div>
 <p><code>T</code> es una representación finita de un conjunto potencialmente muy grande —incluso infinito— de relaciones completas.</p>
@@ -453,55 +505,72 @@ div.csl-indent {
 </section>
 <section id="base-de-datos-incompleta" class="level2">
 <h2 class="anchored" data-anchor-id="base-de-datos-incompleta">Base de datos incompleta</h2>
-<p>La Clase 06 generaliza:</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Definición del curso">
+<p>Podemos describir la información incompleta directamente mediante conjuntos de mundos:</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Definición formal">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Definición del curso
+<span class="screen-reader-only">Nota</span>Definición formal
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Una <strong>base de datos incompleta</strong> (I) es un conjunto de relaciones ordinarias que comparten los mismos atributos:</p>
-<p>[ R_1,R_2I, att(R_1)=att(R_2). ]</p>
-<p><span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Sobre un esquema de atributos fijo, una <strong>base de datos incompleta</strong> <span class="math inline">\(I\)</span> es un conjunto de relaciones ordinarias que comparten esos atributos:</p>
+<p><span class="math display">\[
+\forall R_1,R_2\in I,
+\qquad
+att(R_1)=att(R_2).
+\]</span></p>
 </div>
 </div>
 <p>Ejemplos:</p>
 <ul>
-<li>(Worlds(T)) para una tabla de Codd (T);</li>
-<li>({R}) para una relación completa (R);</li>
-<li>().</li>
+<li><span class="math inline">\(Worlds(T)\)</span> para una tabla de Codd <span class="math inline">\(T\)</span>;</li>
+<li><span class="math inline">\(\{R\}\)</span> para una relación completa <span class="math inline">\(R\)</span>;</li>
+<li><span class="math inline">\(\varnothing\)</span>.</li>
 </ul>
 </section>
 <section id="consultas-sobre-información-incompleta" class="level2">
 <h2 class="anchored" data-anchor-id="consultas-sobre-información-incompleta">Consultas sobre información incompleta</h2>
-<p>Para una consulta (Q), el curso define:</p>
-<p>[ Q(I)={Q(R)RI}. ]</p>
-<p>Es decir, aplicamos la consulta a <strong>cada mundo posible</strong>. El resultado vuelve a ser una base de datos incompleta. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Para una consulta <span class="math inline">\(Q\)</span>, definimos:</p>
+<p><span class="math display">\[
+Q(I)=\{Q(R)\mid R\in I\}.
+\]</span></p>
+<p>Es decir, aplicamos la consulta a <strong>cada mundo posible</strong>. El resultado vuelve a ser una base de datos incompleta.</p>
 <section id="proyección" class="level3">
 <h3 class="anchored" data-anchor-id="proyección">Proyección</h3>
-<p>Si (I=Worlds(T)), entonces</p>
-<p>[ <em>{nombre}(I) = {</em>{nombre}(R)RWorlds(T)}. ]</p>
+<p>Si <span class="math inline">\(I=Worlds(T)\)</span>, entonces</p>
+<p><span class="math display">\[
+\pi_{nombre}(I)
+=
+\{\pi_{nombre}(R)\mid R\in Worlds(T)\}.
+\]</span></p>
 <p>Cada mundo genera su propio resultado.</p>
 </section>
 </section>
 <section id="toda-consulta-puede-representarse-otra-vez-con-una-tabla-de-codd" class="level2">
 <h2 class="anchored" data-anchor-id="toda-consulta-puede-representarse-otra-vez-con-una-tabla-de-codd">¿Toda consulta puede representarse otra vez con una tabla de Codd?</h2>
-<p>La Clase 06 formula la pregunta de cierre:</p>
-<p>[ T’ Q(Worlds(T))=Worlds(T’)? ]</p>
-<p>La respuesta es <strong>no</strong>. El curso entrega un contraejemplo con selección donde el conjunto de resultados posibles contiene tanto la relación vacía como una relación no vacía específica, y pide demostrar que ninguna tabla de Codd puede representar exactamente ese conjunto. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>La pregunta de cierre es:</p>
+<p><span class="math display">\[
+\text{¿existe siempre }T'
+\text{ tal que }
+Q(Worlds(T))=Worlds(T')?
+\]</span></p>
+<p>La respuesta es <strong>no</strong>. Consideremos una tabla con un solo atributo, <span class="math inline">\(T=\{(A:x)\}\)</span>, y una constante <span class="math inline">\(a\in Data\)</span>. Supongamos que existe además otro dato <span class="math inline">\(b\neq a\)</span>. Para <span class="math inline">\(Q=\sigma_{A=a}\)</span>:</p>
+<p><span class="math display">\[
+Q(Worlds(T))=\{\varnothing,\{(A:a)\}\}.
+\]</span></p>
+<p>Una valuación con <span class="math inline">\(\nu(x)=a\)</span> produce la relación <span class="math inline">\(\{(A:a)\}\)</span>; cualquier otro valor produce la relación vacía después del filtro. Ninguna tabla de Codd <span class="math inline">\(T'\)</span> representa exactamente ambos mundos: si <span class="math inline">\(T'\)</span> es vacía, solo representa el mundo vacío; si contiene alguna tupla, toda valuación produce al menos una tupla, aunque varias puedan coincidir. Por tanto, una tabla no vacía nunca representa el mundo vacío.</p>
 <p>Esto muestra una diferencia importante:</p>
 <ul>
 <li>una representación puede ser finita y útil;</li>
-<li>pero una clase de representaciones no tiene por qué ser cerrada bajo todas las consultas.</li>
+<li>pero una familia de representaciones no tiene por qué ser cerrada bajo todas las consultas.</li>
 </ul>
 </section>
 <section id="relación-con-null" class="level2">
 <h2 class="anchored" data-anchor-id="relación-con-null">Relación con <code>NULL</code></h2>
-<p>Una celda con <code>NULL</code> en SQL no es literalmente una variable de Codd. La teoría de mundos posibles se introduce para <strong>formalizar la intuición de información desconocida</strong>, no para afirmar que el estándar SQL implemente directamente <code>Worlds(T)</code>. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Una celda con <code>NULL</code> en SQL no es literalmente una variable de Codd. La teoría de mundos posibles se introduce para <strong>formalizar la intuición de información desconocida</strong>, no para afirmar que el estándar SQL implemente directamente <code>Worlds(T)</code>.</p>
 <div class="callout callout-style-default callout-warning callout-titled" title="No confundir dos niveles">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -520,9 +589,9 @@ div.csl-indent {
 </div>
 </div>
 </section>
-<section id="qué-queda-fuera-por-ahora" class="level2">
-<h2 class="anchored" data-anchor-id="qué-queda-fuera-por-ahora">Qué queda fuera por ahora</h2>
-<p>La teoría de información incompleta incluye preguntas sobre respuestas ciertas, poder expresivo y representaciones más generales. El material disponible las señala como un área de investigación, pero no las desarrolla todavía. No las incorporaremos como páginas adicionales hasta contar con material suficiente del curso. <span class="citation" data-cites="riveros2026-clase06 arenas2022">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>; <a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
+<section id="alcance-del-modelo" class="level2">
+<h2 class="anchored" data-anchor-id="alcance-del-modelo">Alcance del modelo</h2>
+<p>La teoría también estudia respuestas ciertas —las que se obtienen en todos los mundos posibles— y representaciones más generales de incertidumbre. El objetivo de esta página es establecer el modelo de valuaciones y mostrar por qué una representación sencilla puede perder cierre bajo consultas. <span class="citation" data-cites="arenas2022">(<a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
 <section id="resumen" class="level3 summary-box">
 <h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
 <ul>
@@ -552,10 +621,7 @@ div.csl-indent {
 Abiteboul, Serge, Richard Hull, y Victor Vianu. 1995. <em>Foundations of Databases</em>. Addison-Wesley.
 </div>
 <div id="ref-arenas2022" class="csl-entry" role="listitem">
-Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>.
-</div>
-<div id="ref-riveros2026-clase06" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026. <em>Nulos</em>.
+Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>. <a href="https://github.com/pdm-book/community">https://github.com/pdm-book/community</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -979,7 +1045,7 @@ Riveros, Cristian. 2026. <em>Nulos</em>.
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

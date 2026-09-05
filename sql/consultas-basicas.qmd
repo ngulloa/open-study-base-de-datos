@@ -5,7 +5,7 @@ description: "El núcleo de DQL y su relación con selección, proyección, prod
 
 ## Intuición y concepto
 
-SQL es declarativo: especificamos el resultado deseado y el RDBMS decide cómo obtenerlo. La Clase 03 introduce el caso base de DQL con `SELECT`, `FROM` y `WHERE`; la Clase 04 lo extiende con combinaciones de relaciones y operadores de conjuntos. [@riveros2026-clase03; @riveros2026-clase04]
+SQL es declarativo: especificamos el resultado deseado y el RDBMS decide cómo obtenerlo. El núcleo de las consultas combina `SELECT`, `FROM` y `WHERE`, y se amplía con joins y operadores de conjuntos. [@silberschatz2020; @ramakrishnan2003]
 
 ::: {.schema-box}
 **Estudiante**(`rut`, `nombre`, `carrera`)  
@@ -28,7 +28,7 @@ Conceptualmente:
 - `FROM` determina las relaciones de entrada;
 - `WHERE` filtra combinaciones de tuplas;
 - `SELECT` determina qué atributos aparecen en la salida;
-- `DISTINCT` elimina duplicados. [@riveros2026-clase03]
+- `DISTINCT` elimina duplicados.
 
 ### Selección y proyección
 
@@ -40,16 +40,16 @@ WHERE carrera = 'Computación';
 
 corresponde, ignorando por un momento la diferencia de duplicados, a
 
-\[
+$$
 \pi_{nombre}
 \left(
 \sigma_{carrera=\text{Computación}}(Estudiante)
 \right).
-\]
+$$
 
 ## SQL permite duplicados
 
-En el álgebra del curso una relación es un conjunto. SQL, en cambio, puede conservar filas repetidas. La Clase 03 destaca esta diferencia mediante la proyección. [@riveros2026-clase03]
+En el álgebra relacional una relación es un conjunto. SQL, en cambio, puede conservar filas repetidas. La proyección permite observar esta diferencia.
 
 Si dos estudiantes tienen la misma carrera:
 
@@ -87,7 +87,7 @@ SELECT E.nombre, C.nombre
 FROM Estudiante AS E, Curso AS C;
 ```
 
-La Clase 04 relaciona un alias de relación con el renombramiento de todos sus atributos mediante un prefijo, por ejemplo `E.rut`. [@riveros2026-clase04]
+Un alias identifica una aparición de una tabla dentro de la consulta. Permite calificar sus columnas, como en `E.rut`, y distinguirlas de las de otra aparición de la misma tabla.
 
 ## Producto cartesiano en `FROM`
 
@@ -98,13 +98,13 @@ SELECT ...
 FROM R, S;
 ```
 
-genera conceptualmente combinaciones de filas de ambas relaciones. Si hay nombres de atributos repetidos, deben calificarse. En álgebra, el curso exige renombramientos para formar un producto cartesiano cuando los conjuntos de atributos no son disjuntos. [@riveros2026-clase04]
+genera conceptualmente combinaciones de filas de ambas relaciones. Si hay nombres de atributos repetidos, deben calificarse. En el álgebra de relaciones nombradas se necesitan renombramientos para formar un producto cartesiano cuando los conjuntos de atributos no son disjuntos.
 
 En la práctica, un producto cartesiano sin una condición que lo justifique suele producir muchas filas y puede indicar un join incompleto.
 
 ## Joins
 
-La Clase 04 presenta varias formas de expresar la combinación de relaciones. [@riveros2026-clase04]
+SQL permite expresar joins de varias formas.
 
 ### `NATURAL JOIN`
 
@@ -128,7 +128,7 @@ Explicita qué atributo compartido debe usarse.
 
 ### `JOIN ... ON`
 
-Aunque el curso ilustra con frecuencia la combinación mediante `FROM R, S` y una condición en `WHERE`, en este sitio preferiremos `JOIN ... ON` cuando la condición de unión sea explícita:
+En este sitio preferiremos `JOIN ... ON` cuando la condición de unión sea explícita:
 
 ```sql
 SELECT E.nombre, I.codigo, I.semestre
@@ -137,7 +137,7 @@ JOIN Inscribe AS I
   ON E.rut = I.rut;
 ```
 
-La forma equivalente mostrada repetidamente en Clase 04 es:
+Para este inner join, la forma equivalente con una condición en `WHERE` es:
 
 ```sql
 SELECT E.nombre, I.codigo, I.semestre
@@ -154,22 +154,22 @@ SELECT E.nombre
 FROM Estudiante AS E
 JOIN Inscribe AS I
   ON E.rut = I.rut
-WHERE I.codigo = 'IIC2413';
+WHERE I.codigo = 'BD101';
 ```
 
-En álgebra:
+En álgebra, bajo semántica de conjuntos (usa `SELECT DISTINCT` para la misma eliminación de duplicados en SQL):
 
-\[
+$$
 \pi_{nombre}
 \left(
-\sigma_{codigo=\text{IIC2413}}
+\sigma_{codigo=\text{BD101}}
 (Estudiante\bowtie Inscribe)
 \right).
-\]
+$$
 
 ## Operadores de conjuntos en SQL
 
-El fragmento presentado en las clases incluye: [@riveros2026-clase03; @riveros2026-clase04]
+Los operadores de conjuntos y sus variantes con multiplicidades son:
 
 ```sql
 Q1 UNION Q2
@@ -180,7 +180,7 @@ Q1 EXCEPT Q2
 Q1 EXCEPT ALL Q2
 ```
 
-El principio general es que ambos lados deben producir el mismo número de columnas y tipos compatibles. Las variantes `ALL` conservan multiplicidades cuando el dialecto las soporta; su disponibilidad no es uniforme entre motores. [@riveros2026-clase04]
+El principio general es que ambos lados deben producir el mismo número de columnas y tipos compatibles. Las variantes `ALL` conservan multiplicidades cuando el dialecto las soporta; su disponibilidad no es uniforme entre motores.
 
 ### `UNION` versus `UNION ALL`
 
@@ -191,11 +191,11 @@ Ejemplo:
 ```sql
 SELECT rut
 FROM Inscribe
-WHERE codigo = 'IIC2413'
+WHERE codigo = 'BD101'
 UNION
 SELECT rut
 FROM Inscribe
-WHERE codigo = 'IIC2233';
+WHERE codigo = 'PROG201';
 ```
 
 retorna cada RUT una sola vez.
@@ -205,11 +205,11 @@ retorna cada RUT una sola vez.
 ```sql
 SELECT rut
 FROM Inscribe
-WHERE codigo = 'IIC2413'
+WHERE codigo = 'BD101'
 INTERSECT
 SELECT rut
 FROM Inscribe
-WHERE codigo = 'IIC2233';
+WHERE codigo = 'PROG201';
 ```
 
 expresa estudiantes inscritos en ambos cursos.
@@ -240,17 +240,18 @@ Ahora ambos lados producen una sola columna `rut`; el resultado son RUT presente
 
 ## SQL, álgebra y lógica
 
-El caso básico del curso se resume como:
+Para condiciones conjuntivas, sin nulos y eliminando duplicados, el patrón básico se resume como:
 
-\[
-\texttt{SELECT-FROM-WHERE}
-\quad\leftrightarrow\quad
-\pi(\sigma(R_1\times\cdots\times R_k))
-\quad\leftrightarrow\quad
-Q(\bar x)\leftarrow\exists\bar y.\;R_1\land\cdots\land R_k\land\theta.
-\]
+$$
+\begin{aligned}
+&\texttt{SELECT DISTINCT ... FROM ... WHERE ...}\\
+&\quad\leftrightarrow\quad\pi_{\bar x}(\sigma_\theta(R_1\times\cdots\times R_k))\\
+&\quad\leftrightarrow\quad Q(\bar x)\leftarrow\exists\bar y.\;
+R_1(\bar t_1)\land\cdots\land R_k(\bar t_k)\land\theta.
+\end{aligned}
+$$
 
-Esta correspondencia se desarrolla formalmente en [equivalencia y patrones de consulta](../teoria-consultas/equivalencia-patrones.qmd). [@riveros2026-clase04]
+Esta correspondencia se desarrolla formalmente en [equivalencia y patrones de consulta](../teoria-consultas/equivalencia-patrones.qmd).
 
 ::: {.summary-box}
 ### Resumen

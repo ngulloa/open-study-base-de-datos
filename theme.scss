@@ -1,0 +1,69 @@
+/*-- scss:defaults --*/
+// Palette shared by Bootstrap, Quarto and the site's CSS components.
+$primary: #2563eb;
+$db-primary-hover: #1d4ed8;
+$db-primary-light: #eff6ff;
+$secondary: #526176;
+$body-bg: #f4f6fa;
+$body-color: #243247;
+$text-muted: #58677b;
+$border-color: #dce3ed;
+$white: #ffffff;
+$success: #18734b;
+$warning: #98620a;
+$danger: #c03642;
+$link-color: $db-primary-hover;
+$link-hover-color: #1e40af;
+$font-family-sans-serif: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+$font-family-monospace: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+$web-font-path: false;
+$enable-rounded: true;
+$min-contrast-ratio: 4.5;
+$font-size-root: 17px;
+$line-height-base: 1.7;
+$headings-font-weight: 700;
+$headings-color: #182b49;
+$border-radius: .6rem;
+$border-radius-sm: .4rem;
+$border-radius-lg: .9rem;
+$btn-border-radius: .6rem;
+$btn-padding-y: .6rem;
+$btn-padding-x: 1.1rem;
+$btn-font-weight: 600;
+$input-bg: $white;
+$input-padding-y: .6rem;
+$input-padding-x: .85rem;
+$input-border-color: $border-color;
+$input-focus-border-color: $primary;
+$input-focus-box-shadow: 0 0 0 .2rem rgba($primary, .18);
+$component-active-bg: $primary;
+$sidebar-bg: $body-bg;
+$sidebar-fg: $secondary;
+$sidebar-hl: $db-primary-hover;
+$code-color: #274e87;
+$code-bg: #eef2f8;
+$code-block-bg: #f7f9fc;
+$table-border-color: $border-color;
+$table-hover-bg: $db-primary-light;
+$callout-color-note: $primary;
+$callout-color-tip: $success;
+$callout-color-warning: $warning;
+$callout-color-important: $danger;
+$callout-color-caution: $warning;
+
+/*-- scss:rules --*/
+:root {
+  --db-primary: #{$primary};
+  --db-primary-hover: #{$db-primary-hover};
+  --db-primary-light: #{$db-primary-light};
+  --db-secondary: #{$secondary};
+  --db-background: #{$body-bg};
+  --db-surface: #{$white};
+  --db-border: #{$border-color};
+  --db-text-primary: #{$body-color};
+  --db-text-secondary: #{$text-muted};
+  --db-heading: #{$headings-color};
+  --db-success: #{$success};
+  --db-warning: #{$warning};
+  --db-danger: #{$danger};
+}

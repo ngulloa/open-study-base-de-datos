@@ -5,7 +5,7 @@ description: "Funciones agregadas, agrupación y filtros sobre grupos en SQL."
 
 ## Intuición y concepto
 
-Las consultas vistas hasta ahora transforman filas o combinaciones de filas. La agregación responde preguntas sobre **colecciones**: cuántos elementos hay, cuál es el mínimo, el máximo, la suma o el promedio. La Clase 05 desarrolla agregación, `GROUP BY` y `HAVING`. [@riveros2026-clase05]
+Las consultas vistas hasta ahora transforman filas o combinaciones de filas. La agregación responde preguntas sobre **colecciones**: cuántos elementos hay, cuál es el mínimo, el máximo, la suma o el promedio. Las funciones agregadas, `GROUP BY` y `HAVING` permiten formular estas consultas. [@silberschatz2020]
 
 Usaremos:
 
@@ -15,7 +15,7 @@ Usaremos:
 
 ## Funciones agregadas
 
-Las funciones principales del curso son: [@riveros2026-clase05]
+Entre las funciones agregadas más comunes están:
 
 - `COUNT`: cuenta valores;
 - `SUM`: suma valores;
@@ -48,7 +48,7 @@ SELECT COUNT(departamento)
 FROM Profesor;
 ```
 
-cuenta solo valores de `departamento` que no son `NULL`. La Clase 05 destaca este comportamiento. [@riveros2026-clase05]
+cuenta solo valores de `departamento` que no son `NULL`.
 
 ## Agregación y `DISTINCT`
 
@@ -59,14 +59,14 @@ SELECT COUNT(DISTINCT codigo) AS cursos_con_inscripciones
 FROM Inscribe;
 ```
 
-El `DISTINCT` está **dentro** del agregado. La Clase 05 contrasta esto con
+El `DISTINCT` está **dentro** del agregado. Compáralo con
 
 ```sql
 SELECT DISTINCT COUNT(codigo)
 FROM Inscribe;
 ```
 
-que no elimina duplicados antes del conteo y, al producir una sola fila agregada, no cumple la intención de contar valores distintos. [@riveros2026-clase05]
+que no elimina duplicados antes del conteo y, al producir una sola fila agregada, no cumple la intención de contar valores distintos.
 
 ## Más de un agregado
 
@@ -91,7 +91,7 @@ FROM Curso;
 mezcla un atributo no agregado con una agregación sin definir cómo se relaciona `codigo` con el único valor agregado.
 
 ::: {.callout-warning title="No depender del comportamiento permisivo de SQLite"}
-La Clase 05 muestra que SQLite puede aceptar algunas consultas con «bare columns» que otros motores, como PostgreSQL, rechazan. El curso recomienda considerar este tipo de consulta como incorrecta en general. [@riveros2026-clase05]
+SQLite acepta columnas no agrupadas ni agregadas, llamadas «bare columns», en consultas como la anterior; PostgreSQL rechaza este ejemplo. En SQLite, un único `MIN` o `MAX` incorporado vincula esas columnas con una fila que alcanza el extremo, pero los empates pueden dejar ambigüedad. Esta regla particular no debe asumirse en SQL portable. Véanse las reglas de [columnas no agrupadas de SQLite](https://www.sqlite.org/lang_select.html#bareagg) y de [agrupación de PostgreSQL](https://www.postgresql.org/docs/current/sql-select.html#SQL-GROUPBY).
 
 Para escribir SQL portable, todo atributo seleccionado en una consulta agrupada debe estar justificado por la agrupación o por una agregación según las reglas del motor y del estándar aplicable.
 :::
@@ -108,7 +108,7 @@ FROM Inscribe
 GROUP BY codigo;
 ```
 
-La idea del curso es equivalente a ejecutar una consulta agregada por cada valor distinto del atributo de agrupación y unir los resultados. [@riveros2026-clase05]
+Conceptualmente, cada grupo se evalúa por separado y aporta una fila de resultados agregados.
 
 ### Agrupación por varios atributos
 
@@ -122,7 +122,7 @@ Cada combinación distinta de `codigo` y `semestre` define un grupo.
 
 ## `WHERE` versus `HAVING`
 
-`WHERE` filtra **filas antes de agrupar**; `HAVING` filtra **grupos**. [@riveros2026-clase05]
+`WHERE` filtra **filas antes de agrupar**; `HAVING` filtra **grupos**.
 
 Ejemplo: cursos con al menos dos inscripciones en 2025-2.
 
@@ -140,23 +140,26 @@ HAVING COUNT(*) >= 2;
 
 ## Orden lógico de procesamiento
 
-La Clase 05 introduce el orden conceptual
+Sin `HAVING`, el orden conceptual es
 
-\[
-FROM\to WHERE\to GROUP\ BY\to SELECT.
-\]
+$$
+\texttt{FROM}\to\texttt{WHERE}\to\texttt{GROUP BY}\to\texttt{SELECT}.
+$$
 
 Al incorporar `HAVING`, la lectura pedagógica queda:
 
-\[
-FROM\to WHERE\to GROUP\ BY\to HAVING\to SELECT.
-\]
+$$
+\begin{aligned}
+\texttt{FROM}&\to\texttt{WHERE}\to\texttt{GROUP BY}\\
+&\to\texttt{HAVING}\to\texttt{SELECT}.
+\end{aligned}
+$$
 
-`ORDER BY` se aplica posteriormente a la presentación ordenada del resultado. Esta secuencia ayuda a entender por qué `WHERE` no puede filtrar directamente sobre un agregado calculado después de agrupar. [@riveros2026-clase05; @silberschatz2020]
+`ORDER BY` se aplica posteriormente a la presentación ordenada del resultado. Esta secuencia ayuda a entender por qué `WHERE` no puede filtrar directamente sobre un agregado calculado después de agrupar. [@silberschatz2020]
 
 ## Cuándo mover una condición de `HAVING` a `WHERE`
 
-La Clase 05 observa que, si una condición de `HAVING` depende solo de un atributo de agrupación, a menudo puede moverse a `WHERE`. [@riveros2026-clase05]
+Una condición sobre un atributo de agrupación puede aplicarse antes de agrupar cuando selecciona grupos completos y no depende de agregados. El siguiente caso usa una igualdad sobre `codigo`:
 
 Estas dos consultas expresan la misma intención:
 
@@ -164,13 +167,13 @@ Estas dos consultas expresan la misma intención:
 SELECT codigo, COUNT(*)
 FROM Inscribe
 GROUP BY codigo
-HAVING codigo = 'IIC2413';
+HAVING codigo = 'BD101';
 ```
 
 ```sql
 SELECT codigo, COUNT(*)
 FROM Inscribe
-WHERE codigo = 'IIC2413'
+WHERE codigo = 'BD101'
 GROUP BY codigo;
 ```
 
@@ -187,7 +190,7 @@ HAVING COUNT(*) >= 2;
 
 ## Agregación y álgebra relacional
 
-La agregación no forma parte del conjunto básico de operadores algebraicos desarrollado en Clase 02. Por eso, el sitio no fuerza una traducción a ese álgebra clásica. *Database Theory* trata agregados y agrupación como una extensión expresiva posterior. [@arenas2022]
+La agregación no forma parte de los operadores del [álgebra relacional clásica](../teoria-consultas/algebra-relacional.qmd). Para representarla algebraicamente se necesitan operadores adicionales. *Database Theory* trata agregados y agrupación como una extensión expresiva posterior. [@arenas2022]
 
 ::: {.summary-box}
 ### Resumen

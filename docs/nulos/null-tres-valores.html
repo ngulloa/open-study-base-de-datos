@@ -99,10 +99,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -428,7 +428,7 @@ window.Quarto = {
 
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>En una base de datos real puede faltar información. SQL usa <code>NULL</code> como marcador especial para representar situaciones que suelen interpretarse como «desconocido» o «no aplicable». La Clase 06 advierte inmediatamente que estas interpretaciones no son idénticas y pregunta cuál es realmente la semántica de <code>NULL</code>. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>En una base de datos real puede faltar información. SQL usa <code>NULL</code> como marcador especial para representar situaciones que suelen interpretarse como «desconocido» o «no aplicable». Estas interpretaciones son distintas en el dominio de una aplicación, aunque SQL usa el mismo marcador. Para razonar sobre consultas debemos conocer sus reglas de evaluación.</p>
 <p>Por eso, <code>NULL</code> no debe tratarse como una constante ordinaria. En particular:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">NULL</span> <span class="op">=</span> <span class="kw">NULL</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>no se evalúa como verdadero.</p>
@@ -446,7 +446,7 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> pid, nombre</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Profesor</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> departamento <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>No se debe reemplazar <code>IS NULL</code> por <code>= NULL</code>. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>No se debe reemplazar <code>IS NULL</code> por <code>= NULL</code>.</p>
 </section>
 <section id="evitar-nulos-cuando-el-dominio-no-los-necesita" class="level2">
 <h2 class="anchored" data-anchor-id="evitar-nulos-cuando-el-dominio-no-los-necesita">Evitar nulos cuando el dominio no los necesita</h2>
@@ -456,19 +456,21 @@ window.Quarto = {
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  nombre       <span class="dt">VARCHAR</span>(<span class="dv">100</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  departamento <span class="dt">VARCHAR</span>(<span class="dv">100</span>)</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p><code>NOT NULL</code> prohíbe el marcador en una columna. La decisión debe responder al significado del dato: si un valor es obligatorio en el dominio, permitir <code>NULL</code> crea estados que luego deben manejar todas las consultas. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p><code>NOT NULL</code> prohíbe el marcador en una columna. La decisión debe responder al significado del dato: si un valor es obligatorio en el dominio, permitir <code>NULL</code> crea estados que luego deben manejar todas las consultas.</p>
 </section>
 <section id="lógica-de-tres-valores" class="level2">
 <h2 class="anchored" data-anchor-id="lógica-de-tres-valores">Lógica de tres valores</h2>
 <p>Con <code>NULL</code>, SQL no usa únicamente <code>TRUE</code> y <code>FALSE</code>. Introduce un tercer valor lógico:</p>
-<p>[ UNKNOWN. ]</p>
-<p>La Clase 06 define las comparaciones ordinarias con <code>NULL</code> como <code>UNKNOWN</code>, salvo predicados especiales como <code>IS NULL</code>. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p><span class="math display">\[
+\texttt{UNKNOWN}.
+\]</span></p>
+<p>Las comparaciones ordinarias con <code>NULL</code> producen <code>UNKNOWN</code>. Los predicados especiales como <code>IS NULL</code> permiten preguntar directamente por el marcador.</p>
 <section id="not" class="level3">
 <h3 class="anchored" data-anchor-id="not"><code>NOT</code></h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
-<th>(p)</th>
+<th><span class="math inline">\(p\)</span></th>
 <th><code>NOT p</code></th>
 </tr>
 </thead>
@@ -553,16 +555,24 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p>Estas tablas explican resultados que serían imposibles bajo lógica clásica. <span class="citation" data-cites="riveros2026-clase06 ramakrishnan2003">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026a</a>; <a href="#ref-ramakrishnan2003" role="doc-biblioref">Ramakrishnan y Gehrke 2003</a>)</span></p>
+<p>Estas tablas explican resultados que serían imposibles bajo lógica clásica. <span class="citation" data-cites="ramakrishnan2003">(<a href="#ref-ramakrishnan2003" role="doc-biblioref">Ramakrishnan y Gehrke 2003</a>)</span></p>
 </section>
 </section>
 <section id="operaciones-y-comparaciones" class="level2">
 <h2 class="anchored" data-anchor-id="operaciones-y-comparaciones">Operaciones y comparaciones</h2>
-<p>La regla pedagógica presentada en clase es:</p>
-<p>[ NULL&nbsp;&nbsp;a = NULL ]</p>
+<p>Para resumir la propagación del marcador, escribimos:</p>
+<p><span class="math display">\[
+\texttt{NULL}\ \circledast\ a
+=
+\texttt{NULL}
+\]</span></p>
 <p>para muchas operaciones ordinarias, y</p>
-<p>[ NULLa = UNKNOWN ]</p>
-<p>para comparaciones ordinarias. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p><span class="math display">\[
+\texttt{NULL}\sim a
+=
+\texttt{UNKNOWN}
+\]</span></p>
+<p>para comparaciones ordinarias.</p>
 <p>Por ejemplo:</p>
 <pre class="text"><code>NULL + 3          -&gt; NULL
 NULL = 3          -&gt; UNKNOWN
@@ -572,17 +582,17 @@ NULL IS NULL      -&gt; TRUE</code></pre>
 </section>
 <section id="semántica-de-where" class="level2">
 <h2 class="anchored" data-anchor-id="semántica-de-where">Semántica de <code>WHERE</code></h2>
-<div class="callout callout-style-default callout-note callout-titled" title="Regla clave del curso">
+<div class="callout callout-style-default callout-note callout-titled" title="Regla de filtrado">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Regla clave del curso
+<span class="screen-reader-only">Nota</span>Regla de filtrado
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Una fila pasa el filtro <code>WHERE</code> <strong>si y solo si</strong> la condición se evalúa como <code>TRUE</code>. Tanto <code>FALSE</code> como <code>UNKNOWN</code> quedan fuera del resultado. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>Una fila pasa el filtro <code>WHERE</code> <strong>si y solo si</strong> la condición se evalúa como <code>TRUE</code>. Tanto <code>FALSE</code> como <code>UNKNOWN</code> quedan fuera del resultado.</p>
 </div>
 </div>
 <p>Esto explica por qué una aparente tautología clásica puede fallar:</p>
@@ -591,21 +601,23 @@ NULL IS NULL      -&gt; TRUE</code></pre>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> departamento <span class="op">=</span> <span class="st">'Computación'</span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>   <span class="kw">OR</span> departamento <span class="op">&lt;&gt;</span> <span class="st">'Computación'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Si <code>departamento</code> es <code>NULL</code>, ambas comparaciones son <code>UNKNOWN</code>:</p>
-<p>[ UNKNOWNUNKNOWN=UNKNOWN, ]</p>
+<p><span class="math display">\[
+\texttt{UNKNOWN}\lor \texttt{UNKNOWN}=\texttt{UNKNOWN},
+\]</span></p>
 <p>y la fila no pasa <code>WHERE</code>.</p>
 </section>
 <section id="el-problema-de-not-in" class="level2">
 <h2 class="anchored" data-anchor-id="el-problema-de-not-in">El problema de <code>NOT IN</code></h2>
-<p>La Clase 06 muestra un caso oficial en que una subconsulta usada por <code>NOT IN</code> contiene <code>NULL</code>. Para un valor (x) distinto de las constantes conocidas:</p>
-[
-<span class="math display">\[\begin{aligned}
-x\;NOT\ IN\;\{NULL,1610\}
-&amp;=NOT(x=NULL\lor x=1610)\\
-&amp;=NOT(UNKNOWN\lor FALSE)\\
-&amp;=UNKNOWN.
-\end{aligned}\]</span>
-<p>]</p>
-<p>Como <code>WHERE</code> solo conserva <code>TRUE</code>, el resultado puede ser vacío. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>Supongamos que una subconsulta produce los valores <code>NULL</code> y <code>10</code>. Para un valor conocido <span class="math inline">\(x\)</span> distinto de <span class="math inline">\(10\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+x\;\texttt{NOT}\ \texttt{IN}\;\{\texttt{NULL},10\}
+&amp;=\texttt{NOT}(x=\texttt{NULL}\lor x=10)\\
+&amp;=\texttt{NOT}(\texttt{UNKNOWN}\lor \texttt{FALSE})\\
+&amp;=\texttt{UNKNOWN}.
+\end{aligned}
+\]</span></p>
+<p>Como <code>WHERE</code> solo conserva <code>TRUE</code>, el resultado puede ser vacío.</p>
 <div class="callout callout-style-default callout-warning callout-titled" title="Patrón seguro para ausencia">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -622,16 +634,16 @@ x\;NOT\ IN\;\{NULL,1610\}
 </section>
 <section id="null-y-agregación" class="level2">
 <h2 class="anchored" data-anchor-id="null-y-agregación"><code>NULL</code> y agregación</h2>
-<p>La Clase 05 muestra que:</p>
+<p>La diferencia entre contar filas y contar valores conocidos se observa en:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">COUNT</span>(<span class="op">*</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>cuenta filas, mientras</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">COUNT</span>(departamento)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>no cuenta las filas donde <code>departamento</code> es <code>NULL</code>. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026b</a>)</span></p>
-<p>Otros agregados también tienen reglas respecto de <code>NULL</code>; para esta primera versión nos limitamos a la distinción explícitamente trabajada en el curso.</p>
+<p>no cuenta las filas donde <code>departamento</code> es <code>NULL</code>.</p>
+<p><code>SUM</code>, <code>AVG</code>, <code>MIN</code> y <code>MAX</code> también ignoran entradas <code>NULL</code>. Si no hay valores conocidos, devuelven <code>NULL</code>, mientras que <code>COUNT</code> devuelve cero. <span class="citation" data-cites="silberschatz2020">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>)</span></p>
 </section>
 <section id="null-no-es-todavía-una-teoría-completa-de-información-incompleta" class="level2">
 <h2 class="anchored" data-anchor-id="null-no-es-todavía-una-teoría-completa-de-información-incompleta"><code>NULL</code> no es todavía una teoría completa de información incompleta</h2>
-<p>La lógica de tres valores describe cómo SQL evalúa expresiones con <code>NULL</code>, pero no resuelve por sí sola preguntas como «¿qué mundos completos son compatibles con esta tabla?». La segunda parte de Clase 06 introduce una semántica formal mediante <a href="../nulos/informacion-incompleta.html">tablas de Codd y mundos posibles</a>. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>La lógica de tres valores describe cómo SQL evalúa expresiones con <code>NULL</code>, pero no resuelve por sí sola preguntas como «¿qué mundos completos son compatibles con esta tabla?». Estas preguntas se estudian mediante <a href="../nulos/informacion-incompleta.html">tablas de Codd y mundos posibles</a>.</p>
 <section id="resumen" class="level3 summary-box">
 <h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
 <ul>
@@ -661,11 +673,8 @@ x\;NOT\ IN\;\{NULL,1610\}
 <div id="ref-ramakrishnan2003" class="csl-entry" role="listitem">
 Ramakrishnan, Raghu, y Johannes Gehrke. 2003. <em>Database Management Systems</em>. 3.ª ed. McGraw-Hill.
 </div>
-<div id="ref-riveros2026-clase06" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026a. <em>Nulos</em>.
-</div>
-<div id="ref-riveros2026-clase05" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026b. <em>SQL avanzado</em>.
+<div id="ref-silberschatz2020" class="csl-entry" role="listitem">
+Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System Concepts</em>. 7.ª ed. McGraw-Hill Education.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -1089,7 +1098,7 @@ Riveros, Cristian. 2026b. <em>SQL avanzado</em>.
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

@@ -62,26 +62,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -99,10 +80,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -402,21 +383,21 @@ div.csl-indent {
 
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>Además del núcleo relacional, SQL ofrece expresiones, funciones, filtros compactos y mecanismos para ordenar o limitar resultados. La Clase 05 enfatiza que muchas de estas construcciones presentan variaciones entre motores. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Además del núcleo relacional, SQL ofrece expresiones, funciones, filtros compactos y mecanismos para ordenar o limitar resultados. Muchas de estas construcciones presentan variaciones entre motores.</p>
 </section>
 <section id="expresiones-y-funciones" class="level2">
 <h2 class="anchored" data-anchor-id="expresiones-y-funciones">Expresiones y funciones</h2>
-<p>Ejemplos de operaciones numéricas mencionadas en el curso incluyen:</p>
+<p>Entre las operaciones y funciones numéricas habituales se encuentran:</p>
 <ul>
 <li><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>;</li>
 <li><code>ABS</code>, <code>CEIL</code>, <code>FLOOR</code>, <code>ROUND</code>, <code>SQRT</code>;</li>
-<li>otras funciones que dependen del motor. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></li>
+<li>otras funciones que dependen del motor.</li>
 </ul>
 <p>Ejemplo:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> codigo,</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">ABS</span>(creditos <span class="op">-</span> <span class="dv">10</span>) <span class="kw">AS</span> diferencia</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Curso;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Entre las funciones de texto, la clase menciona familias como <code>LOWER</code>, <code>UPPER</code>, <code>TRIM</code> y <code>SUBSTRING</code>. La firma exacta puede variar.</p>
+<p>Entre las funciones de texto se encuentran <code>LOWER</code>, <code>UPPER</code>, <code>TRIM</code> y <code>SUBSTRING</code>. La firma exacta puede variar.</p>
 <div class="callout callout-style-default callout-warning callout-titled" title="Funciones y portabilidad">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -427,7 +408,7 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>No todas las funciones tienen el mismo nombre, número de argumentos o comportamiento en todos los RDBMS. Conviene separar el SQL conceptual de las funciones específicas del motor que se use en una tarea o aplicación. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>No todas las funciones tienen el mismo nombre, número de argumentos o comportamiento en todos los RDBMS. Conviene separar el SQL conceptual de las funciones específicas del motor que se use en una tarea o aplicación.</p>
 </div>
 </div>
 </section>
@@ -447,11 +428,11 @@ div.csl-indent {
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> nombre, creditos</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Curso</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> creditos <span class="kw">BETWEEN</span> <span class="dv">5</span> <span class="kw">AND</span> <span class="dv">10</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>En el uso mostrado por el curso, expresa un intervalo inclusivo entre los límites. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p><code>BETWEEN</code> incluye ambos límites: aquí equivale a <code>creditos &gt;= 5 AND creditos &lt;= 10</code>.</p>
 </section>
 <section id="like-y-patrones" class="level2">
 <h2 class="anchored" data-anchor-id="like-y-patrones"><code>LIKE</code> y patrones</h2>
-<p>La Clase 05 utiliza <code>%</code> como comodín para cualquier secuencia de caracteres: <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p><code>LIKE</code> utiliza <code>%</code> como comodín para cualquier secuencia de caracteres, incluida la secuencia vacía:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> nombre</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Curso</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> nombre <span class="kw">LIKE</span> <span class="st">'Bases%'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
@@ -491,7 +472,7 @@ div.csl-indent {
 <p>Cada clave puede usar:</p>
 <ul>
 <li><code>ASC</code>: ascendente;</li>
-<li><code>DESC</code>: descendente. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></li>
+<li><code>DESC</code>: descendente.</li>
 </ul>
 <div class="callout callout-style-default callout-warning callout-titled" title="Orden sin ORDER BY">
 <div class="callout-header d-flex align-content-center">
@@ -509,7 +490,7 @@ div.csl-indent {
 </section>
 <section id="limitar-la-cantidad-de-resultados" class="level2">
 <h2 class="anchored" data-anchor-id="limitar-la-cantidad-de-resultados">Limitar la cantidad de resultados</h2>
-<p>Aquí aparecen diferencias claras entre dialectos. La Clase 05 muestra: <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>La sintaxis para limitar resultados varía entre dialectos:</p>
 <section id="sqlite-postgresql-y-mysql" class="level3">
 <h3 class="anchored" data-anchor-id="sqlite-postgresql-y-mysql">SQLite, PostgreSQL y MySQL</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> codigo, creditos</span>
@@ -530,24 +511,24 @@ div.csl-indent {
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> creditos <span class="kw">DESC</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>OFFSET <span class="dv">0</span> <span class="kw">ROWS</span> FETCH <span class="kw">NEXT</span> <span class="dv">3</span> <span class="kw">ROWS</span> <span class="kw">ONLY</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>El soporte concreto de <code>OFFSET</code>/<code>FETCH</code> y sus detalles debe verificarse en el motor utilizado.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Convención del curso">
+<div class="callout callout-style-default callout-note callout-titled" title="Orden y selección de filas">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Convención del curso
+<span class="screen-reader-only">Nota</span>Orden y selección de filas
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>La Clase 05 presenta <code>ORDER BY</code> y los mecanismos de límite dentro de «orden y cantidad de resultados» y los separa conceptualmente del álgebra relacional. En una aplicación real, limitar filas sí cambia qué filas devuelve la consulta; para que «las primeras N» sean reproducibles, debe combinarse con un criterio de orden suficiente. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>El álgebra relacional clásica opera sobre conjuntos sin orden. <code>ORDER BY</code> introduce un orden de presentación, mientras que un límite selecciona cuántas filas se devuelven. Para que «las primeras N» sean reproducibles, el criterio de orden debe resolver los empates.</p>
 </div>
 </div>
 </section>
 </section>
 <section id="qué-es-un-dialecto-sql" class="level2">
 <h2 class="anchored" data-anchor-id="qué-es-un-dialecto-sql">¿Qué es un dialecto SQL?</h2>
-<p>El curso define un <strong>dialecto SQL</strong> como una modificación o extensión no incluida en el estándar SQL considerado. Entre las razones para desviarse del estándar menciona innovación, compatibilidad histórica y eficiencia. <span class="citation" data-cites="riveros2026-clase05">(<a href="#ref-riveros2026-clase05" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Un <strong>dialecto SQL</strong> es la variante del lenguaje implementada por un motor: comprende la parte del estándar que admite, sus extensiones y sus reglas particulares. Las diferencias pueden responder a innovación, compatibilidad histórica o decisiones de implementación.</p>
 <p>La consecuencia práctica es que una consulta puede ser correcta en un motor y no compilar en otro.</p>
 <section id="estrategia-editorial-del-sitio" class="level3">
 <h3 class="anchored" data-anchor-id="estrategia-editorial-del-sitio">Estrategia editorial del sitio</h3>
@@ -556,7 +537,7 @@ div.csl-indent {
 <li>preferiremos construcciones ampliamente portables;</li>
 <li>indicaremos cuando una sintaxis pertenece a un motor o familia de motores;</li>
 <li>no presentaremos el comportamiento permisivo de un motor como regla general de SQL;</li>
-<li>cuando el curso use SQLite para mostrar una excepción, la marcaremos como tal.</li>
+<li>explicaremos las excepciones de SQLite u otros motores junto al ejemplo correspondiente.</li>
 </ol>
 </section>
 </section>
@@ -596,12 +577,7 @@ div.csl-indent {
 
 
 
-
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-riveros2026-clase05" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026. <em>SQL avanzado</em>.
-</div>
-</div></section></div></main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -1023,7 +999,7 @@ Riveros, Cristian. 2026. <em>SQL avanzado</em>.
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

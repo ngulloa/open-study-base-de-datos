@@ -64,10 +64,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -97,6 +97,35 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -358,9 +387,11 @@ div.csl-indent {
 
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>El modelo relacional representa la información mediante <strong>relaciones</strong>. Antes de introducir atributos con nombre, la Clase 01 construye el modelo desde objetos matemáticos simples: tuplas, producto cartesiano, relaciones, esquemas y bases de datos. <span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>El modelo relacional representa la información mediante <strong>relaciones</strong>. Su construcción formal parte de objetos matemáticos simples: tuplas, producto cartesiano, relaciones, esquemas y bases de datos.</p>
 <p>Usaremos el dominio universitario como ejemplo transversal. En su forma posicional, una tupla de estudiante puede representarse como</p>
-<p>[ (r1,&nbsp;,&nbsp;). ]</p>
+<p><span class="math display">\[
+(r1,\ \text{Ana},\ \text{IngenieríaCivil}).
+\]</span></p>
 <p>Aquí la posición 1 representa el RUT, la posición 2 el nombre y la posición 3 la carrera. En la página de <a href="../fundamentos/relaciones-nombradas.html">relaciones nombradas</a> reemplazaremos esta dependencia de posiciones por atributos explícitos.</p>
 </section>
 <section id="tuplas" class="level2">
@@ -375,29 +406,47 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Una <strong>(k)-tupla</strong> (t) es una secuencia ordenada de (k) elementos:</p>
-<p>[ t := (a_1,a_2,,a_k). ]</p>
-<p>Cuando (k=0), (t=()) es la <strong>tupla vacía</strong>. <span class="citation" data-cites="riveros2026-clase01 arenas2022">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>; <a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
+<p>Una <strong><span class="math inline">\(k\)</span>-tupla</strong> <span class="math inline">\(\bar t\)</span> es una secuencia ordenada de <span class="math inline">\(k\)</span> elementos:</p>
+<p><span class="math display">\[
+\bar t := (a_1,a_2,\ldots,a_k).
+\]</span></p>
+<p>Cuando <span class="math inline">\(k=0\)</span>, <span class="math inline">\(\bar t=()\)</span> es la <strong>tupla vacía</strong>. <span class="citation" data-cites="arenas2022">(<a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
 </div>
 </div>
-<p>El orden y la repetición importan en una tupla:</p>
-<p>[ (a,b,c)(c,b,a), (a,a,b)(a,b). ]</p>
+<p>El orden y la repetición importan en una tupla. Para datos distintos <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span> y <span class="math inline">\(c\)</span>:</p>
+<p><span class="math display">\[
+(a,b,c)\neq(c,b,a),
+\qquad
+(a,a,b)\neq(a,b).
+\]</span></p>
 <p>En cambio, en un conjunto el orden y la multiplicidad no importan.</p>
-<p>Para (t=(a_1,,a_n)), el curso usa:</p>
+<p>Para <span class="math inline">\(\bar t=(a_1,\ldots,a_n)\)</span>, en este sitio usaremos:</p>
 <ul>
-<li>(t[i]=a_i) para el elemento en posición (i);</li>
-<li>({t}={a_1,,a_n}) para el conjunto de elementos mencionados por la tupla. <span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></li>
+<li><span class="math inline">\(\bar t[i]=a_i\)</span> para el elemento en posición <span class="math inline">\(i\)</span>;</li>
+<li><span class="math inline">\(\{\bar t\}=\{a_1,\ldots,a_n\}\)</span> para el conjunto de elementos mencionados por la tupla.</li>
 </ul>
 <p>La tupla vacía no debe confundirse con el conjunto vacío:</p>
-<p>[ (), {()}. ]</p>
+<p><span class="math display">\[
+()\neq\varnothing,
+\qquad
+\{()\}\neq\varnothing.
+\]</span></p>
 </section>
 <section id="producto-cartesiano" class="level2">
 <h2 class="anchored" data-anchor-id="producto-cartesiano">Producto cartesiano</h2>
-<p>Para conjuntos (A_1,,A_k), el producto cartesiano es</p>
-<p>[ A_1A_k := {(a_1,,a_k)a_iA_ii}. ]</p>
-<p>Es el conjunto de todas las (k)-tuplas que pueden formarse tomando un elemento de cada conjunto. <span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></p>
-<p>Para un conjunto (A), la notación del curso es</p>
-<p>[ A^k=_{k}, A^0={()}. ]</p>
+<p>Para conjuntos <span class="math inline">\(A_1,\ldots,A_k\)</span>, el producto cartesiano es</p>
+<p><span class="math display">\[
+A_1\times\cdots\times A_k
+:=
+\{(a_1,\ldots,a_k)\mid a_i\in A_i\text{ para todo }i\}.
+\]</span></p>
+<p>Es el conjunto de todas las <span class="math inline">\(k\)</span>-tuplas que pueden formarse tomando un elemento de cada conjunto.</p>
+<p>Para un conjunto <span class="math inline">\(A\)</span>, definimos</p>
+<p><span class="math display">\[
+A^k=\underbrace{A\times\cdots\times A}_{k\text{ veces}},
+\qquad
+A^0=\{()\}.
+\]</span></p>
 </section>
 <section id="relaciones" class="level2">
 <h2 class="anchored" data-anchor-id="relaciones">Relaciones</h2>
@@ -411,13 +460,18 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Una <strong>(k)-relación</strong> (R) es un conjunto finito de (k)-tuplas. En particular, para conjuntos apropiados (A_1,,A_k):</p>
-<p>[ RA_1A_k. ]</p>
-<p><span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Una <strong><span class="math inline">\(k\)</span>-relación</strong> <span class="math inline">\(R\)</span> es un conjunto finito de <span class="math inline">\(k\)</span>-tuplas. En particular, para conjuntos apropiados <span class="math inline">\(A_1,\ldots,A_k\)</span>:</p>
+<p><span class="math display">\[
+R\subseteq A_1\times\cdots\times A_k.
+\]</span></p>
 </div>
 </div>
 <p>Por ejemplo, una relación posicional <code>Estudiante</code> puede ser</p>
-<p>[ {(r1,,), (r2,,), (r3,,)}. ]</p>
+<p><span class="math display">\[
+\{(r1,\text{Ana},\text{IngenieríaCivil}),
+(r2,\text{Ben},\text{Computación}),
+(r3,\text{Zoe},\text{Computación})\}.
+\]</span></p>
 <p>Como una relación es un <strong>conjunto</strong>:</p>
 <ul>
 <li>no tiene un orden intrínseco entre sus tuplas;</li>
@@ -433,14 +487,14 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>La Clase 01 contrasta las relaciones matemáticas con una representación tabular, indicando que una tabla puede mostrar filas en un orden y puede contener filas repetidas. <span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Una representación tabular muestra filas en un orden visual determinado. Una tabla SQL también puede contener filas repetidas, mientras que una relación matemática no tiene duplicados.</p>
 <p>En SQL, sin embargo, <strong>el orden de las filas de una consulta no está garantizado sin <code>ORDER BY</code></strong>. Por eso, en este sitio distinguiremos siempre entre el objeto matemático —la relación— y su visualización concreta como tabla.</p>
 </div>
 </div>
 </section>
 <section id="esquema-relacional" class="level2">
 <h2 class="anchored" data-anchor-id="esquema-relacional">Esquema relacional</h2>
-<p>Sea <code>Data</code> un conjunto fijo de datos posibles. La Clase 01 define un esquema mediante los nombres de las relaciones y sus aridades. <span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Sea <code>Data</code> un conjunto infinito fijo de datos posibles. Usaremos <span class="math inline">\(\mathbb N=\{0,1,2,\ldots\}\)</span> para admitir también relaciones de aridad cero. Un esquema posicional especifica los nombres de las relaciones y sus aridades.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Definición formal">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -452,24 +506,36 @@ div.csl-indent {
 </div>
 <div class="callout-body-container callout-body">
 <p>Un <strong>esquema de base de datos</strong> es un par</p>
-<p>[ S=(N,ar), ]</p>
+<p><span class="math display">\[
+S=(N,ar),
+\]</span></p>
 <p>donde:</p>
 <ul>
-<li>(N) es un conjunto de nombres de relaciones;</li>
-<li>(ar:NN) asigna a cada nombre su aridad. <span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></li>
+<li><span class="math inline">\(N\)</span> es un conjunto finito de nombres de relaciones;</li>
+<li><span class="math inline">\(ar:N\to\mathbb N\)</span> asigna a cada nombre su aridad.</li>
 </ul>
 </div>
 </div>
 <p>Para el ejemplo universitario, una parte del esquema puede representarse por</p>
-<p>[ N={,,} ]</p>
+<p><span class="math display">\[
+N=\{\text{Estudiante},\text{Curso},\text{Inscribe}\}
+\]</span></p>
 <p>con</p>
-<p>[ ar()=3, ar()=3, ar()=3. ]</p>
+<p><span class="math display">\[
+ar(\text{Estudiante})=3,
+\quad
+ar(\text{Curso})=3,
+\quad
+ar(\text{Inscribe})=3.
+\]</span></p>
 <p>El esquema describe la <strong>forma</strong> de la base de datos, no sus valores actuales.</p>
 </section>
 <section id="base-de-datos-de-un-esquema" class="level2">
 <h2 class="anchored" data-anchor-id="base-de-datos-de-un-esquema">Base de datos de un esquema</h2>
 <p>Sea <code>Rel</code> el conjunto de todas las relaciones finitas sobre <code>Data</code>:</p>
-<p>[ Rel={RRData^k,&nbsp;|R|&lt;kN}. ]</p>
+<p><span class="math display">\[
+Rel=\{R\mid R\subseteq Data^k,\ |R|&lt;\infty\text{ para algún }k\in\mathbb N\}.
+\]</span></p>
 <div class="callout callout-style-default callout-note callout-titled" title="Definición formal">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -480,20 +546,29 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Dado un esquema (S=(N,ar)), una <strong>base de datos</strong> (D) de (S) es una función</p>
-<p>[ D:NRel ]</p>
-<p>tal que, para cada (RN),</p>
-<p>[ D(R)Data^{ar(R)}. ]</p>
-<p><span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Dado un esquema <span class="math inline">\(S=(N,ar)\)</span>, una <strong>base de datos</strong> <span class="math inline">\(D\)</span> de <span class="math inline">\(S\)</span> es una función</p>
+<p><span class="math display">\[
+D:N\to Rel
+\]</span></p>
+<p>tal que, para cada <span class="math inline">\(R\in N\)</span>,</p>
+<p><span class="math display">\[
+D(R)\subseteq Data^{ar(R)}.
+\]</span></p>
 </div>
 </div>
 <p>Así, <code>D(Estudiante)</code> es la relación concreta almacenada para ese nombre, mientras que <code>ar(Estudiante)=3</code> pertenece al esquema.</p>
 </section>
 <section id="dominio-de-la-base-de-datos" class="level2">
 <h2 class="anchored" data-anchor-id="dominio-de-la-base-de-datos">Dominio de la base de datos</h2>
-<p>La Clase 01 define el dominio activo de una base de datos como los datos que efectivamente aparecen en sus relaciones:</p>
-<p>[ Dom(D) := <em>{RN} </em>{tD(R)} {t}. ]</p>
-<p>Esta noción será importante al definir la semántica de las <a href="../teoria-consultas/logica-primer-orden.html">consultas de primer orden</a>. <span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>El <strong>dominio activo</strong> de una base de datos contiene los datos que efectivamente aparecen en sus relaciones:</p>
+<p><span class="math display">\[
+Dom(D)
+:=
+\bigcup_{R\in N}
+\bigcup_{\bar t\in D(R)}
+\{\bar t\}.
+\]</span></p>
+<p>Esta noción será importante al definir la semántica de las <a href="../teoria-consultas/logica-primer-orden.html">consultas de primer orden</a>.</p>
 </section>
 <section id="forma-y-contenido" class="level2">
 <h2 class="anchored" data-anchor-id="forma-y-contenido">Forma y contenido</h2>
@@ -508,9 +583,9 @@ div.csl-indent {
 <ul>
 <li>Una tupla es una secuencia ordenada; una relación es un conjunto finito de tuplas.</li>
 <li>Las relaciones no tienen duplicados ni orden intrínseco.</li>
-<li>El esquema (S=(N,ar)) define nombres y aridades.</li>
-<li>Una base de datos (D) asigna a cada nombre una relación compatible con el esquema.</li>
-<li>(Dom(D)) contiene los datos que aparecen efectivamente en la instancia.</li>
+<li>El esquema <span class="math inline">\(S=(N,ar)\)</span> define nombres y aridades.</li>
+<li>Una base de datos <span class="math inline">\(D\)</span> asigna a cada nombre una relación compatible con el esquema.</li>
+<li><span class="math inline">\(Dom(D)\)</span> contiene los datos que aparecen efectivamente en la instancia.</li>
 </ul>
 </section>
 </section>
@@ -529,13 +604,10 @@ div.csl-indent {
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-arenas2022" class="csl-entry" role="listitem">
-Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>.
+Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>. <a href="https://github.com/pdm-book/community">https://github.com/pdm-book/community</a>.
 </div>
 <div id="ref-ramakrishnan2003" class="csl-entry" role="listitem">
 Ramakrishnan, Raghu, y Johannes Gehrke. 2003. <em>Database Management Systems</em>. 3.ª ed. McGraw-Hill.
-</div>
-<div id="ref-riveros2026-clase01" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026. <em>Modelo relacional y consultas de primer orden</em>.
 </div>
 <div id="ref-silberschatz2020" class="csl-entry" role="listitem">
 Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System Concepts</em>. 7.ª ed. McGraw-Hill Education.
@@ -962,7 +1034,7 @@ Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

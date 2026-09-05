@@ -64,10 +64,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -350,7 +350,7 @@ window.Quarto = {
   <li><a href="#semántica" id="toc-semántica" class="nav-link" data-scroll-target="#semántica">Semántica</a></li>
   <li><a href="#consultas-de-primer-orden" id="toc-consultas-de-primer-orden" class="nav-link" data-scroll-target="#consultas-de-primer-orden">Consultas de primer orden</a>
   <ul class="collapse">
-  <li><a href="#ejemplo-estudiantes-inscritos-en-iic2413" id="toc-ejemplo-estudiantes-inscritos-en-iic2413" class="nav-link" data-scroll-target="#ejemplo-estudiantes-inscritos-en-iic2413">Ejemplo: estudiantes inscritos en IIC2413</a></li>
+  <li><a href="#ejemplo-estudiantes-inscritos-en-bd101" id="toc-ejemplo-estudiantes-inscritos-en-bd101" class="nav-link" data-scroll-target="#ejemplo-estudiantes-inscritos-en-bd101">Ejemplo: estudiantes inscritos en BD101</a></li>
   <li><a href="#ejemplo-cursos-sin-prerrequisitos" id="toc-ejemplo-cursos-sin-prerrequisitos" class="nav-link" data-scroll-target="#ejemplo-cursos-sin-prerrequisitos">Ejemplo: cursos sin prerrequisitos</a></li>
   </ul></li>
   <li><a href="#universal-como-ausencia-de-contraejemplo" id="toc-universal-como-ausencia-de-contraejemplo" class="nav-link" data-scroll-target="#universal-como-ausencia-de-contraejemplo">Universal como ausencia de contraejemplo</a>
@@ -390,30 +390,30 @@ window.Quarto = {
 
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>Una consulta debe depender de la <strong>forma</strong> de la base de datos y no de enumerar manualmente su contenido. La Clase 01 introduce la lógica de primer orden como primer lenguaje formal para declarar propiedades de los datos. <span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Una consulta debe depender de la <strong>forma</strong> de la base de datos y no de enumerar manualmente su contenido. La lógica de primer orden permite declarar esas propiedades mediante predicados, conectivos y cuantificadores.</p>
 <p>Por ejemplo, sobre</p>
 <div class="schema-box">
 <p><strong>Estudiante</strong>(<code>rut</code>, <code>nombre</code>, <code>carrera</code>)<br>
 <strong>Curso</strong>(<code>codigo</code>, <code>nombre</code>, <code>creditos</code>)<br>
 <strong>Inscribe</strong>(<code>rut</code>, <code>codigo</code>, <code>semestre</code>)</p>
 </div>
-<p>podemos expresar «estudiantes inscritos en IIC2413» diciendo que <strong>existe</strong> una tupla de <code>Inscribe</code> que conecta el RUT del estudiante con ese código.</p>
+<p>podemos expresar «estudiantes inscritos en BD101» diciendo que <strong>existe</strong> una tupla de <code>Inscribe</code> que conecta el RUT del estudiante con ese código.</p>
 </section>
 <section id="datos-variables-y-términos" class="level2">
 <h2 class="anchored" data-anchor-id="datos-variables-y-términos">Datos, variables y términos</h2>
-<p>El curso fija:</p>
+<p>Fijamos los siguientes conjuntos:</p>
 <ul>
 <li><code>Data</code>: conjunto de datos o constantes;</li>
-<li><code>Var</code>: conjunto de variables, con (DataVar=);</li>
-<li>un <strong>término</strong> es un elemento de (DataVar). <span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></li>
+<li><code>Var</code>: conjunto de variables, con <span class="math inline">\(Data\cap Var=\varnothing\)</span>;</li>
+<li>un <strong>término</strong> es un elemento de <span class="math inline">\(Data\cup Var\)</span>.</li>
 </ul>
-<p>Usaremos (a,b,c,) para constantes y (x,y,z,) para variables.</p>
+<p>Usaremos <span class="math inline">\(a,b,c,\ldots\)</span> para constantes y <span class="math inline">\(x,y,z,\ldots\)</span> para variables.</p>
 </section>
 <section id="sintaxis" class="level2">
 <h2 class="anchored" data-anchor-id="sintaxis">Sintaxis</h2>
-<p>Sea (S=(N,ar)) un esquema posicional. Una fórmula () sobre (S) se construye recursivamente a partir de: <span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></p>
-[
-<span class="math display">\[\begin{aligned}
+<p>Sea <span class="math inline">\(S=(N,ar)\)</span> un esquema posicional. Una fórmula <span class="math inline">\(\varphi\)</span> sobre <span class="math inline">\(S\)</span> se construye recursivamente a partir de:</p>
+<p><span class="math display">\[
+\begin{aligned}
 \varphi ::= {} &amp; x=a
 \mid x=y
 \mid R(t_1,\ldots,t_k) \\
@@ -422,113 +422,160 @@ window.Quarto = {
 \mid \neg\psi \\
 &amp;\mid \exists x.\psi
 \mid \forall x.\psi,
-\end{aligned}\]</span>
-<p>]</p>
-<p>donde (RN), (k=ar(R)) y cada (t_iDataVar).</p>
+\end{aligned}
+\]</span></p>
+<p>donde <span class="math inline">\(R\in N\)</span>, <span class="math inline">\(k=ar(R)\)</span> y cada <span class="math inline">\(t_i\in Data\cup Var\)</span>.</p>
 <p>Las tres primeras formas son <strong>atómicas</strong>; las restantes construyen fórmulas compuestas.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Comparaciones usadas en el curso">
+<div class="callout callout-style-default callout-note callout-titled" title="Comparaciones de orden">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Comparaciones usadas en el curso
+<span class="screen-reader-only">Nota</span>Comparaciones de orden
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>La Ayudantía 1 extiende las fórmulas atómicas con comparaciones</p>
-<p>[ xa,xy, {&lt;,&gt;,,}, ]</p>
-<p>con la semántica esperada. Esta extensión es útil para mantener una correspondencia directa con selecciones comparativas del álgebra relacional. <span class="citation" data-cites="saavedra2026-ayudantia1">(<a href="#ref-saavedra2026-ayudantia1" role="doc-biblioref">Saavedra 2026</a>)</span></p>
+<p>Cuando los datos poseen un orden definido, podemos extender las fórmulas atómicas con comparaciones</p>
+<p><span class="math display">\[
+x\sim a,\qquad x\sim y,
+\quad
+\sim\in\{&lt;,&gt;,\le,\ge\},
+\]</span></p>
+<p>interpretadas sobre valores de dominios comparables. Esta extensión es útil para mantener una correspondencia directa con selecciones comparativas del álgebra relacional.</p>
 </div>
 </div>
 </section>
 <section id="variables-libres-y-cuantificadas" class="level2">
 <h2 class="anchored" data-anchor-id="variables-libres-y-cuantificadas">Variables libres y cuantificadas</h2>
-<p>Una variable es <strong>libre</strong> si su valor debe venir dado por una asignación externa; queda <strong>cuantificada</strong> cuando está bajo () o ().</p>
+<p>Una variable es <strong>libre</strong> si su valor debe venir dado por una asignación externa; queda <strong>cuantificada</strong> cuando está bajo <span class="math inline">\(\exists\)</span> o <span class="math inline">\(\forall\)</span>.</p>
 <p>Por ejemplo,</p>
-<p>[ (x)=cs.; Inscribe(x,c,s)c= ]</p>
-<p>tiene a (x) libre y a (c,s) cuantificadas.</p>
-<p>El curso denota por (FV()) el conjunto de variables libres y por (Const()) las constantes mencionadas por la fórmula. <span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p><span class="math display">\[
+\varphi(x)=\exists c\exists s.\; Inscribe(x,c,s)\land c=\text{BD101}
+\]</span></p>
+<p>tiene a <span class="math inline">\(x\)</span> libre y a <span class="math inline">\(c,s\)</span> cuantificadas.</p>
+<p>Denotaremos por <span class="math inline">\(FV(\varphi)\)</span> el conjunto de variables libres y por <span class="math inline">\(Const(\varphi)\)</span> las constantes mencionadas por la fórmula.</p>
 </section>
 <section id="semántica" class="level2">
 <h2 class="anchored" data-anchor-id="semántica">Semántica</h2>
-<p>Sea (D) una base de datos del esquema. Una asignación () de () sobre (D) asigna a cada variable libre un elemento de</p>
-<p>[ Dom(D)Const(). ]</p>
-<p>El curso adopta además ((a)=a) para constantes (aData). <span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></p>
-<p>La relación de satisfacción ((D,)) se define inductivamente. Los casos centrales son:</p>
-<p>[ (D,)x=a (x)=a, ]</p>
-<p>[ (D,)x=y (x)=(y), ]</p>
-<p>[ (D,)R(t_1,,t_k) ((t_1),,(t_k))D(R). ]</p>
+<p>Sea <span class="math inline">\(D\)</span> una base de datos del esquema y <span class="math inline">\(\varphi\)</span> la fórmula completa que queremos evaluar. En este sitio usaremos <strong>semántica de dominio activo</strong>: fijamos</p>
+<p><span class="math display">\[
+U=Dom(D)\cup Const(\varphi).
+\]</span></p>
+<p>El universo <span class="math inline">\(U\)</span> permanece fijo al evaluar todas las subfórmulas de <span class="math inline">\(\varphi\)</span>. Una asignación <span class="math inline">\(\alpha\)</span> da valores en <span class="math inline">\(U\)</span> a las variables libres de la subfórmula evaluada. Para las constantes, extendemos la notación mediante <span class="math inline">\(\alpha(a)=a\)</span>.</p>
+<p>Escribiremos <span class="math inline">\((D,\alpha)\models_U\psi\)</span> para indicar que la subfórmula <span class="math inline">\(\psi\)</span> es verdadera con esa asignación y ese universo. Los casos atómicos son:</p>
+<p><span class="math display">\[
+\begin{aligned}
+(D,\alpha)\models_U x=a
+&amp;\iff \alpha(x)=a,\\
+(D,\alpha)\models_U x=y
+&amp;\iff \alpha(x)=\alpha(y),\\
+(D,\alpha)\models_U R(t_1,\ldots,t_k)
+&amp;\iff (\alpha(t_1),\ldots,\alpha(t_k))\in D(R).
+\end{aligned}
+\]</span></p>
 <p>Para los conectivos:</p>
-<p>[ (D,) (D,) (D,), ]</p>
-<p>con definiciones análogas para () y ().</p>
-<p>Para los cuantificadores, el curso cuantifica sobre el dominio activo más las constantes de la fórmula:</p>
-<p>[ (D,)x. (D,_{x/a}) aDom(D)Const(), ]</p>
-<p>[ (D,)x. (D,_{x/a}) aDom(D)Const(). ]</p>
-<p>Esta elección de semántica activa es importante cuando más adelante relacionemos lógica y álgebra relacional. <span class="citation" data-cites="riveros2026-clase01 arenas2022">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>; <a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
+<p><span class="math display">\[
+\begin{aligned}
+(D,\alpha)\models_U\psi\land\chi
+&amp;\iff (D,\alpha)\models_U\psi
+\text{ y }(D,\alpha)\models_U\chi,\\
+(D,\alpha)\models_U\psi\lor\chi
+&amp;\iff (D,\alpha)\models_U\psi
+\text{ o }(D,\alpha)\models_U\chi,\\
+(D,\alpha)\models_U\neg\psi
+&amp;\iff (D,\alpha)\not\models_U\psi.
+\end{aligned}
+\]</span></p>
+<p>Denotamos por <span class="math inline">\(\alpha_{x/a}\)</span> la asignación que da a <span class="math inline">\(x\)</span> el valor <span class="math inline">\(a\)</span> y coincide con <span class="math inline">\(\alpha\)</span> en las demás variables. Los cuantificadores se interpretan sobre el mismo <span class="math inline">\(U\)</span>:</p>
+<p><span class="math display">\[
+\begin{aligned}
+(D,\alpha)\models_U\exists x.\psi
+&amp;\iff \text{existe }a\in U\text{ tal que }(D,\alpha_{x/a})\models_U\psi,\\
+(D,\alpha)\models_U\forall x.\psi
+&amp;\iff \text{para todo }a\in U,\ (D,\alpha_{x/a})\models_U\psi.
+\end{aligned}
+\]</span></p>
+<p>Si <span class="math inline">\(U\)</span> es vacío, el existencial es falso y el universal verdadero. La semántica activa permite evaluar consultas sobre un universo finito; su relación con el álgebra se desarrolla en <a href="../teoria-consultas/equivalencia-patrones.html">equivalencia y patrones de consulta</a>. <span class="citation" data-cites="arenas2022">(<a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
 </section>
 <section id="consultas-de-primer-orden" class="level2">
 <h2 class="anchored" data-anchor-id="consultas-de-primer-orden">Consultas de primer orden</h2>
-<div class="callout callout-style-default callout-note callout-titled" title="Definición del curso">
+<div class="callout callout-style-default callout-note callout-titled" title="Definición formal">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Definición del curso
+<span class="screen-reader-only">Nota</span>Definición formal
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Una consulta de primer orden tiene la forma</p>
-<p>[ Q(x_1,,x_n), ]</p>
-<p>con (FV(){x_1,,x_n}). Su respuesta sobre (D) es</p>
-<p>[ Q(D)= {((x_1),,(x_n)) (D,)}. ]</p>
-<p><span class="citation" data-cites="riveros2026-clase01">(<a href="#ref-riveros2026-clase01" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p><span class="math display">\[
+Q(x_1,\ldots,x_n)\leftarrow\varphi,
+\]</span></p>
+<p>con variables de salida distintas y <span class="math inline">\(FV(\varphi)\subseteq X\)</span>, donde <span class="math inline">\(X=\{x_1,\ldots,x_n\}\)</span>. Su respuesta sobre <span class="math inline">\(D\)</span> es</p>
+<p><span class="math display">\[
+\begin{aligned}
+Q(D)=\{&amp;(\alpha(x_1),\ldots,\alpha(x_n))\mid\\
+&amp;\alpha:X\to U,\ (D,\alpha)\models_U\varphi\},
+\qquad U=Dom(D)\cup Const(\varphi).
+\end{aligned}
+\]</span></p>
 </div>
 </div>
-<div class="callout callout-style-default callout-warning callout-titled" title="Detalle de la definición">
+<div class="callout callout-style-default callout-note callout-titled" title="Variables de salida">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Advertencia</span>Detalle de la definición
+<span class="screen-reader-only">Nota</span>Variables de salida
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Las diapositivas escriben la condición (FV(){x_1,,x_n}). La definición semántica usa valores para todas las variables de la cabeza. Para evitar el caso límite no desarrollado en el material, todos los ejemplos de este sitio harán que cada variable de la cabeza ocurra libremente en la fórmula.</p>
+<p>La asignación debe dar valor a <strong>todas</strong> las variables de la cabeza, incluso si alguna no aparece libre en <span class="math inline">\(\varphi\)</span>. En ese caso, la variable adicional recorre <span class="math inline">\(U\)</span> sin otra restricción. Normalmente usaremos <span class="math inline">\(FV(\varphi)=X\)</span> para que cada variable de salida participe explícitamente en la condición. Si <span class="math inline">\(n=0\)</span>, la respuesta es <span class="math inline">\(\{()\}\)</span> cuando la fórmula es verdadera y <span class="math inline">\(\varnothing\)</span> cuando es falsa.</p>
 </div>
 </div>
-<section id="ejemplo-estudiantes-inscritos-en-iic2413" class="level3">
-<h3 class="anchored" data-anchor-id="ejemplo-estudiantes-inscritos-en-iic2413">Ejemplo: estudiantes inscritos en IIC2413</h3>
-[
-<span class="math display">\[\begin{aligned}
+<section id="ejemplo-estudiantes-inscritos-en-bd101" class="level3">
+<h3 class="anchored" data-anchor-id="ejemplo-estudiantes-inscritos-en-bd101">Ejemplo: estudiantes inscritos en BD101</h3>
+<p><span class="math display">\[
+\begin{aligned}
 Q(n)\leftarrow\;&amp;\exists r\exists c\exists s.\\
 &amp;Estudiante(r,n,c)\land
-Inscribe(r,\text{IIC2413},s).
-\end{aligned}\]</span>
-<p>]</p>
+Inscribe(r,\text{BD101},s).
+\end{aligned}
+\]</span></p>
 <p>La consulta retorna los nombres de estudiantes para los cuales existe una inscripción compatible.</p>
 </section>
 <section id="ejemplo-cursos-sin-prerrequisitos" class="level3">
 <h3 class="anchored" data-anchor-id="ejemplo-cursos-sin-prerrequisitos">Ejemplo: cursos sin prerrequisitos</h3>
-<p>[ Q(n) ccr.; Curso(c,n,cr) p.;Requisito(c,p). ]</p>
+<p><span class="math display">\[
+Q(n)\leftarrow
+\exists c\exists cr.\;
+Curso(c,n,cr)\land
+\neg\exists p.\;Requisito(c,p).
+\]</span></p>
 <p>Aquí la negación de un existencial expresa «no existe ningún prerrequisito».</p>
 </section>
 </section>
 <section id="universal-como-ausencia-de-contraejemplo" class="level2">
 <h2 class="anchored" data-anchor-id="universal-como-ausencia-de-contraejemplo">Universal como ausencia de contraejemplo</h2>
 <p>La equivalencia</p>
-<p>[ x. x. ]</p>
-<p>es especialmente útil para consultas de tipo «para todos». La Ayudantía 1 la destaca como patrón central de traducción entre lógica y álgebra. <span class="citation" data-cites="saavedra2026-ayudantia1">(<a href="#ref-saavedra2026-ayudantia1" role="doc-biblioref">Saavedra 2026</a>)</span></p>
+<p><span class="math display">\[
+\forall x.\varphi
+\equiv
+\neg\exists x.\neg\varphi
+\]</span></p>
+<p>es especialmente útil para consultas de tipo «para todos». Permite traducir condiciones universales a negación y existencia, y de allí a diferencias en álgebra relacional.</p>
 <p>La idea práctica es buscar un <strong>contraejemplo</strong>: una condición universal se cumple cuando no existe ningún elemento que la viole.</p>
 <section id="resumen" class="level3 summary-box">
 <h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
 <ul>
 <li>Las relaciones de una base de datos se interpretan como predicados.</li>
 <li>Una fórmula combina átomos mediante conectivos y cuantificadores.</li>
-<li>La semántica del curso cuantifica sobre (Dom(D)Const()).</li>
-<li>Una consulta (Q(x)) produce una relación con las asignaciones que satisfacen ().</li>
+<li>La semántica activa del sitio cuantifica sobre <span class="math inline">\(Dom(D)\cup Const(\varphi)\)</span>.</li>
+<li>Una consulta <span class="math inline">\(Q(\bar x)\leftarrow\varphi\)</span> produce una relación con las asignaciones que satisfacen <span class="math inline">\(\varphi\)</span>.</li>
 <li>«No existe» y «para todos» son patrones fundamentales para formular consultas.</li>
 </ul>
 </section>
@@ -548,13 +595,7 @@ Inscribe(r,\text{IIC2413},s).
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-arenas2022" class="csl-entry" role="listitem">
-Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>.
-</div>
-<div id="ref-riveros2026-clase01" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026. <em>Modelo relacional y consultas de primer orden</em>.
-</div>
-<div id="ref-saavedra2026-ayudantia1" class="csl-entry" role="listitem">
-Saavedra, Benjamin. 2026. <em>Ayudantía 1: Álgebra Relacional y Consultas de Primer Orden</em>.
+Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>. <a href="https://github.com/pdm-book/community">https://github.com/pdm-book/community</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -978,7 +1019,7 @@ Saavedra, Benjamin. 2026. <em>Ayudantía 1: Álgebra Relacional y Consultas de P
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

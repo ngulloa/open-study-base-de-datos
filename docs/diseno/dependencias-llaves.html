@@ -99,10 +99,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -132,6 +132,35 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -399,13 +428,13 @@ div.csl-indent {
 
 <section id="intuición-por-qué-diseñar-relaciones" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-por-qué-diseñar-relaciones">Intuición: por qué diseñar relaciones</h2>
-<p>Una base de datos puede almacenar información correcta y aun así tener un <strong>mal esquema</strong>. La Clase 07 parte de una pregunta de diseño: ¿conviene almacenar todo en una sola relación o fragmentarlo en muchas relaciones pequeñas? Ninguno de los extremos es correcto por sí mismo. <span class="citation" data-cites="riveros2026-clase07">(<a href="#ref-riveros2026-clase07" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Una base de datos puede almacenar información correcta y aun así tener un <strong>mal esquema</strong>. Esto plantea una pregunta de diseño: ¿conviene almacenar todo en una sola relación o fragmentarlo en muchas relaciones pequeñas? Ninguno de los extremos es correcto por sí mismo.</p>
 <p>El objetivo es diseñar un esquema que favorezca:</p>
 <ul>
 <li>integridad y consistencia de los datos;</li>
 <li>representación precisa del dominio;</li>
 <li>eficiencia en tiempo y espacio;</li>
-<li>flexibilidad frente a cambios. <span class="citation" data-cites="riveros2026-clase07">(<a href="#ref-riveros2026-clase07" role="doc-biblioref">Riveros 2026</a>)</span></li>
+<li>flexibilidad frente a cambios.</li>
 </ul>
 </section>
 <section id="redundancia-y-anomalías" class="level2">
@@ -438,7 +467,7 @@ div.csl-indent {
 <td>r2</td>
 <td>Ben</td>
 <td>Computación</td>
-<td>IIC2233</td>
+<td>PROG201</td>
 <td>Programación Avanzada</td>
 <td style="text-align: right;">10</td>
 <td>2025-1</td>
@@ -447,7 +476,7 @@ div.csl-indent {
 <td>r2</td>
 <td>Ben</td>
 <td>Computación</td>
-<td>IIC2413</td>
+<td>BD101</td>
 <td>Bases de Datos</td>
 <td style="text-align: right;">10</td>
 <td>2025-2</td>
@@ -456,7 +485,7 @@ div.csl-indent {
 <td>r3</td>
 <td>Zoe</td>
 <td>Computación</td>
-<td>IIC2233</td>
+<td>PROG201</td>
 <td>Programación Avanzada</td>
 <td style="text-align: right;">10</td>
 <td>2024-2</td>
@@ -465,7 +494,7 @@ div.csl-indent {
 <td>r3</td>
 <td>Zoe</td>
 <td>Computación</td>
-<td>IIC2413</td>
+<td>BD101</td>
 <td>Bases de Datos</td>
 <td style="text-align: right;">10</td>
 <td>2025-2</td>
@@ -474,24 +503,24 @@ div.csl-indent {
 </table>
 </div>
 <p>La carrera de Ben se repite; también el nombre y créditos de cada curso.</p>
-<p>La Clase 07 presenta tres anomalías clásicas asociadas a redundancia. <span class="citation" data-cites="riveros2026-clase07 silberschatz2020">(<a href="#ref-riveros2026-clase07" role="doc-biblioref">Riveros 2026</a>; <a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>)</span></p>
+<p>La redundancia puede producir tres anomalías clásicas. <span class="citation" data-cites="silberschatz2020">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>)</span></p>
 <section id="anomalía-de-actualización" class="level3">
 <h3 class="anchored" data-anchor-id="anomalía-de-actualización">Anomalía de actualización</h3>
-<p>Si <code>IIC2413</code> cambia su nombre, hay que modificar varias filas. Si una queda sin actualizar, la relación pasa a afirmar dos nombres distintos para el mismo código.</p>
+<p>Si <code>BD101</code> cambia su nombre, hay que modificar varias filas. Si una queda sin actualizar, la relación pasa a afirmar dos nombres distintos para el mismo código.</p>
 </section>
 <section id="anomalía-de-eliminación" class="level3">
 <h3 class="anchored" data-anchor-id="anomalía-de-eliminación">Anomalía de eliminación</h3>
-<p>Si eliminamos la última inscripción de cierto curso y los datos del curso solo existen dentro de esta relación, podemos perder accidentalmente el nombre y sus créditos.</p>
+<p>Si eliminamos la última inscripción de cierto curso y sus datos solo existen dentro de esta relación, podemos perder accidentalmente el nombre y sus créditos.</p>
 </section>
 <section id="anomalía-de-inserción" class="level3">
 <h3 class="anchored" data-anchor-id="anomalía-de-inserción">Anomalía de inserción</h3>
 <p>Si queremos registrar un curso nuevo antes de que tenga estudiantes inscritos, el esquema combinado puede obligarnos a inventar datos de inscripción o usar nulos innecesarios.</p>
-<p>El ejemplo oficial de Clase 07 muestra los mismos fenómenos con una relación <code>Movies</code>. Lo importante no es el dominio concreto, sino que la repetición proviene de <strong>dependencias entre atributos</strong>. <span class="citation" data-cites="riveros2026-clase07">(<a href="#ref-riveros2026-clase07" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Estas anomalías también pueden aparecer en otros dominios, como un catálogo de películas que repite datos de cada estudio productor. Su causa común es almacenar repetidamente información determinada por <strong>dependencias entre atributos</strong>.</p>
 </section>
 </section>
 <section id="dependencias-funcionales" class="level2">
 <h2 class="anchored" data-anchor-id="dependencias-funcionales">Dependencias funcionales</h2>
-<p>Sea (R) una relación nombrada y sean (A) y (B) listas de atributos de (R).</p>
+<p>Sea <span class="math inline">\(R\)</span> una relación nombrada y sean <span class="math inline">\(\bar A\)</span> y <span class="math inline">\(\bar B\)</span> listas de atributos distintos de <span class="math inline">\(R\)</span>. En el razonamiento con dependencias importa su conjunto de atributos, no el orden. Escribiremos <span class="math inline">\(\{\bar A\}\)</span> para ese conjunto; el complemento se toma dentro de <span class="math inline">\(att(R)\)</span>.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Definición formal">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -503,24 +532,38 @@ div.csl-indent {
 </div>
 <div class="callout-body-container callout-body">
 <p>Una dependencia funcional tiene la forma</p>
-<p>[ AB. ]</p>
-<p>La relación (R) <strong>satisface</strong> esa dependencia, escrito</p>
-<p>[ RAB, ]</p>
-<p>si para todas (_1,_2R):</p>
-<p>[ _{A}(<em>1)=</em>{A}(<em>2) </em>{B}(<em>1)=</em>{B}(_2). ]</p>
-<p><span class="citation" data-cites="riveros2026-clase07 arenas2022">(<a href="#ref-riveros2026-clase07" role="doc-biblioref">Riveros 2026</a>; <a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
+<p><span class="math display">\[
+\bar A\to\bar B.
+\]</span></p>
+<p>La relación <span class="math inline">\(R\)</span> <strong>satisface</strong> esa dependencia, escrito</p>
+<p><span class="math display">\[
+R\models\bar A\to\bar B,
+\]</span></p>
+<p>si para todas <span class="math inline">\(\bar\tau_1,\bar\tau_2\in R\)</span>:</p>
+<p><span class="math display">\[
+\pi_{\bar A}(\bar\tau_1)=\pi_{\bar A}(\bar\tau_2)
+\quad\Longrightarrow\quad
+\pi_{\bar B}(\bar\tau_1)=\pi_{\bar B}(\bar\tau_2).
+\]</span></p>
+<p><span class="citation" data-cites="arenas2022">(<a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>)</span></p>
 </div>
 </div>
-<p>Intuitivamente: <strong>si dos tuplas coinciden en (A), entonces deben coincidir en (B)</strong>.</p>
+<p>Intuitivamente: <strong>si dos tuplas coinciden en <span class="math inline">\(\bar A\)</span>, entonces deben coincidir en <span class="math inline">\(\bar B\)</span></strong>.</p>
 </section>
 <section id="dependencias-del-dominio-universitario" class="level2">
 <h2 class="anchored" data-anchor-id="dependencias-del-dominio-universitario">Dependencias del dominio universitario</h2>
 <p>En el esquema acordado, son naturales restricciones como:</p>
-<p>[ rutnombre&nbsp;carrera ]</p>
+<p><span class="math display">\[
+rut\to nombre\ carrera
+\]</span></p>
 <p>para <code>Estudiante</code>,</p>
-<p>[ codigonombre&nbsp;creditos ]</p>
+<p><span class="math display">\[
+codigo\to nombre\ creditos
+\]</span></p>
 <p>para <code>Curso</code>, y</p>
-<p>[ pidnombre&nbsp;departamento ]</p>
+<p><span class="math display">\[
+pid\to nombre\ departamento
+\]</span></p>
 <p>para <code>Profesor</code>.</p>
 <p>Estas dependencias no se justifican porque «casualmente» la instancia actual tenga valores distintos. Representan reglas del <strong>dominio</strong>: un RUT identifica los datos de un estudiante; un código identifica la información de un curso; un PID identifica un profesor.</p>
 <div class="callout callout-style-default callout-warning callout-titled" title="Instancia versus restricción del dominio">
@@ -533,50 +576,62 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>La Clase 07 enfatiza que una dependencia funcional no debe inferirse solo observando una instancia. Una tabla pequeña puede satisfacer accidentalmente muchas dependencias que dejarían de cumplirse al insertar nuevos datos. Las dependencias relevantes para diseño son restricciones que el dominio pretende mantener. <span class="citation" data-cites="riveros2026-clase07">(<a href="#ref-riveros2026-clase07" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Una dependencia funcional no debe inferirse solo observando una instancia. Una tabla pequeña puede satisfacer accidentalmente muchas dependencias que dejarían de cumplirse al insertar nuevos datos. Las dependencias relevantes para diseño son restricciones que el dominio pretende mantener.</p>
 </div>
 </div>
 </section>
 <section id="dependencias-triviales" class="level2">
 <h2 class="anchored" data-anchor-id="dependencias-triviales">Dependencias triviales</h2>
 <p>Una dependencia</p>
-<p>[ AB ]</p>
-<p>es <strong>trivial</strong> cuando los atributos de (B) ya están contenidos en (A). En ese caso siempre se satisface, porque dos tuplas que coinciden en (A) necesariamente coinciden en cualquier subconjunto de esos atributos. <span class="citation" data-cites="riveros2026-clase07">(<a href="#ref-riveros2026-clase07" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p><span class="math display">\[
+\bar A\to\bar B
+\]</span></p>
+<p>es <strong>trivial</strong> cuando los atributos de <span class="math inline">\(\bar B\)</span> ya están contenidos en <span class="math inline">\(\bar A\)</span>. En ese caso siempre se satisface, porque dos tuplas que coinciden en <span class="math inline">\(\bar A\)</span> necesariamente coinciden en cualquier subconjunto de esos atributos.</p>
 </section>
 <section id="superllaves" class="level2">
 <h2 class="anchored" data-anchor-id="superllaves">Superllaves</h2>
-<div class="callout callout-style-default callout-note callout-titled" title="Definición del curso">
+<div class="callout callout-style-default callout-note callout-titled" title="Superllave de una instancia">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Definición del curso
+<span class="screen-reader-only">Nota</span>Superllave de una instancia
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Sea (A^c) el complemento de los atributos (A) dentro de (R). (A) es una <strong>superllave</strong> de (R) si y solo si</p>
-<p>[ RAA^c. ]</p>
-<p>Es decir, (A) determina todos los demás atributos. <span class="citation" data-cites="riveros2026-clase07">(<a href="#ref-riveros2026-clase07" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Sea <span class="math inline">\(\bar A^c\)</span> el complemento de los atributos <span class="math inline">\(\bar A\)</span> dentro de <span class="math inline">\(R\)</span>. <span class="math inline">\(\bar A\)</span> es una <strong>superllave</strong> de <span class="math inline">\(R\)</span> si y solo si</p>
+<p><span class="math display">\[
+R\models\bar A\to\bar A^c.
+\]</span></p>
+<p>Es decir, <span class="math inline">\(\bar A\)</span> determina todos los demás atributos.</p>
 </div>
 </div>
-<p>Equivalentemente, la Clase 07 demuestra la caracterización:</p>
-<p>[ A _1,<em>2R, ; </em>{A}(<em>1)=</em>{A}(_2) _1=_2. ]</p>
-<p>Por tanto, una superllave identifica unívocamente cada tupla.</p>
+<p>Equivalentemente:</p>
+<p><span class="math display">\[
+\bar A\text{ es superllave}
+\iff
+\forall\bar\tau_1,\bar\tau_2\in R,
+\;
+\pi_{\bar A}(\bar\tau_1)=\pi_{\bar A}(\bar\tau_2)
+\Rightarrow
+\bar\tau_1=\bar\tau_2.
+\]</span></p>
+<p>Por tanto, una superllave identifica unívocamente cada tupla de la instancia. En diseño, <span class="math inline">\(\bar A\)</span> es una <strong>superllave bajo <span class="math inline">\(F\)</span></strong> si lo hace en toda relación que satisface las dependencias <span class="math inline">\(F\)</span>, es decir, si <span class="math inline">\(F\models\bar A\to att(R)\)</span>. La <a href="../diseno/implicacion-clausura.html">clausura</a> permite comprobar esta propiedad del esquema.</p>
 </section>
 <section id="llaves" class="level2">
 <h2 class="anchored" data-anchor-id="llaves">Llaves</h2>
 <p>Una <strong>llave</strong> es una superllave <strong>minimal</strong>:</p>
 <ol type="1">
-<li>(A) es superllave;</li>
-<li>ningún subconjunto propio de sus atributos sigue siendo superllave. <span class="citation" data-cites="riveros2026-clase07">(<a href="#ref-riveros2026-clase07" role="doc-biblioref">Riveros 2026</a>)</span></li>
+<li><span class="math inline">\(\bar A\)</span> es superllave;</li>
+<li>ningún subconjunto propio de sus atributos sigue siendo superllave.</li>
 </ol>
-<p>Para <code>Estudiante(rut,nombre,carrera)</code>, si el dominio garantiza que cada estudiante tiene un único RUT, entonces:</p>
+<p>Para <code>Estudiante(rut,nombre,carrera)</code>, supongamos que <code>rut</code> identifica unívocamente a cada estudiante y que ni <code>nombre</code> ni <code>carrera</code>, solos o combinados, garantizan esa identificación. Entonces:</p>
 <ul>
 <li><code>rut</code> es llave;</li>
 <li><code>rut nombre</code> es superllave, pero no llave, porque contiene una superllave más pequeña.</li>
 </ul>
-<p>Para <code>Inscribe(rut,codigo,semestre)</code>, <strong>si el dominio garantiza</strong> a lo sumo una inscripción por estudiante, curso y semestre, el conjunto de los tres atributos puede declararse como llave. Esta es una decisión de modelamiento que debe confirmarse con los requisitos del dominio.</p>
+<p>Para <code>Inscribe(rut,codigo,semestre)</code>, <strong>si el dominio garantiza</strong> a lo sumo una inscripción por estudiante, curso y semestre, el conjunto de los tres atributos identifica una inscripción. Para que sea una llave candidata, además ningún subconjunto propio debe garantizar esa identificación. Esta es una decisión de modelamiento que debe confirmarse con los requisitos del dominio.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Terminología">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -587,13 +642,13 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>La diapositiva de Clase 07 muestra «superset key» como traducción inglesa de superllave. La terminología estándar de la bibliografía es <strong>superkey</strong>, que es la que usaremos en el sitio. <span class="citation" data-cites="silberschatz2020 ramakrishnan2003">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>; <a href="#ref-ramakrishnan2003" role="doc-biblioref">Ramakrishnan y Gehrke 2003</a>)</span></p>
+<p>El término inglés para superllave es <strong>superkey</strong>. Una llave minimal también se llama <strong>llave candidata</strong> (<em>candidate key</em>). <span class="citation" data-cites="silberschatz2020 ramakrishnan2003">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>; <a href="#ref-ramakrishnan2003" role="doc-biblioref">Ramakrishnan y Gehrke 2003</a>)</span></p>
 </div>
 </div>
 </section>
 <section id="llaves-en-sql" class="level2">
 <h2 class="anchored" data-anchor-id="llaves-en-sql">Llaves en SQL</h2>
-<p>El curso presenta la sintaxis:</p>
+<p>En SQL, una llave primaria se declara así:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> Estudiante (</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  rut     <span class="dt">VARCHAR</span>(<span class="dv">12</span>),</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  nombre  <span class="dt">VARCHAR</span>(<span class="dv">100</span>),</span>
@@ -607,7 +662,7 @@ div.csl-indent {
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  semestre <span class="dt">VARCHAR</span>(<span class="dv">10</span>),</span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">PRIMARY</span> <span class="kw">KEY</span> (rut, codigo, semestre)</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p><code>PRIMARY KEY</code> declara una llave primaria elegida para la tabla. La teoría puede admitir más de una llave candidata; SQL distingue cuál se declara como primaria. <span class="citation" data-cites="riveros2026-clase07 silberschatz2020">(<a href="#ref-riveros2026-clase07" role="doc-biblioref">Riveros 2026</a>; <a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>)</span></p>
+<p><code>PRIMARY KEY</code> declara una llave primaria elegida para la tabla. La teoría puede admitir más de una llave candidata; SQL distingue cuál se declara como primaria. <span class="citation" data-cites="silberschatz2020">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>)</span></p>
 </section>
 <section id="qué-problema-resolvimos-y-cuál-falta" class="level2">
 <h2 class="anchored" data-anchor-id="qué-problema-resolvimos-y-cuál-falta">Qué problema resolvimos y cuál falta</h2>
@@ -622,7 +677,7 @@ div.csl-indent {
 <h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
 <ul>
 <li>La redundancia puede producir anomalías de actualización, eliminación e inserción.</li>
-<li>Una dependencia funcional (AB) exige que coincidencia en (A) implique coincidencia en (B).</li>
+<li>Una dependencia funcional <span class="math inline">\(\bar A\to\bar B\)</span> exige que coincidencia en <span class="math inline">\(\bar A\)</span> implique coincidencia en <span class="math inline">\(\bar B\)</span>.</li>
 <li>Las dependencias relevantes son restricciones del dominio, no coincidencias accidentales de una instancia.</li>
 <li>Una superllave determina todos los atributos; una llave es una superllave minimal.</li>
 <li><code>PRIMARY KEY</code> materializa en SQL una llave elegida para la tabla.</li>
@@ -644,13 +699,10 @@ div.csl-indent {
 
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-arenas2022" class="csl-entry" role="listitem">
-Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>.
+Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>. <a href="https://github.com/pdm-book/community">https://github.com/pdm-book/community</a>.
 </div>
 <div id="ref-ramakrishnan2003" class="csl-entry" role="listitem">
 Ramakrishnan, Raghu, y Johannes Gehrke. 2003. <em>Database Management Systems</em>. 3.ª ed. McGraw-Hill.
-</div>
-<div id="ref-riveros2026-clase07" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026. <em>Dependencias funcionales</em>.
 </div>
 <div id="ref-silberschatz2020" class="csl-entry" role="listitem">
 Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System Concepts</em>. 7.ª ed. McGraw-Hill Education.
@@ -1077,7 +1129,7 @@ Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

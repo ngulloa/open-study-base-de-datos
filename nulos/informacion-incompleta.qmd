@@ -5,16 +5,16 @@ description: "Tablas de Codd, valuaciones, posibles mundos y consultas sobre bas
 
 ## Intuición y concepto
 
-Un `NULL` indica que la información disponible no determina completamente un dato. Una forma formal de entender esa incertidumbre es pensar que la tabla observada representa **muchas bases de datos completas posibles**. La Clase 06 introduce esta perspectiva mediante tablas de Codd y mundos posibles. [@riveros2026-clase06]
+Un `NULL` indica que la información disponible no determina completamente un dato. Una forma formal de entender esa incertidumbre es pensar que la tabla observada representa **muchas bases de datos completas posibles**. Las tablas de Codd y la semántica de mundos posibles formalizan esta perspectiva.
 
-El material hace una simplificación explícita: desarrolla la teoría para una base con **una sola relación**, señalando que el enfoque se extiende a esquemas con varias relaciones. Mantendremos esa misma presentación. [@riveros2026-clase06]
+Para concentrarnos en la incertidumbre, trabajaremos con un esquema de **una sola relación**. Con varias relaciones, cada mundo sería una instancia completa del esquema y una valuación se aplicaría de manera coherente a todas sus tablas.
 
 ## Tablas de Codd
 
-Sea `Data` el conjunto de datos, `Att` un conjunto infinito de atributos y `Var` un conjunto infinito de variables.
+Sea `Data` el conjunto de datos, `Att` un conjunto infinito de atributos y `Var` un conjunto infinito de variables, disjunto de `Data`. El esquema de atributos de cada tabla se fija explícitamente, incluso para una tabla vacía.
 
-::: {.callout-note title="Definición del curso"}
-Una **tabla de Codd** \(T\) es un subconjunto finito de tuplas con los mismos atributos, cuyos valores pertenecen a \(Data\cup Var\), y donde cada variable aparece una sola vez. [@riveros2026-clase06]
+::: {.callout-note title="Definición formal"}
+Una **tabla de Codd** $T$ es un subconjunto finito de tuplas con los mismos atributos, cuyos valores pertenecen a $Data\cup Var$, y donde cada variable aparece una sola vez.
 :::
 
 Ejemplo universitario:
@@ -22,73 +22,72 @@ Ejemplo universitario:
 ::: {.table-responsive}
 | rut | nombre | carrera |
 |---|---|---|
-| r1 | Ana | \(x\) |
-| \(y\) | Ben | Computación |
-| r3 | Zoe | \(z\) |
+| r1 | Ana | $x$ |
+| $y$ | Ben | Computación |
+| r3 | Zoe | $z$ |
 :::
 
-Las variables \(x,y,z\) representan datos aún no determinados.
+Las variables $x,y,z$ representan datos aún no determinados.
 
 ## Variables de una tabla
 
-El curso define
+Definimos
 
-\[
+$$
 Var(T)
 =
 \{\bar\tau(A)\in Var
 \mid
 \bar\tau\in T,\ A\in att(T)\}.
-\]
+$$
 
 Una **valuación** es una función
 
-\[
+$$
 \nu:Var(T)\cup Data\to Data
-\]
+$$
 
 tal que
 
-\[
+$$
 \nu(a)=a
 \qquad
 \text{para todo }a\in Data.
-\]
+$$
 
-Es decir, la valuación elige un dato concreto para cada variable y deja intactas las constantes. [@riveros2026-clase06]
+Es decir, la valuación elige un dato concreto para cada variable y deja intactas las constantes.
 
 ## Aplicar una valuación
 
-Para una valuación \(\nu\), la relación completa obtenida es
+Para una valuación $\nu$, la relación completa obtenida es
 
-\[
+$$
 \nu(T)=\{\nu\circ\bar\tau\mid\bar\tau\in T\}.
-\]
+$$
 
 Por ejemplo, con
 
-\[
+$$
 \nu(x)=\text{IngenieríaCivil},
 \quad
 \nu(y)=r2,
 \quad
 \nu(z)=\text{Computación},
-\]
+$$
 
 obtenemos una relación ordinaria completamente determinada.
 
 ## Mundos posibles
 
 ::: {.callout-note title="Definición formal"}
-Los **posibles mundos** representados por una tabla de Codd \(T\) son
+Los **posibles mundos** representados por una tabla de Codd $T$ son
 
-\[
+$$
 Worlds(T)
 =
 \{\nu(T)\mid \nu\text{ es una valuación de }T\}.
-\]
+$$
 
-[@riveros2026-clase06]
 :::
 
 `T` es una representación finita de un conjunto potencialmente muy grande —incluso infinito— de relaciones completas.
@@ -97,68 +96,73 @@ Esta idea es una base clásica para estudiar información incompleta. *Foundatio
 
 ## Base de datos incompleta
 
-La Clase 06 generaliza:
+Podemos describir la información incompleta directamente mediante conjuntos de mundos:
 
-::: {.callout-note title="Definición del curso"}
-Una **base de datos incompleta** \(I\) es un conjunto de relaciones ordinarias que comparten los mismos atributos:
+::: {.callout-note title="Definición formal"}
+Sobre un esquema de atributos fijo, una **base de datos incompleta** $I$ es un conjunto de relaciones ordinarias que comparten esos atributos:
 
-\[
+$$
 \forall R_1,R_2\in I,
 \qquad
 att(R_1)=att(R_2).
-\]
+$$
 
-[@riveros2026-clase06]
 :::
 
 Ejemplos:
 
-- \(Worlds(T)\) para una tabla de Codd \(T\);
-- \(\{R\}\) para una relación completa \(R\);
-- \(\varnothing\).
+- $Worlds(T)$ para una tabla de Codd $T$;
+- $\{R\}$ para una relación completa $R$;
+- $\varnothing$.
 
 ## Consultas sobre información incompleta
 
-Para una consulta \(Q\), el curso define:
+Para una consulta $Q$, definimos:
 
-\[
+$$
 Q(I)=\{Q(R)\mid R\in I\}.
-\]
+$$
 
-Es decir, aplicamos la consulta a **cada mundo posible**. El resultado vuelve a ser una base de datos incompleta. [@riveros2026-clase06]
+Es decir, aplicamos la consulta a **cada mundo posible**. El resultado vuelve a ser una base de datos incompleta.
 
 ### Proyección
 
-Si \(I=Worlds(T)\), entonces
+Si $I=Worlds(T)$, entonces
 
-\[
+$$
 \pi_{nombre}(I)
 =
 \{\pi_{nombre}(R)\mid R\in Worlds(T)\}.
-\]
+$$
 
 Cada mundo genera su propio resultado.
 
 ## ¿Toda consulta puede representarse otra vez con una tabla de Codd?
 
-La Clase 06 formula la pregunta de cierre:
+La pregunta de cierre es:
 
-\[
+$$
 \text{¿existe siempre }T'
 \text{ tal que }
 Q(Worlds(T))=Worlds(T')?
-\]
+$$
 
-La respuesta es **no**. El curso entrega un contraejemplo con selección donde el conjunto de resultados posibles contiene tanto la relación vacía como una relación no vacía específica, y pide demostrar que ninguna tabla de Codd puede representar exactamente ese conjunto. [@riveros2026-clase06]
+La respuesta es **no**. Consideremos una tabla con un solo atributo, $T=\{(A:x)\}$, y una constante $a\in Data$. Supongamos que existe además otro dato $b\neq a$. Para $Q=\sigma_{A=a}$:
+
+$$
+Q(Worlds(T))=\{\varnothing,\{(A:a)\}\}.
+$$
+
+Una valuación con $\nu(x)=a$ produce la relación $\{(A:a)\}$; cualquier otro valor produce la relación vacía después del filtro. Ninguna tabla de Codd $T'$ representa exactamente ambos mundos: si $T'$ es vacía, solo representa el mundo vacío; si contiene alguna tupla, toda valuación produce al menos una tupla, aunque varias puedan coincidir. Por tanto, una tabla no vacía nunca representa el mundo vacío.
 
 Esto muestra una diferencia importante:
 
 - una representación puede ser finita y útil;
-- pero una clase de representaciones no tiene por qué ser cerrada bajo todas las consultas.
+- pero una familia de representaciones no tiene por qué ser cerrada bajo todas las consultas.
 
 ## Relación con `NULL`
 
-Una celda con `NULL` en SQL no es literalmente una variable de Codd. La teoría de mundos posibles se introduce para **formalizar la intuición de información desconocida**, no para afirmar que el estándar SQL implemente directamente `Worlds(T)`. [@riveros2026-clase06]
+Una celda con `NULL` en SQL no es literalmente una variable de Codd. La teoría de mundos posibles se introduce para **formalizar la intuición de información desconocida**, no para afirmar que el estándar SQL implemente directamente `Worlds(T)`.
 
 ::: {.callout-warning title="No confundir dos niveles"}
 - `NULL` y la lógica de tres valores describen la evaluación concreta de SQL.
@@ -167,9 +171,9 @@ Una celda con `NULL` en SQL no es literalmente una variable de Codd. La teoría 
 Ambos temas están relacionados, pero no son la misma semántica operacional.
 :::
 
-## Qué queda fuera por ahora
+## Alcance del modelo
 
-La teoría de información incompleta incluye preguntas sobre respuestas ciertas, poder expresivo y representaciones más generales. El material disponible las señala como un área de investigación, pero no las desarrolla todavía. No las incorporaremos como páginas adicionales hasta contar con material suficiente del curso. [@riveros2026-clase06; @arenas2022]
+La teoría también estudia respuestas ciertas —las que se obtienen en todos los mundos posibles— y representaciones más generales de incertidumbre. El objetivo de esta página es establecer el modelo de valuaciones y mostrar por qué una representación sencilla puede perder cierre bajo consultas. [@arenas2022]
 
 ::: {.summary-box}
 ### Resumen

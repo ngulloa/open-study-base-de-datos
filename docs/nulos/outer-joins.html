@@ -62,26 +62,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -99,10 +80,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -422,7 +403,7 @@ window.Quarto = {
 
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>Un join ordinario solo conserva combinaciones compatibles. Si una fila no tiene compañero en la otra relación, desaparece. Los <strong>outer joins</strong> preservan ciertas filas sin compañero y completan los atributos faltantes con <code>NULL</code>. La Clase 06 los introduce como mecanismo para modelar datos opcionales. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Un join ordinario solo conserva combinaciones compatibles. Si una fila no tiene compañero en la otra relación, desaparece. Los <strong>outer joins</strong> preservan ciertas filas sin compañero y completan los atributos faltantes con <code>NULL</code>. Permiten consultar relaciones donde la correspondencia entre filas es opcional.</p>
 <p>Ejemplo:</p>
 <div class="schema-box">
 <p><strong>Curso</strong>(<code>codigo</code>, <code>nombre</code>, <code>creditos</code>)<br>
@@ -432,16 +413,18 @@ window.Quarto = {
 </section>
 <section id="extender-una-tupla-con-null" class="level2">
 <h2 class="anchored" data-anchor-id="extender-una-tupla-con-null">Extender una tupla con <code>NULL</code></h2>
-<p>El curso supone aquí (NULLData) y define una extensión de tupla. Para una tupla () y un conjunto de atributos (X):</p>
-<p>[ :att()XData{NULL}, ]</p>
+<p>Para formalizar la extensión, supongamos <span class="math inline">\(NULL\notin Data\)</span> y tuplas originales sin nulos. Para una tupla <span class="math inline">\(\bar\tau\)</span> y un conjunto de atributos <span class="math inline">\(X\)</span>:</p>
+<p><span class="math display">\[
+\bar\tau[X]:att(\bar\tau)\cup X\to Data\cup\{NULL\},
+\]</span></p>
 <p>con</p>
-[ (A)=
-<span class="math display">\[\begin{cases}
+<p><span class="math display">\[
+\bar\tau[X](A)=
+\begin{cases}
 \bar\tau(A), &amp; A\in att(\bar\tau),\\
 NULL, &amp; A\notin att(\bar\tau).
-\end{cases}\]</span>
-<p>]</p>
-<p><span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></p>
+\end{cases}
+\]</span></p>
 <p>Esta operación permite completar una tupla cuando no existe información proveniente de la otra relación.</p>
 </section>
 <section id="left-outer-join" class="level2">
@@ -449,14 +432,14 @@ NULL, &amp; A\notin att(\bar\tau).
 <p>El <strong>left outer join</strong> contiene:</p>
 <ol type="1">
 <li>todas las combinaciones del join normal;</li>
-<li>cada tupla de la relación izquierda que no tiene compañero, extendida con <code>NULL</code> en los atributos faltantes. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></li>
+<li>cada tupla de la relación izquierda que no tiene compañero, extendida con <code>NULL</code> en los atributos faltantes.</li>
 </ol>
 <p>En SQL:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> C.codigo, C.nombre, R.prerrequisito</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Curso <span class="kw">AS</span> C</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> Requisito <span class="kw">AS</span> R</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> C.codigo <span class="op">=</span> R.codigo;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Si <code>IIC1103</code> no tiene prerrequisito, la fila puede verse como:</p>
+<p>Si <code>PROG101</code> no tiene prerrequisito, la fila puede verse como:</p>
 <div class="table-responsive">
 <table class="caption-top table">
 <thead>
@@ -468,7 +451,7 @@ NULL, &amp; A\notin att(\bar\tau).
 </thead>
 <tbody>
 <tr class="odd">
-<td>IIC1103</td>
+<td>PROG101</td>
 <td>Introducción a Programación</td>
 <td><code>NULL</code></td>
 </tr>
@@ -479,7 +462,7 @@ NULL, &amp; A\notin att(\bar\tau).
 </section>
 <section id="right-outer-join" class="level2">
 <h2 class="anchored" data-anchor-id="right-outer-join">Right outer join</h2>
-<p>El <strong>right outer join</strong> es simétrico: preserva las tuplas sin compañero de la relación derecha. La Clase 06 presenta la equivalencia conceptual de intercambiar los lados y usar left outer join. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>El <strong>right outer join</strong> es simétrico: preserva las tuplas sin compañero de la relación derecha. Puede expresarse intercambiando los lados y usando un left outer join, con las columnas de salida en el orden deseado.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> C.codigo, C.nombre, R.prerrequisito</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Curso <span class="kw">AS</span> C</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">RIGHT</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> Requisito <span class="kw">AS</span> R</span>
@@ -494,7 +477,7 @@ NULL, &amp; A\notin att(\bar\tau).
 <li>filas de la izquierda sin compañero;</li>
 <li>filas de la derecha sin compañero.</li>
 </ul>
-<p>La definición de Clase 06 lo construye como unión del left y right outer join. <span class="citation" data-cites="riveros2026-clase06">(<a href="#ref-riveros2026-clase06" role="doc-biblioref">Riveros 2026</a>)</span></p>
+<p>Bajo semántica de conjuntos y con el mismo esquema de salida, puede construirse como la unión del left y el right outer join. Esta identidad no autoriza a usar <code>UNION ALL</code> directamente en SQL: las coincidencias aparecerían dos veces.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">..</span>.</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> R</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FULL</span> <span class="kw">OUTER</span> <span class="kw">JOIN</span> S</span>
@@ -551,25 +534,25 @@ NULL, &amp; A\notin att(\bar\tau).
 <section id="condiciones-en-on-y-where" class="level2">
 <h2 class="anchored" data-anchor-id="condiciones-en-on-y-where">Condiciones en <code>ON</code> y <code>WHERE</code></h2>
 <p>Con outer joins, mover una condición entre <code>ON</code> y <code>WHERE</code> puede cambiar el resultado.</p>
-<p>Supongamos que queremos conservar todos los cursos y mostrar solo prerrequisitos cuyo código empieza por <code>IIC</code>:</p>
+<p>Supongamos que queremos conservar todos los cursos y mostrar solo prerrequisitos cuyo código empieza por <code>PROG</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> C.codigo, R.prerrequisito</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Curso <span class="kw">AS</span> C</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> Requisito <span class="kw">AS</span> R</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> C.codigo <span class="op">=</span> R.codigo</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a> <span class="kw">AND</span> R.prerrequisito <span class="kw">LIKE</span> <span class="st">'IIC%'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a> <span class="kw">AND</span> R.prerrequisito <span class="kw">LIKE</span> <span class="st">'PROG%'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>La condición forma parte de la coincidencia; un curso sin coincidencia apropiada sigue apareciendo con <code>NULL</code>.</p>
 <p>En cambio:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> C.codigo, R.prerrequisito</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Curso <span class="kw">AS</span> C</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> Requisito <span class="kw">AS</span> R</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> C.codigo <span class="op">=</span> R.codigo</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> R.prerrequisito <span class="kw">LIKE</span> <span class="st">'IIC%'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> R.prerrequisito <span class="kw">LIKE</span> <span class="st">'PROG%'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <p>el <code>WHERE</code> elimina las filas donde <code>R.prerrequisito</code> es <code>NULL</code> porque la condición no resulta <code>TRUE</code>. Esto puede convertir el efecto observable en algo cercano a un inner join para ese filtro.</p>
 <p>La explicación depende directamente de la <a href="../nulos/null-tres-valores.html">lógica de tres valores</a>.</p>
 </section>
 <section id="outer-join-y-anti-join-no-son-lo-mismo" class="level2">
 <h2 class="anchored" data-anchor-id="outer-join-y-anti-join-no-son-lo-mismo">Outer join y anti-join no son lo mismo</h2>
-<p>Un anti-join responde «qué tuplas de (R) no tienen compañero en (S)». Un left outer join conserva <strong>tanto</strong> las coincidencias como las no coincidencias de la izquierda. Para extraer solo las no coincidencias puede usarse un patrón como:</p>
+<p>Un anti-join responde «qué tuplas de <span class="math inline">\(R\)</span> no tienen compañero en <span class="math inline">\(S\)</span>». Un left outer join conserva <strong>tanto</strong> las coincidencias como las no coincidencias de la izquierda. Para extraer solo las no coincidencias puede usarse un patrón como:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> C.codigo, C.nombre</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Curso <span class="kw">AS</span> C</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> Requisito <span class="kw">AS</span> R</span>
@@ -598,12 +581,7 @@ NULL, &amp; A\notin att(\bar\tau).
 
 
 
-
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-riveros2026-clase06" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026. <em>Nulos</em>.
-</div>
-</div></section></div></main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -1025,7 +1003,7 @@ Riveros, Cristian. 2026. <em>Nulos</em>.
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

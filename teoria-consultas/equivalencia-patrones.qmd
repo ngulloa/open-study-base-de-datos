@@ -5,33 +5,53 @@ description: "Relación entre lógica de primer orden, álgebra relacional y el 
 
 ## Una consulta, varios lenguajes
 
-El curso desarrolla en paralelo tres formas de expresar consultas:
+Una misma consulta puede expresarse mediante:
 
 - lógica de primer orden;
 - álgebra relacional;
 - SQL.
 
-La utilidad pedagógica no es solo poder traducir sintaxis. El objetivo es reconocer la **misma intención declarativa** detrás de expresiones distintas. [@riveros2026-clase04; @arenas2022]
+La utilidad pedagógica no es solo poder traducir sintaxis. El objetivo es reconocer la **misma intención declarativa** detrás de expresiones distintas. [@arenas2022]
 
 ## Teorema de Codd
 
 ::: {.callout-note title="Resultado central"}
-La Clase 04 presenta el **Teorema de Codd**: álgebra relacional y lógica de primer orden son igualmente expresivas, considerando el fragmento apropiado de consultas de primer orden independientes del dominio. [@riveros2026-clase04; @arenas2022]
+El **teorema de Codd** relaciona el álgebra relacional con las consultas de primer orden independientes del dominio: ambos formalismos tienen el mismo poder expresivo, usando convenciones compatibles para constantes y relaciones de aridad cero. [@abiteboul1995]
 :::
 
-En la notación resumida del curso:
+Una consulta es **independiente del dominio** si ampliar el universo de evaluación con datos ajenos a la instancia y a las constantes de la consulta no cambia su respuesta. Esto es distinto de elegir de antemano una semántica activa.
 
-\[
-SQL^*\;=\;\text{Álgebra relacional}\;=\;\text{Lógica de primer orden}^{\dagger},
-\]
+Por ejemplo, $Q(x)\leftarrow\neg R(x)$ depende del universo cuando $x$ puede recorrer cualquier dato: al ampliarlo aparecen respuestas nuevas. Bajo semántica activa, en cambio, significa buscar el complemento de $R$ dentro de $Dom(D)$. Para traducirlo al álgebra se construye explícitamente esa relación de valores candidatos y se resta $R$.
 
-donde:
+Con el universo activo $U=Dom(D)\cup Const(\varphi)$, también hay una traducción entre lógica y álgebra: se construye $U$ uniendo las proyecciones de los atributos de la instancia y las relaciones unitarias de las constantes, con renombramientos compatibles. La negación se interpreta como complemento respecto de los productos de $U$ correspondientes a las variables libres. [@arenas2022]
 
-- \(SQL^*\) es el fragmento de SQL estudiado hasta ese punto;
-- \(\dagger\) restringe la lógica a consultas independientes del dominio; la semántica activa adoptada en Clase 01 evita resultados que dependan de elementos arbitrarios externos a la base de datos. [@riveros2026-clase01; @riveros2026-clase04]
+::: {.callout-note title="Constantes y relaciones auxiliares"}
+Para esta equivalencia general admitimos relaciones constantes como $\{(A:a)\}$ y la relación de aridad cero $\{()\}$. Son expresiones base auxiliares, además de las relaciones almacenadas. Sin ellas, el álgebra que solo parte de tablas vacías no podría devolver la constante $a$ de $Q(x)\leftarrow x=a$. Los ejemplos de joins y filtros sobre tablas no necesitan introducir estas relaciones auxiliares.
+:::
+
+### El fragmento relacional de SQL
+
+En esta página, $SQL^*$ designa consultas compuestas con selección, proyección, joins, subconsultas de existencia y operadores de conjuntos, bajo estas condiciones:
+
+- los datos no contienen `NULL`;
+- los resultados se interpretan como conjuntos, eliminando duplicados cuando corresponda;
+- las comparaciones tienen la misma interpretación en los tres lenguajes;
+- no se incorporan agregados, recursión, ventanas, orden ni límites de filas.
+
+Con esas condiciones y una representación compatible de constantes y resultados booleanos, podemos resumir la correspondencia expresiva como
+
+$$
+\begin{aligned}
+SQL^*
+&\equiv \text{álgebra relacional}\\
+&\equiv \text{consultas de primer orden independientes del dominio}.
+\end{aligned}
+$$
+
+La notación $SQL^*$ es una convención de esta página. En los ejemplos, `DISTINCT` y los filtros que vinculan variables con relaciones hacen explícitas las condiciones de la traducción.
 
 ::: {.callout-warning title="Qué no afirma esta equivalencia"}
-No significa que **todo SQL moderno** sea equivalente a la lógica de primer orden o al álgebra relacional clásica. Agregación, recursión, ventanas y otras extensiones agregan construcciones que deben analizarse por separado. La igualdad anterior se refiere al fragmento especificado por el curso.
+La correspondencia no abarca **todo SQL**. Agregación, recursión, ventanas y otras extensiones requieren un análisis propio. Tampoco permite intercambiar sin revisión consultas con multiplicidades o `NULL` por expresiones de álgebra relacional clásica.
 :::
 
 ## Patrón base: selección, proyección y join
@@ -46,44 +66,44 @@ WHERE <condición>;
 
 puede verse algebraicamente como
 
-\[
+$$
 \pi_{\text{atributos}}
 \left(
 \sigma_{\text{condición}}
 (R_1\times\cdots\times R_k)
 \right),
-\]
+$$
 
-con renombramientos cuando sean necesarios. En lógica, el patrón correspondiente es una consulta conjuntiva:
+con renombramientos cuando sean necesarios. Si la condición es una conjunción de comparaciones, el patrón lógico es una consulta conjuntiva (con esas comparaciones):
 
-\[
+$$
 Q(\bar x)\leftarrow
 \exists\bar y.\;
-R_1\land\cdots\land R_k\land\theta.
-\]
+R_1(\bar t_1)\land\cdots\land R_k(\bar t_k)\land\theta.
+$$
 
-[@riveros2026-clase04]
+Aquí cada $R_i(\bar t_i)$ es un átomo relacional con sus variables y $\bar y$ reúne las variables que no se proyectan.
 
-### Ejemplo: estudiantes inscritos en IIC2413
+### Ejemplo: estudiantes inscritos en BD101
 
 **Lógica**
 
-\[
+$$
 Q(n)\leftarrow
 \exists r\exists c\exists s.\;
 Estudiante(r,n,c)\land
-Inscribe(r,\text{IIC2413},s).
-\]
+Inscribe(r,\text{BD101},s).
+$$
 
 **Álgebra**
 
-\[
+$$
 \pi_{nombre}
 \left(
 Estudiante\bowtie
-\sigma_{codigo=\text{IIC2413}}(Inscribe)
+\sigma_{codigo=\text{BD101}}(Inscribe)
 \right).
-\]
+$$
 
 **SQL**
 
@@ -92,16 +112,16 @@ SELECT DISTINCT E.nombre
 FROM Estudiante AS E
 JOIN Inscribe AS I
   ON E.rut = I.rut
-WHERE I.codigo = 'IIC2413';
+WHERE I.codigo = 'BD101';
 ```
 
 ## Patrón «existe»
 
 En lógica:
 
-\[
+$$
 \exists y.\;\varphi(x,y).
-\]
+$$
 
 En álgebra, suele corresponder a combinar con otra relación y proyectar los atributos de interés. En SQL, `EXISTS`, `IN` o un join pueden expresar la idea según el contexto.
 
@@ -121,9 +141,9 @@ WHERE EXISTS (
 
 La lógica usa negación de un existencial:
 
-\[
+$$
 \neg\exists y.\;\varphi(x,y).
-\]
+$$
 
 En álgebra aparece una diferencia o un anti-join. En SQL, el patrón más directo suele ser `NOT EXISTS`.
 
@@ -139,27 +159,25 @@ WHERE NOT EXISTS (
 );
 ```
 
-Álgebra:
+Álgebra, interpretando la salida como conjunto de nombres (con `DISTINCT` en SQL si se requiere eliminar duplicados):
 
-\[
-\pi_{codigo,nombre,creditos}(Curso)
-\triangleright
-Requisito.
-\]
+$$
+\pi_{nombre}(Curso\triangleright Requisito).
+$$
 
 ## Patrón «dos o más distintos»
 
-La Ayudantía 1 destaca que se necesitan **dos testigos distintos**. [@saavedra2026-ayudantia1]
+Para exigir al menos dos participantes se necesitan **dos testigos distintos**.
 
 Para cursos dictados por más de un profesor **en un mismo semestre**:
 
-\[
+$$
 \begin{aligned}
 Q(c)\leftarrow\;&
 \exists p_1\exists p_2\exists s.\\
 &Dicta(p_1,c,s)\land Dicta(p_2,c,s)\land\neg(p_1=p_2).
 \end{aligned}
-\]
+$$
 
 En álgebra se usan dos copias renombradas de `Dicta`; sin renombramiento, los atributos compartidos obligarían a igualar valores que queremos comparar como testigos diferentes.
 
@@ -178,18 +196,18 @@ JOIN Dicta AS D2
 
 Para condiciones que deben cumplirse ambas pero pueden tener testigos distintos, una estrategia es usar dos existenciales, dos `EXISTS` o una intersección.
 
-Ejemplo: estudiantes inscritos tanto en IIC2413 como en IIC2233:
+Ejemplo: estudiantes inscritos tanto en BD101 como en PROG201:
 
 ```sql
 SELECT E.nombre
 FROM Estudiante AS E
 WHERE EXISTS (
   SELECT 1 FROM Inscribe AS I
-  WHERE I.rut = E.rut AND I.codigo = 'IIC2413'
+  WHERE I.rut = E.rut AND I.codigo = 'BD101'
 )
 AND EXISTS (
   SELECT 1 FROM Inscribe AS I
-  WHERE I.rut = E.rut AND I.codigo = 'IIC2233'
+  WHERE I.rut = E.rut AND I.codigo = 'PROG201'
 );
 ```
 
@@ -197,21 +215,27 @@ AND EXISTS (
 
 La equivalencia
 
-\[
+$$
 \forall x.\varphi
 \equiv
 \neg\exists x.\neg\varphi
-\]
+$$
 
-sugiere buscar **ausencia de contraejemplos**. [@saavedra2026-ayudantia1]
+sugiere buscar **ausencia de contraejemplos**.
 
 Para una consulta del tipo «estudiantes que cumplen una condición para todos los cursos de un conjunto», la estructura lógica es:
 
-\[
+$$
 \neg\exists c.\;CursoObjetivo(c)\land\neg Cumple(estudiante,c).
-\]
+$$
 
-En álgebra, la Ayudantía señala que este patrón suele requerir diferencias anidadas y se relaciona con el operador de división. No desarrollaremos división como operador primitivo porque todavía no forma parte del núcleo definido en clase; el patrón de contraejemplo es suficiente para razonar las consultas actuales. [@saavedra2026-ayudantia1]
+En álgebra, el patrón puede expresarse con diferencias anidadas y está relacionado con la división. Sean $E(rut)$ los estudiantes candidatos, $C(codigo)$ los códigos objetivo e $I(rut,codigo)$ las inscripciones, todos bajo semántica de conjuntos. Entonces:
+
+$$
+E\setminus\pi_{rut}\bigl((E\times C)\setminus I\bigr)
+$$
+
+retiene los estudiantes inscritos en todos los códigos de $C$: el producto enumera las parejas requeridas, la diferencia interior encuentra las faltantes y la exterior descarta a quien tenga alguna. Si $C$ es vacío, todos los candidatos de $E$ cumplen la condición. Esta construcción desarrolla el patrón universal sin añadir división como operador primitivo.
 
 ## Equivalencia no significa igualdad sintáctica
 
@@ -221,16 +245,16 @@ Dos consultas pueden ser equivalentes aunque su forma sea muy distinta. Para dem
 2. que toda tupla del lado izquierdo pertenece al derecho;
 3. que toda tupla del lado derecho pertenece al izquierdo.
 
-La Ayudantía 1 propone explícitamente pruebas por doble contención o mediante un «si y solo si». [@saavedra2026-ayudantia1]
+La doble contención demuestra igualdad de conjuntos. También puede organizarse la prueba como una cadena de equivalencias de pertenencia para una tupla arbitraria.
 
 ::: {.callout-warning title="Duplicados al traducir SQL"}
-El álgebra del curso tiene semántica de conjuntos, mientras SQL permite duplicados. Una reescritura que es correcta en álgebra puede necesitar `DISTINCT` para conservar exactamente la misma salida observable en SQL. La Clase 04 advierte especialmente sobre este problema al desanidar consultas. [@riveros2026-clase04]
+El álgebra relacional tiene semántica de conjuntos, mientras SQL permite duplicados. Una reescritura que es correcta en álgebra puede necesitar `DISTINCT` para conservar exactamente la misma salida observable en SQL. Al desanidar, hay que distinguir repeticiones debidas a varios testigos de las debidas a filas distintas con los mismos valores proyectados; la página de [subconsultas](../sql/subconsultas.qmd#correlación-y-desanidamiento) desarrolla un ejemplo.
 :::
 
 ::: {.summary-box}
 ### Resumen
 
-- El fragmento relacional estudiado de SQL, el álgebra relacional y la lógica de primer orden independiente del dominio expresan las mismas consultas básicas.
+- El fragmento relacional de SQL definido aquí, el álgebra relacional y la lógica de primer orden independiente del dominio expresan las mismas consultas básicas.
 - `SELECT-FROM-WHERE` se interpreta naturalmente como proyección, selección y combinación de relaciones.
 - «Existe», «no existe», «dos distintos» y «para todos» son patrones reutilizables.
 - Las traducciones deben respetar atributos y, al pasar a SQL, también la semántica de duplicados.

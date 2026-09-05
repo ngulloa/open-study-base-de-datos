@@ -99,10 +99,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -132,6 +132,35 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -390,32 +419,38 @@ div.csl-indent {
 
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>Una aplicación que almacena datos necesita más que archivos: debe poder <strong>persistir</strong>, consultar, modificar y administrar información de manera controlada. Un sistema de manejo de bases de datos (DBMS) ofrece esa capa de software. Cuando el sistema organiza los datos mediante el modelo relacional, hablamos de un <strong>RDBMS</strong> (<em>Relational Database Management System</em>). La Clase 03 lo presenta como el motor encargado del almacenamiento, gestión y optimización del acceso a datos organizados en relaciones. <span class="citation" data-cites="riveros2026-clase03">(<a href="#ref-riveros2026-clase03" role="doc-biblioref">Riveros 2026b</a>)</span></p>
+<p>Una aplicación que almacena datos necesita más que archivos: debe poder <strong>persistir</strong>, consultar, modificar y administrar información de manera controlada. Un sistema de manejo de bases de datos (DBMS) ofrece esa capa de software. Cuando el sistema organiza los datos mediante el modelo relacional, hablamos de un <strong>RDBMS</strong> (<em>Relational Database Management System</em>). El motor administra el almacenamiento y el acceso a esos datos.</p>
 <p>La idea central es separar dos responsabilidades:</p>
 <ul>
 <li>el usuario o la aplicación declara qué datos quiere almacenar, modificar o consultar;</li>
 <li>el motor decide cómo ejecutar esas acciones sobre el almacenamiento físico.</li>
 </ul>
 <p>Esta separación permite trabajar con una representación lógica estable aunque cambie la implementación interna del sistema. Es una de las ideas fundamentales de los sistemas de bases de datos modernos. <span class="citation" data-cites="abiteboul1995 silberschatz2020 ramakrishnan2003">(<a href="#ref-abiteboul1995" role="doc-biblioref">Abiteboul et&nbsp;al. 1995</a>; <a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>; <a href="#ref-ramakrishnan2003" role="doc-biblioref">Ramakrishnan y Gehrke 2003</a>)</span></p>
-<div class="callout callout-style-default callout-note callout-titled" title="Definición del curso">
+<div class="callout callout-style-default callout-note callout-titled" title="Definición">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Definición del curso
+<span class="screen-reader-only">Nota</span>Definición
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Un <strong>RDBMS</strong> es un software —el motor de bases de datos— encargado del almacenamiento, gestión y optimización del acceso a datos organizados en relaciones. <span class="citation" data-cites="riveros2026-clase03">(<a href="#ref-riveros2026-clase03" role="doc-biblioref">Riveros 2026b</a>)</span></p>
+<p>Un <strong>RDBMS</strong> es un software —el motor de bases de datos— encargado del almacenamiento, gestión y optimización del acceso a datos organizados en relaciones.</p>
 </div>
 </div>
 </section>
 <section id="rdbms-relaciones-y-sql" class="level2">
 <h2 class="anchored" data-anchor-id="rdbms-relaciones-y-sql">RDBMS, relaciones y SQL</h2>
-<p>En el curso, SQL se introduce como el <strong>lenguaje de acciones al RDBMS</strong>. El usuario envía una instrucción SQL y el motor produce o modifica relaciones según corresponda. <span class="citation" data-cites="riveros2026-clase03">(<a href="#ref-riveros2026-clase03" role="doc-biblioref">Riveros 2026b</a>)</span></p>
+<p>SQL permite <strong>definir, consultar y modificar datos</strong>, además de administrar permisos en un RDBMS. El usuario envía una instrucción SQL y el motor produce o modifica relaciones según corresponda.</p>
 <p>Una vista simplificada es:</p>
-<p>[ . ]</p>
+<p><span class="math display">\[
+\text{usuario/aplicación}
+\xrightarrow{\text{SQL}}
+\text{RDBMS}
+\xrightarrow{\text{gestiona}}
+\text{datos relacionales}.
+\]</span></p>
 <p>Esto conecta tres niveles que se desarrollan en páginas distintas:</p>
 <ol type="1">
 <li>el <a href="../fundamentos/modelo-relacional.html">modelo relacional</a>, que define qué son las relaciones y los esquemas;</li>
@@ -425,7 +460,7 @@ div.csl-indent {
 </section>
 <section id="lenguajes-dentro-de-sql" class="level2">
 <h2 class="anchored" data-anchor-id="lenguajes-dentro-de-sql">Lenguajes dentro de SQL</h2>
-<p>La Clase 03 distingue varios sublenguajes. <span class="citation" data-cites="riveros2026-clase03">(<a href="#ref-riveros2026-clase03" role="doc-biblioref">Riveros 2026b</a>)</span></p>
+<p>Las instrucciones SQL pueden agruparse por su propósito:</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -457,30 +492,30 @@ div.csl-indent {
 </tr>
 </tbody>
 </table>
-<p>Esta clasificación es útil pedagógicamente, aunque la frontera entre DML y DQL no siempre se trata igual en toda la literatura. En este sitio mantendremos la clasificación usada en el curso.</p>
+<p>Esta clasificación es útil pedagógicamente, aunque la frontera entre DML y DQL no siempre se trata igual en toda la literatura. Como convención pedagógica del sitio, distinguiremos DQL para las consultas y DML para las modificaciones.</p>
 </section>
 <section id="arquitecturas-de-aplicación" class="level2">
 <h2 class="anchored" data-anchor-id="arquitecturas-de-aplicación">Arquitecturas de aplicación</h2>
-<p>El material del curso menciona arquitecturas <strong>cliente-servidor</strong> y <strong>tres niveles</strong> como ejemplos del uso de un RDBMS. <span class="citation" data-cites="riveros2026-clase03">(<a href="#ref-riveros2026-clase03" role="doc-biblioref">Riveros 2026b</a>)</span> Por ahora basta con la intuición:</p>
+<p>Un RDBMS puede integrarse en arquitecturas <strong>cliente-servidor</strong> o de <strong>tres niveles</strong>:</p>
 <ul>
 <li>en cliente-servidor, una aplicación se conecta a un servidor de bases de datos;</li>
 <li>en una arquitectura de tres niveles, una capa intermedia contiene la lógica de aplicación y se comunica con la base de datos.</li>
 </ul>
-<p>La conexión de aplicaciones mediante drivers y cursores aparece en el programa, pero todavía no hay material suficiente del curso para desarrollarla como página propia. <span class="citation" data-cites="riveros2026-programa">(<a href="#ref-riveros2026-programa" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>Las aplicaciones se comunican con el motor mediante interfaces o drivers. Un cursor permite recorrer los resultados de una consulta desde el programa cliente.</p>
 </section>
 <section id="sql-es-declarativo" class="level2">
 <h2 class="anchored" data-anchor-id="sql-es-declarativo">SQL es declarativo</h2>
-<p>Una consulta SQL expresa <strong>qué resultado</strong> se busca, no el algoritmo exacto para obtenerlo. La Clase 04 resume esta idea señalando que el RDBMS transforma la consulta en un algoritmo eficiente. <span class="citation" data-cites="riveros2026-clase04">(<a href="#ref-riveros2026-clase04" role="doc-biblioref">Riveros 2026c</a>)</span></p>
+<p>Una consulta SQL expresa <strong>qué resultado</strong> se busca, no el algoritmo exacto para obtenerlo. El RDBMS transforma la consulta en un plan de ejecución y busca estrategias eficientes para evaluarla.</p>
 <p>Por ejemplo:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> nombre</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Estudiante</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> carrera <span class="op">=</span> <span class="st">'Computación'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>La consulta no especifica si el motor debe recorrer todas las filas, usar un índice o aplicar otra estrategia. Esas decisiones pertenecen al procesamiento y optimización de consultas, una unidad posterior del curso.</p>
+<p>La consulta no especifica si el motor debe recorrer todas las filas, usar un índice o aplicar otra estrategia. Esas decisiones pertenecen al procesamiento y la optimización de consultas.</p>
 <section id="resumen" class="level3 summary-box">
 <h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
 <ul>
 <li>Un DBMS administra datos persistentes; un <strong>RDBMS</strong> lo hace usando el modelo relacional.</li>
-<li>SQL es el lenguaje principal para interactuar con un RDBMS en este curso.</li>
+<li>SQL es el lenguaje principal para interactuar con un RDBMS en los ejemplos del sitio.</li>
 <li>El usuario declara operaciones lógicas; el motor se ocupa de su ejecución.</li>
 <li>DDL, DML y DQL separan, pedagógicamente, definición de esquema, modificación y consulta.</li>
 </ul>
@@ -504,15 +539,6 @@ Abiteboul, Serge, Richard Hull, y Victor Vianu. 1995. <em>Foundations of Databas
 </div>
 <div id="ref-ramakrishnan2003" class="csl-entry" role="listitem">
 Ramakrishnan, Raghu, y Johannes Gehrke. 2003. <em>Database Management Systems</em>. 3.ª ed. McGraw-Hill.
-</div>
-<div id="ref-riveros2026-programa" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026a. <em>Programa de Curso: IIC2413 – Bases de Datos, Sección 3</em>.
-</div>
-<div id="ref-riveros2026-clase03" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026b. <em>SQL (Parte I)</em>.
-</div>
-<div id="ref-riveros2026-clase04" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026c. <em>SQL (Parte II)</em>.
 </div>
 <div id="ref-silberschatz2020" class="csl-entry" role="listitem">
 Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System Concepts</em>. 7.ª ed. McGraw-Hill Education.
@@ -939,7 +965,7 @@ Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

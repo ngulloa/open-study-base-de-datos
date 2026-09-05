@@ -5,14 +5,14 @@ description: "Motivación del diseño relacional, anomalías, dependencias funci
 
 ## Intuición: por qué diseñar relaciones
 
-Una base de datos puede almacenar información correcta y aun así tener un **mal esquema**. La Clase 07 parte de una pregunta de diseño: ¿conviene almacenar todo en una sola relación o fragmentarlo en muchas relaciones pequeñas? Ninguno de los extremos es correcto por sí mismo. [@riveros2026-clase07]
+Una base de datos puede almacenar información correcta y aun así tener un **mal esquema**. Esto plantea una pregunta de diseño: ¿conviene almacenar todo en una sola relación o fragmentarlo en muchas relaciones pequeñas? Ninguno de los extremos es correcto por sí mismo.
 
 El objetivo es diseñar un esquema que favorezca:
 
 - integridad y consistencia de los datos;
 - representación precisa del dominio;
 - eficiencia en tiempo y espacio;
-- flexibilidad frente a cambios. [@riveros2026-clase07]
+- flexibilidad frente a cambios.
 
 ## Redundancia y anomalías
 
@@ -21,113 +21,113 @@ Consideremos una relación deliberadamente redundante:
 ::: {.table-responsive}
 | rut | estudiante | carrera | codigo | curso | creditos | semestre |
 |---|---|---|---|---|---:|---|
-| r2 | Ben | Computación | IIC2233 | Programación Avanzada | 10 | 2025-1 |
-| r2 | Ben | Computación | IIC2413 | Bases de Datos | 10 | 2025-2 |
-| r3 | Zoe | Computación | IIC2233 | Programación Avanzada | 10 | 2024-2 |
-| r3 | Zoe | Computación | IIC2413 | Bases de Datos | 10 | 2025-2 |
+| r2 | Ben | Computación | PROG201 | Programación Avanzada | 10 | 2025-1 |
+| r2 | Ben | Computación | BD101 | Bases de Datos | 10 | 2025-2 |
+| r3 | Zoe | Computación | PROG201 | Programación Avanzada | 10 | 2024-2 |
+| r3 | Zoe | Computación | BD101 | Bases de Datos | 10 | 2025-2 |
 :::
 
 La carrera de Ben se repite; también el nombre y créditos de cada curso.
 
-La Clase 07 presenta tres anomalías clásicas asociadas a redundancia. [@riveros2026-clase07; @silberschatz2020]
+La redundancia puede producir tres anomalías clásicas. [@silberschatz2020]
 
 ### Anomalía de actualización
 
-Si `IIC2413` cambia su nombre, hay que modificar varias filas. Si una queda sin actualizar, la relación pasa a afirmar dos nombres distintos para el mismo código.
+Si `BD101` cambia su nombre, hay que modificar varias filas. Si una queda sin actualizar, la relación pasa a afirmar dos nombres distintos para el mismo código.
 
 ### Anomalía de eliminación
 
-Si eliminamos la última inscripción de cierto curso y los datos del curso solo existen dentro de esta relación, podemos perder accidentalmente el nombre y sus créditos.
+Si eliminamos la última inscripción de cierto curso y sus datos solo existen dentro de esta relación, podemos perder accidentalmente el nombre y sus créditos.
 
 ### Anomalía de inserción
 
 Si queremos registrar un curso nuevo antes de que tenga estudiantes inscritos, el esquema combinado puede obligarnos a inventar datos de inscripción o usar nulos innecesarios.
 
-El ejemplo oficial de Clase 07 muestra los mismos fenómenos con una relación `Movies`. Lo importante no es el dominio concreto, sino que la repetición proviene de **dependencias entre atributos**. [@riveros2026-clase07]
+Estas anomalías también pueden aparecer en otros dominios, como un catálogo de películas que repite datos de cada estudio productor. Su causa común es almacenar repetidamente información determinada por **dependencias entre atributos**.
 
 ## Dependencias funcionales
 
-Sea \(R\) una relación nombrada y sean \(\bar A\) y \(\bar B\) listas de atributos de \(R\).
+Sea $R$ una relación nombrada y sean $\bar A$ y $\bar B$ listas de atributos distintos de $R$. En el razonamiento con dependencias importa su conjunto de atributos, no el orden. Escribiremos $\{\bar A\}$ para ese conjunto; el complemento se toma dentro de $att(R)$.
 
 ::: {.callout-note title="Definición formal"}
 Una dependencia funcional tiene la forma
 
-\[
+$$
 \bar A\to\bar B.
-\]
+$$
 
-La relación \(R\) **satisface** esa dependencia, escrito
+La relación $R$ **satisface** esa dependencia, escrito
 
-\[
+$$
 R\models\bar A\to\bar B,
-\]
+$$
 
-si para todas \(\bar\tau_1,\bar\tau_2\in R\):
+si para todas $\bar\tau_1,\bar\tau_2\in R$:
 
-\[
+$$
 \pi_{\bar A}(\bar\tau_1)=\pi_{\bar A}(\bar\tau_2)
 \quad\Longrightarrow\quad
 \pi_{\bar B}(\bar\tau_1)=\pi_{\bar B}(\bar\tau_2).
-\]
+$$
 
-[@riveros2026-clase07; @arenas2022]
+[@arenas2022]
 :::
 
-Intuitivamente: **si dos tuplas coinciden en \(\bar A\), entonces deben coincidir en \(\bar B\)**.
+Intuitivamente: **si dos tuplas coinciden en $\bar A$, entonces deben coincidir en $\bar B$**.
 
 ## Dependencias del dominio universitario
 
 En el esquema acordado, son naturales restricciones como:
 
-\[
+$$
 rut\to nombre\ carrera
-\]
+$$
 
 para `Estudiante`,
 
-\[
+$$
 codigo\to nombre\ creditos
-\]
+$$
 
 para `Curso`, y
 
-\[
+$$
 pid\to nombre\ departamento
-\]
+$$
 
 para `Profesor`.
 
 Estas dependencias no se justifican porque «casualmente» la instancia actual tenga valores distintos. Representan reglas del **dominio**: un RUT identifica los datos de un estudiante; un código identifica la información de un curso; un PID identifica un profesor.
 
 ::: {.callout-warning title="Instancia versus restricción del dominio"}
-La Clase 07 enfatiza que una dependencia funcional no debe inferirse solo observando una instancia. Una tabla pequeña puede satisfacer accidentalmente muchas dependencias que dejarían de cumplirse al insertar nuevos datos. Las dependencias relevantes para diseño son restricciones que el dominio pretende mantener. [@riveros2026-clase07]
+Una dependencia funcional no debe inferirse solo observando una instancia. Una tabla pequeña puede satisfacer accidentalmente muchas dependencias que dejarían de cumplirse al insertar nuevos datos. Las dependencias relevantes para diseño son restricciones que el dominio pretende mantener.
 :::
 
 ## Dependencias triviales
 
 Una dependencia
 
-\[
+$$
 \bar A\to\bar B
-\]
+$$
 
-es **trivial** cuando los atributos de \(\bar B\) ya están contenidos en \(\bar A\). En ese caso siempre se satisface, porque dos tuplas que coinciden en \(\bar A\) necesariamente coinciden en cualquier subconjunto de esos atributos. [@riveros2026-clase07]
+es **trivial** cuando los atributos de $\bar B$ ya están contenidos en $\bar A$. En ese caso siempre se satisface, porque dos tuplas que coinciden en $\bar A$ necesariamente coinciden en cualquier subconjunto de esos atributos.
 
 ## Superllaves
 
-::: {.callout-note title="Definición del curso"}
-Sea \(\bar A^c\) el complemento de los atributos \(\bar A\) dentro de \(R\). \(\bar A\) es una **superllave** de \(R\) si y solo si
+::: {.callout-note title="Superllave de una instancia"}
+Sea $\bar A^c$ el complemento de los atributos $\bar A$ dentro de $R$. $\bar A$ es una **superllave** de $R$ si y solo si
 
-\[
+$$
 R\models\bar A\to\bar A^c.
-\]
+$$
 
-Es decir, \(\bar A\) determina todos los demás atributos. [@riveros2026-clase07]
+Es decir, $\bar A$ determina todos los demás atributos.
 :::
 
-Equivalentemente, la Clase 07 demuestra la caracterización:
+Equivalentemente:
 
-\[
+$$
 \bar A\text{ es superllave}
 \iff
 \forall\bar\tau_1,\bar\tau_2\in R,
@@ -135,31 +135,31 @@ Equivalentemente, la Clase 07 demuestra la caracterización:
 \pi_{\bar A}(\bar\tau_1)=\pi_{\bar A}(\bar\tau_2)
 \Rightarrow
 \bar\tau_1=\bar\tau_2.
-\]
+$$
 
-Por tanto, una superllave identifica unívocamente cada tupla.
+Por tanto, una superllave identifica unívocamente cada tupla de la instancia. En diseño, $\bar A$ es una **superllave bajo $F$** si lo hace en toda relación que satisface las dependencias $F$, es decir, si $F\models\bar A\to att(R)$. La [clausura](implicacion-clausura.qmd) permite comprobar esta propiedad del esquema.
 
 ## Llaves
 
 Una **llave** es una superllave **minimal**:
 
-1. \(\bar A\) es superllave;
-2. ningún subconjunto propio de sus atributos sigue siendo superllave. [@riveros2026-clase07]
+1. $\bar A$ es superllave;
+2. ningún subconjunto propio de sus atributos sigue siendo superllave.
 
-Para `Estudiante(rut,nombre,carrera)`, si el dominio garantiza que cada estudiante tiene un único RUT, entonces:
+Para `Estudiante(rut,nombre,carrera)`, supongamos que `rut` identifica unívocamente a cada estudiante y que ni `nombre` ni `carrera`, solos o combinados, garantizan esa identificación. Entonces:
 
 - `rut` es llave;
 - `rut nombre` es superllave, pero no llave, porque contiene una superllave más pequeña.
 
-Para `Inscribe(rut,codigo,semestre)`, **si el dominio garantiza** a lo sumo una inscripción por estudiante, curso y semestre, el conjunto de los tres atributos puede declararse como llave. Esta es una decisión de modelamiento que debe confirmarse con los requisitos del dominio.
+Para `Inscribe(rut,codigo,semestre)`, **si el dominio garantiza** a lo sumo una inscripción por estudiante, curso y semestre, el conjunto de los tres atributos identifica una inscripción. Para que sea una llave candidata, además ningún subconjunto propio debe garantizar esa identificación. Esta es una decisión de modelamiento que debe confirmarse con los requisitos del dominio.
 
 ::: {.callout-note title="Terminología"}
-La diapositiva de Clase 07 muestra «superset key» como traducción inglesa de superllave. La terminología estándar de la bibliografía es **superkey**, que es la que usaremos en el sitio. [@silberschatz2020; @ramakrishnan2003]
+El término inglés para superllave es **superkey**. Una llave minimal también se llama **llave candidata** (*candidate key*). [@silberschatz2020; @ramakrishnan2003]
 :::
 
 ## Llaves en SQL
 
-El curso presenta la sintaxis:
+En SQL, una llave primaria se declara así:
 
 ```sql
 CREATE TABLE Estudiante (
@@ -181,7 +181,7 @@ CREATE TABLE Inscribe (
 );
 ```
 
-`PRIMARY KEY` declara una llave primaria elegida para la tabla. La teoría puede admitir más de una llave candidata; SQL distingue cuál se declara como primaria. [@riveros2026-clase07; @silberschatz2020]
+`PRIMARY KEY` declara una llave primaria elegida para la tabla. La teoría puede admitir más de una llave candidata; SQL distingue cuál se declara como primaria. [@silberschatz2020]
 
 ## Qué problema resolvimos y cuál falta
 
@@ -197,7 +197,7 @@ Estas preguntas conducen a [implicación y clausura](implicacion-clausura.qmd) y
 ### Resumen
 
 - La redundancia puede producir anomalías de actualización, eliminación e inserción.
-- Una dependencia funcional \(\bar A\to\bar B\) exige que coincidencia en \(\bar A\) implique coincidencia en \(\bar B\).
+- Una dependencia funcional $\bar A\to\bar B$ exige que coincidencia en $\bar A$ implique coincidencia en $\bar B$.
 - Las dependencias relevantes son restricciones del dominio, no coincidencias accidentales de una instancia.
 - Una superllave determina todos los atributos; una llave es una superllave minimal.
 - `PRIMARY KEY` materializa en SQL una llave elegida para la tabla.

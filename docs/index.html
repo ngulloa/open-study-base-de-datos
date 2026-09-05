@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Sitio de estudio conceptual para IIC2413">
+<meta name="description" content="Material académico autónomo sobre el modelo relacional, consultas, SQL y diseño de bases de datos.">
 
 <title>Bases de Datos</title>
 <style>
@@ -63,10 +63,10 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -319,7 +319,7 @@ div.csl-indent {
 
 <div>
   <div class="description">
-    Sitio de estudio conceptual para IIC2413
+    Material académico autónomo sobre el modelo relacional, consultas, SQL y diseño de bases de datos.
   </div>
 </div>
 
@@ -338,21 +338,11 @@ div.csl-indent {
 
 <section id="modelo-relacional-consultas-sql-y-diseño" class="level2 hero-db">
 <h2 class="anchored" data-anchor-id="modelo-relacional-consultas-sql-y-diseño">Modelo relacional, consultas, SQL y diseño</h2>
-<p>Este sitio organiza el material disponible de <strong>IIC2413 — Bases de Datos</strong> por conceptos. La prioridad editorial es mantener las definiciones y convenciones del curso, y utilizar bibliografía académica para formalizar y profundizar cuando aporta claridad. <span class="citation" data-cites="riveros2026-programa">(<a href="#ref-riveros2026-programa" role="doc-biblioref">Riveros 2026</a>)</span></p>
-<p>La primera versión cubre el material desarrollado hasta dependencias funcionales y descomposiciones. Temas anunciados en el programa pero todavía no desarrollados en el material del curso —como formas normales, E/R, procesamiento de consultas o transacciones— no se adelantan artificialmente.</p>
-</section>
-<section id="ejemplo-transversal" class="level2">
-<h2 class="anchored" data-anchor-id="ejemplo-transversal">Ejemplo transversal</h2>
-<p>La mayor parte del sitio utiliza un dominio universitario común:</p>
-<div class="schema-box">
-<p><strong>Estudiante</strong>(<code>rut</code>, <code>nombre</code>, <code>carrera</code>)<br>
-<strong>Curso</strong>(<code>codigo</code>, <code>nombre</code>, <code>creditos</code>)<br>
-<strong>Profesor</strong>(<code>pid</code>, <code>nombre</code>, <code>departamento</code>)<br>
-<strong>Inscribe</strong>(<code>rut</code>, <code>codigo</code>, <code>semestre</code>)<br>
-<strong>Dicta</strong>(<code>pid</code>, <code>codigo</code>, <code>semestre</code>)<br>
-<strong>Requisito</strong>(<code>codigo</code>, <code>prerrequisito</code>)</p>
+<p>Este sitio presenta las bases conceptuales y prácticas de las <strong>bases de datos relacionales</strong>. Combina definiciones matemáticas, ejemplos y consultas SQL para estudiar cómo se representa la información, cómo se consulta y cómo se diseña un esquema.</p>
+<div class="hero-actions">
+<p><a href="./fundamentos/sistemas-rdbms.html" class="btn btn-primary">Comenzar a estudiar</a> <a href="#mapa-de-contenidos" class="btn btn-outline-primary">Explorar los temas</a></p>
 </div>
-<p>Los ejemplos oficiales del curso se conservan cuando son necesarios para explicar fielmente una definición, una advertencia o un argumento.</p>
+<p>El recorrido comprende el modelo relacional, la lógica y el álgebra de consultas, SQL, la información incompleta y el diseño mediante dependencias funcionales y descomposiciones. Las páginas se pueden leer en ese orden o consultar por concepto; cada una incluye ejemplos, un resumen y enlaces a los conocimientos relacionados.</p>
 </section>
 <section id="mapa-de-contenidos" class="level2">
 <h2 class="anchored" data-anchor-id="mapa-de-contenidos">Mapa de contenidos</h2>
@@ -384,12 +374,25 @@ div.csl-indent {
 </section>
 </div>
 </section>
+<section id="ejemplo-transversal" class="level2">
+<h2 class="anchored" data-anchor-id="ejemplo-transversal">Ejemplo transversal</h2>
+<p>La mayor parte del sitio utiliza un dominio universitario común:</p>
+<div class="schema-box">
+<p><strong>Estudiante</strong>(<code>rut</code>, <code>nombre</code>, <code>carrera</code>)<br>
+<strong>Curso</strong>(<code>codigo</code>, <code>nombre</code>, <code>creditos</code>)<br>
+<strong>Profesor</strong>(<code>pid</code>, <code>nombre</code>, <code>departamento</code>)<br>
+<strong>Inscribe</strong>(<code>rut</code>, <code>codigo</code>, <code>semestre</code>)<br>
+<strong>Dicta</strong>(<code>pid</code>, <code>codigo</code>, <code>semestre</code>)<br>
+<strong>Requisito</strong>(<code>codigo</code>, <code>prerrequisito</code>)</p>
+</div>
+<p>Los datos son ficticios. Usaremos <code>BD101</code> para Bases de Datos, <code>PROG101</code> para Introducción a Programación y <code>PROG201</code> para Programación Avanzada. Los identificadores <code>r1</code>, <code>r2</code>, etc., representan RUT simplificados; <code>p1</code>, <code>p2</code>, etc., identifican profesores ficticios. Cada ejemplo explicita las restricciones del dominio que necesita.</p>
+</section>
 <section id="convenciones-editoriales" class="level2">
 <h2 class="anchored" data-anchor-id="convenciones-editoriales">Convenciones editoriales</h2>
 <ul>
-<li>La notación del curso tiene prioridad; cuando existe una ambigüedad, se explicita.</li>
+<li>Las convenciones de notación se definen en el sitio: distinguimos aridades posicionales de conjuntos de atributos y explicitamos el dominio de evaluación de las consultas.</li>
 <li>SQL se presenta como lenguaje real con semántica de duplicados y particularidades de motor, distinguiéndolo del modelo de conjuntos del álgebra relacional.</li>
-<li>Las definiciones formales, teoremas y propiedades importantes se contrastan con bibliografía de teoría y sistemas de bases de datos. <span class="citation" data-cites="arenas2022 abiteboul1995 garciamolina2009 silberschatz2020 ramakrishnan2003">(<a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>; <a href="#ref-abiteboul1995" role="doc-biblioref">Abiteboul et&nbsp;al. 1995</a>; <a href="#ref-garciamolina2009" role="doc-biblioref">Garcia-Molina et&nbsp;al. 2009</a>; <a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>; <a href="#ref-ramakrishnan2003" role="doc-biblioref">Ramakrishnan y Gehrke 2003</a>)</span></li>
+<li>La bibliografía principal reúne obras de teoría y sistemas de bases de datos para fundamentar los conceptos y ampliar su estudio. <span class="citation" data-cites="arenas2022 abiteboul1995 garciamolina2009 silberschatz2020 ramakrishnan2003">(<a href="#ref-arenas2022" role="doc-biblioref">Arenas et&nbsp;al. 2022</a>; <a href="#ref-abiteboul1995" role="doc-biblioref">Abiteboul et&nbsp;al. 1995</a>; <a href="#ref-garciamolina2009" role="doc-biblioref">Garcia-Molina et&nbsp;al. 2009</a>; <a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>; <a href="#ref-ramakrishnan2003" role="doc-biblioref">Ramakrishnan y Gehrke 2003</a>)</span></li>
 <li>Una definición se desarrolla en su página principal y, en el resto del sitio, se enlaza en vez de repetirse extensamente.</li>
 </ul>
 
@@ -402,16 +405,13 @@ div.csl-indent {
 Abiteboul, Serge, Richard Hull, y Victor Vianu. 1995. <em>Foundations of Databases</em>. Addison-Wesley.
 </div>
 <div id="ref-arenas2022" class="csl-entry" role="listitem">
-Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>.
+Arenas, Marcelo, Pablo Barceló, Leonid Libkin, Wim Martens, y Andreas Pieris. 2022. <em>Database Theory: Querying Data</em>. <a href="https://github.com/pdm-book/community">https://github.com/pdm-book/community</a>.
 </div>
 <div id="ref-garciamolina2009" class="csl-entry" role="listitem">
 Garcia-Molina, Hector, Jeffrey D. Ullman, y Jennifer Widom. 2009. <em>Database Systems: The Complete Book</em>. 2.ª ed. Pearson Prentice Hall.
 </div>
 <div id="ref-ramakrishnan2003" class="csl-entry" role="listitem">
 Ramakrishnan, Raghu, y Johannes Gehrke. 2003. <em>Database Management Systems</em>. 3.ª ed. McGraw-Hill.
-</div>
-<div id="ref-riveros2026-programa" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026. <em>Programa de Curso: IIC2413 – Bases de Datos, Sección 3</em>.
 </div>
 <div id="ref-silberschatz2020" class="csl-entry" role="listitem">
 Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System Concepts</em>. 7.ª ed. McGraw-Hill Education.
@@ -835,7 +835,7 @@ Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

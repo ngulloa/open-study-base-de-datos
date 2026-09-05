@@ -63,12 +63,14 @@ website:
           - href: diseno/descomposiciones.qmd
             text: Descomposiciones y pérdida de información
   page-footer:
-    left: "IIC2413 · Bases de Datos"
+    left: "Bases de Datos · Estudio por conceptos"
     right: "Sitio de estudio construido con Quarto"
 
 format:
   html:
-    theme: cosmo
+    theme:
+      - cosmo
+      - theme.scss
     css: styles.css
     toc: true
     toc-depth: 3
@@ -78,4 +80,3 @@ format:
     html-math-method: mathjax
     link-external-newwindow: true
     smooth-scroll: true
-

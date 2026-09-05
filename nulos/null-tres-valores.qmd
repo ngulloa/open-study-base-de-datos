@@ -5,7 +5,7 @@ description: "Semántica de NULL en SQL, UNKNOWN, tablas de verdad y consecuenci
 
 ## Intuición y concepto
 
-En una base de datos real puede faltar información. SQL usa `NULL` como marcador especial para representar situaciones que suelen interpretarse como «desconocido» o «no aplicable». La Clase 06 advierte inmediatamente que estas interpretaciones no son idénticas y pregunta cuál es realmente la semántica de `NULL`. [@riveros2026-clase06]
+En una base de datos real puede faltar información. SQL usa `NULL` como marcador especial para representar situaciones que suelen interpretarse como «desconocido» o «no aplicable». Estas interpretaciones son distintas en el dominio de una aplicación, aunque SQL usa el mismo marcador. Para razonar sobre consultas debemos conocer sus reglas de evaluación.
 
 Por eso, `NULL` no debe tratarse como una constante ordinaria. En particular:
 
@@ -40,7 +40,7 @@ FROM Profesor
 WHERE departamento IS NOT NULL;
 ```
 
-No se debe reemplazar `IS NULL` por `= NULL`. [@riveros2026-clase06]
+No se debe reemplazar `IS NULL` por `= NULL`.
 
 ## Evitar nulos cuando el dominio no los necesita
 
@@ -54,21 +54,21 @@ CREATE TABLE Profesor (
 );
 ```
 
-`NOT NULL` prohíbe el marcador en una columna. La decisión debe responder al significado del dato: si un valor es obligatorio en el dominio, permitir `NULL` crea estados que luego deben manejar todas las consultas. [@riveros2026-clase06]
+`NOT NULL` prohíbe el marcador en una columna. La decisión debe responder al significado del dato: si un valor es obligatorio en el dominio, permitir `NULL` crea estados que luego deben manejar todas las consultas.
 
 ## Lógica de tres valores
 
 Con `NULL`, SQL no usa únicamente `TRUE` y `FALSE`. Introduce un tercer valor lógico:
 
-\[
-UNKNOWN.
-\]
+$$
+\texttt{UNKNOWN}.
+$$
 
-La Clase 06 define las comparaciones ordinarias con `NULL` como `UNKNOWN`, salvo predicados especiales como `IS NULL`. [@riveros2026-clase06]
+Las comparaciones ordinarias con `NULL` producen `UNKNOWN`. Los predicados especiales como `IS NULL` permiten preguntar directamente por el marcador.
 
 ### `NOT`
 
-| \(p\) | `NOT p` |
+| $p$ | `NOT p` |
 |---|---|
 | `TRUE` | `FALSE` |
 | `FALSE` | `TRUE` |
@@ -90,27 +90,27 @@ La Clase 06 define las comparaciones ordinarias con `NULL` como `UNKNOWN`, salvo
 | **`UNKNOWN`** | `TRUE` | `UNKNOWN` | `UNKNOWN` |
 | **`FALSE`** | `TRUE` | `UNKNOWN` | `FALSE` |
 
-Estas tablas explican resultados que serían imposibles bajo lógica clásica. [@riveros2026-clase06; @ramakrishnan2003]
+Estas tablas explican resultados que serían imposibles bajo lógica clásica. [@ramakrishnan2003]
 
 ## Operaciones y comparaciones
 
-La regla pedagógica presentada en clase es:
+Para resumir la propagación del marcador, escribimos:
 
-\[
-NULL\ \circledast\ a
+$$
+\texttt{NULL}\ \circledast\ a
 =
-NULL
-\]
+\texttt{NULL}
+$$
 
 para muchas operaciones ordinarias, y
 
-\[
-NULL\sim a
+$$
+\texttt{NULL}\sim a
 =
-UNKNOWN
-\]
+\texttt{UNKNOWN}
+$$
 
-para comparaciones ordinarias. [@riveros2026-clase06]
+para comparaciones ordinarias.
 
 Por ejemplo:
 
@@ -125,8 +125,8 @@ Hay excepciones definidas por operadores o funciones específicos; no conviene e
 
 ## Semántica de `WHERE`
 
-::: {.callout-note title="Regla clave del curso"}
-Una fila pasa el filtro `WHERE` **si y solo si** la condición se evalúa como `TRUE`. Tanto `FALSE` como `UNKNOWN` quedan fuera del resultado. [@riveros2026-clase06]
+::: {.callout-note title="Regla de filtrado"}
+Una fila pasa el filtro `WHERE` **si y solo si** la condición se evalúa como `TRUE`. Tanto `FALSE` como `UNKNOWN` quedan fuera del resultado.
 :::
 
 Esto explica por qué una aparente tautología clásica puede fallar:
@@ -140,26 +140,26 @@ WHERE departamento = 'Computación'
 
 Si `departamento` es `NULL`, ambas comparaciones son `UNKNOWN`:
 
-\[
-UNKNOWN\lor UNKNOWN=UNKNOWN,
-\]
+$$
+\texttt{UNKNOWN}\lor \texttt{UNKNOWN}=\texttt{UNKNOWN},
+$$
 
 y la fila no pasa `WHERE`.
 
 ## El problema de `NOT IN`
 
-La Clase 06 muestra un caso oficial en que una subconsulta usada por `NOT IN` contiene `NULL`. Para un valor \(x\) distinto de las constantes conocidas:
+Supongamos que una subconsulta produce los valores `NULL` y `10`. Para un valor conocido $x$ distinto de $10$:
 
-\[
+$$
 \begin{aligned}
-x\;NOT\ IN\;\{NULL,1610\}
-&=NOT(x=NULL\lor x=1610)\\
-&=NOT(UNKNOWN\lor FALSE)\\
-&=UNKNOWN.
+x\;\texttt{NOT}\ \texttt{IN}\;\{\texttt{NULL},10\}
+&=\texttt{NOT}(x=\texttt{NULL}\lor x=10)\\
+&=\texttt{NOT}(\texttt{UNKNOWN}\lor \texttt{FALSE})\\
+&=\texttt{UNKNOWN}.
 \end{aligned}
-\]
+$$
 
-Como `WHERE` solo conserva `TRUE`, el resultado puede ser vacío. [@riveros2026-clase06]
+Como `WHERE` solo conserva `TRUE`, el resultado puede ser vacío.
 
 ::: {.callout-warning title="Patrón seguro para ausencia"}
 Si la intención es «no existe una fila relacionada», `NOT EXISTS` suele ser una formulación más directa y evita que un `NULL` en la columna de comparación de la subconsulta contamine un `NOT IN`.
@@ -167,7 +167,7 @@ Si la intención es «no existe una fila relacionada», `NOT EXISTS` suele ser u
 
 ## `NULL` y agregación
 
-La Clase 05 muestra que:
+La diferencia entre contar filas y contar valores conocidos se observa en:
 
 ```sql
 COUNT(*)
@@ -179,13 +179,13 @@ cuenta filas, mientras
 COUNT(departamento)
 ```
 
-no cuenta las filas donde `departamento` es `NULL`. [@riveros2026-clase05]
+no cuenta las filas donde `departamento` es `NULL`.
 
-Otros agregados también tienen reglas respecto de `NULL`; para esta primera versión nos limitamos a la distinción explícitamente trabajada en el curso.
+`SUM`, `AVG`, `MIN` y `MAX` también ignoran entradas `NULL`. Si no hay valores conocidos, devuelven `NULL`, mientras que `COUNT` devuelve cero. [@silberschatz2020]
 
 ## `NULL` no es todavía una teoría completa de información incompleta
 
-La lógica de tres valores describe cómo SQL evalúa expresiones con `NULL`, pero no resuelve por sí sola preguntas como «¿qué mundos completos son compatibles con esta tabla?». La segunda parte de Clase 06 introduce una semántica formal mediante [tablas de Codd y mundos posibles](informacion-incompleta.qmd). [@riveros2026-clase06]
+La lógica de tres valores describe cómo SQL evalúa expresiones con `NULL`, pero no resuelve por sí sola preguntas como «¿qué mundos completos son compatibles con esta tabla?». Estas preguntas se estudian mediante [tablas de Codd y mundos posibles](informacion-incompleta.qmd).
 
 ::: {.summary-box}
 ### Resumen

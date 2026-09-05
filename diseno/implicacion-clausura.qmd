@@ -5,60 +5,58 @@ description: "Conjuntos de dependencias funcionales, implicación, equivalencia 
 
 ## Intuición y concepto
 
-Una base de datos rara vez tiene una sola dependencia funcional. Cuando conocemos un conjunto \(F\), algunas dependencias adicionales se siguen lógicamente de él. La Clase 08 formaliza este razonamiento y presenta la **clausura de atributos** como herramienta algorítmica. [@riveros2026-clase08]
+Una base de datos rara vez tiene una sola dependencia funcional. Cuando conocemos un conjunto $F$, algunas dependencias adicionales se siguen lógicamente de él. La **clausura de atributos** permite calcular esas consecuencias y decidir si ciertos atributos forman una superllave.
 
 ## Satisfacción de un conjunto de dependencias
 
-Sea \(F\) un conjunto de dependencias funcionales.
+Fijemos un esquema de atributos. Sea $F$ un conjunto de dependencias funcionales sobre ese esquema; todas las relaciones consideradas a continuación tienen esos mismos atributos.
 
-\[
+$$
 R\models F
-\]
+$$
 
-significa que \(R\) satisface **cada** dependencia de \(F\):
+significa que $R$ satisface **cada** dependencia de $F$:
 
-\[
+$$
 R\models F
 \iff
 \forall(\bar A\to\bar B)\in F,
 \;R\models\bar A\to\bar B.
-\]
-
-[@riveros2026-clase08]
+$$
 
 ## Implicación
 
 ::: {.callout-note title="Definición formal"}
-Decimos que \(F\) **implica** \(F'\), escrito
+Decimos que $F$ **implica** $F'$, escrito
 
-\[
+$$
 F\models F',
-\]
+$$
 
-si para toda relación \(R\):
+si para toda relación $R$:
 
-\[
+$$
 R\models F
 \quad\Longrightarrow\quad
 R\models F'.
-\]
+$$
 
-[@riveros2026-clase08; @arenas2022]
+[@arenas2022]
 :::
 
 Para una sola dependencia escribimos, por ejemplo,
 
-\[
+$$
 F\models A\to C.
-\]
+$$
 
-Esto no pregunta si una instancia concreta satisface \(A\to C\), sino si **toda** relación que respete \(F\) necesariamente debe respetarla.
+Esto no pregunta si una instancia concreta satisface $A\to C$, sino si **toda** relación que respete $F$ necesariamente debe respetarla.
 
 ## Equivalencia de conjuntos
 
-\(F\) y \(F'\) son equivalentes cuando tienen exactamente los mismos modelos:
+$F$ y $F'$ son equivalentes cuando tienen exactamente los mismos modelos:
 
-\[
+$$
 F\equiv F'
 \iff
 \forall R,
@@ -66,181 +64,177 @@ F\equiv F'
 R\models F
 \text{ si y solo si }
 R\models F'.
-\]
+$$
 
-[@riveros2026-clase08]
+## Reglas de razonamiento
 
-## Reglas trabajadas en clase
-
-La Clase 08 introduce explícitamente dos reglas de razonamiento. [@riveros2026-clase08]
+Dos reglas útiles permiten descomponer dependencias y encadenarlas:
 
 ### Dividir y juntar
 
-\[
+$$
 \{\bar A\to B_1\cdots B_m\}
 \equiv
 \{\bar A\to B_1,\ldots,\bar A\to B_m\}.
-\]
+$$
 
 Por ejemplo:
 
-\[
+$$
 codigo\to nombre\ creditos
-\]
+$$
 
 es equivalente a
 
-\[
+$$
 \{codigo\to nombre,\;codigo\to creditos\}.
-\]
+$$
 
 ### Transitividad
 
-\[
+$$
 \{\bar A\to\bar B,\;\bar B\to\bar C\}
 \models
 \bar A\to\bar C.
-\]
+$$
 
 Si un atributo determina otro, y ese segundo determina un tercero, el primero determina el tercero.
 
-La bibliografía presenta sistemas axiomáticos completos para dependencias funcionales, pero el material del curso disponible hasta Clase 08 solo necesita estas reglas y el algoritmo de clausura. No adelantaremos una página separada de axiomas de Armstrong todavía. [@silberschatz2020; @garciamolina2009]
+Estas reglas forman parte del razonamiento con dependencias funcionales. Los axiomas de Armstrong proporcionan un sistema completo de deducción; aquí usaremos la clausura para decidir implicación de forma algorítmica. [@silberschatz2020; @garciamolina2009]
 
 ## Dos problemas algorítmicos
 
-La Clase 08 plantea: dado \(F\), [@riveros2026-clase08]
+Dado $F$, queremos resolver:
 
-1. ¿es \(\bar A\) una superllave?
-2. ¿se cumple \(F\models\bar A\to\bar B\)?
+1. ¿es $\bar A$ una superllave?
+2. ¿se cumple $F\models\bar A\to\bar B$?
 
-Ambos se resuelven calculando la clausura de \(\bar A\).
+Ambos se resuelven calculando la clausura de $\bar A$.
 
 ## Clausura de atributos
 
 ::: {.callout-note title="Definición formal"}
-La **clausura** de \(\bar A\) bajo \(F\) es
+La **clausura** de $\bar A$ bajo $F$ es
 
-\[
+$$
 \bar A^+
 :=
 \{B\mid F\models\bar A\to B\}.
-\]
+$$
 
-[@riveros2026-clase08]
 :::
 
-Contiene exactamente los atributos individuales que están funcionalmente determinados por \(\bar A\) según \(F\).
+Contiene exactamente los atributos individuales que están funcionalmente determinados por $\bar A$ según $F$.
 
 ## Ejemplo universitario
 
 Supongamos una relación auxiliar
 
-\[
+$$
 InscripcionDetallada(rut,nombreEst,carrera,codigo,nombreCurso,creditos)
-\]
+$$
 
 con
 
-\[
+$$
 F=\{
  rut\to nombreEst\ carrera,
  codigo\to nombreCurso\ creditos
 \}.
-\]
+$$
 
 Entonces:
 
-\[
+$$
 \{rut,codigo\}^+
 =
 \{rut,codigo,nombreEst,carrera,nombreCurso,creditos\}.
-\]
+$$
 
-Por lo tanto, `rut codigo` determina todos los atributos de esta relación y es una superllave bajo \(F\).
+Por lo tanto, `rut codigo` determina todos los atributos de esta relación y es una superllave bajo $F$.
 
 En cambio:
 
-\[
+$$
 \{rut\}^+
 =
 \{rut,nombreEst,carrera\},
-\]
+$$
 
 por lo que `rut` no es superllave de `InscripcionDetallada`.
 
 ## Algoritmo de clausura
 
-La Clase 08 presenta el siguiente procedimiento: [@riveros2026-clase08]
+El procedimiento aplica dependencias hasta alcanzar un punto fijo:
 
 ```text
 entrada: F y un conjunto de atributos A
 clausura <- A
 reglas   <- F
 
-repetir
-  si existe B -> C en reglas con B contenido en clausura:
-    clausura <- clausura union C
-    eliminar B -> C de reglas
-hasta que no haya cambios
+mientras exista B -> C en reglas con B contenido en clausura:
+  clausura <- clausura union C
+  eliminar B -> C de reglas
 
 retornar clausura
 ```
 
-La idea es simple: cada vez que ya conocemos todos los atributos del lado izquierdo de una dependencia, podemos agregar los del lado derecho.
+Cada vez que ya conocemos todos los atributos del lado izquierdo de una dependencia, podemos agregar los del lado derecho. Incluso si una regla no agrega atributos, seguimos buscando otras aplicables. El proceso termina porque cada iteración elimina una regla de un conjunto finito.
 
 ### Ejecución sobre el ejemplo
 
 Inicio:
 
-\[
+$$
 clausura=\{rut,codigo\}.
-\]
+$$
 
 Por `rut → nombreEst carrera`:
 
-\[
+$$
 clausura=
 \{rut,codigo,nombreEst,carrera\}.
-\]
+$$
 
 Por `codigo → nombreCurso creditos`:
 
-\[
+$$
 clausura=
 \{rut,codigo,nombreEst,carrera,nombreCurso,creditos\}.
-\]
+$$
 
 No quedan reglas aplicables que agreguen atributos nuevos; el algoritmo termina.
 
 ## Corrección del algoritmo
 
-La Clase 08 bosqueja una demostración en dos direcciones: [@riveros2026-clase08]
+La corrección requiere demostrar dos direcciones:
 
-1. si un atributo entra a `clausura`, entonces realmente pertenece a \(\bar A^+\);
-2. si un atributo no entra al finalizar, puede construirse una relación que satisface \(F\) pero viola \(\bar A\to B\), por lo que \(B\notin\bar A^+\).
+1. si un atributo entra a `clausura`, entonces realmente pertenece a $\bar A^+$;
+2. si un atributo no entra al finalizar, puede construirse una relación que satisface $F$ pero viola $\bar A\to B$, por lo que $B\notin\bar A^+$.
 
 El primer punto se demuestra inductivamente sobre las iteraciones. El segundo usa dos tuplas que coinciden en los atributos de la clausura y difieren en los demás.
 
-No expandiremos aquí los detalles que el propio material deja como ejercicio, pero mantendremos el resultado que la clase establece.
+Sea $C$ el conjunto final. Para la primera dirección, inicialmente $\bar A\subseteq C$ y sus atributos están determinados trivialmente por $\bar A$. Si todos los atributos de $X$ ya están determinados y $X\to Y\in F$, la transitividad justifica incorporar $Y$.
+
+Para la segunda, supongamos $B\notin C$ y un dominio con al menos dos valores distintos, $a$ y $b$. Construyamos dos tuplas sobre el esquema: $t_1$ vale $a$ en todos los atributos; $t_2$ vale $a$ en $C$ y $b$ fuera de $C$. La relación $\{t_1,t_2\}$ satisface $F$: si ambas coinciden en el antecedente $X$ de una regla, entonces $X\subseteq C$; como el algoritmo terminó, su consecuente también está en $C$, y ambas tuplas coinciden en él. Sin embargo, coinciden en $\bar A$ y difieren en $B$. Por tanto, $F\not\models\bar A\to B$.
 
 ## Resolver los dos problemas
 
-::: {.callout-note title="Proposición de Clase 08"}
+::: {.callout-note title="Implicación y superllaves bajo F"}
 La clausura permite decidir:
 
-\[
-\bar A\text{ es superllave}
+$$
+\bar A\text{ es superllave bajo }F
 \iff
 \bar A^+=att(R),
-\]
+$$
 
-\[
+$$
 F\models\bar A\to\bar B
 \iff
 \{\bar B\}\subseteq\bar A^+.
-\]
+$$
 
-[@riveros2026-clase08]
 :::
 
 Esta es una de las herramientas algorítmicas más importantes del diseño relacional.
@@ -248,10 +242,10 @@ Esta es una de las herramientas algorítmicas más importantes del diseño relac
 ::: {.summary-box}
 ### Resumen
 
-- \(F\models F'\) significa que toda relación que satisface \(F\) también satisface \(F'\).
+- $F\models F'$ significa que toda relación que satisface $F$ también satisface $F'$.
 - Dos conjuntos son equivalentes si tienen exactamente las mismas consecuencias sobre todas las relaciones.
 - Dividir/juntar y transitividad permiten deducir dependencias.
-- \(\bar A^+\) reúne todos los atributos determinados por \(\bar A\).
+- $\bar A^+$ reúne todos los atributos determinados por $\bar A$.
 - Con la clausura podemos decidir implicación y superllaves.
 :::
 

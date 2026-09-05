@@ -99,10 +99,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -132,6 +132,35 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -357,7 +386,7 @@ div.csl-indent {
   </ul></li>
   <li><a href="#producto-cartesiano" id="toc-producto-cartesiano" class="nav-link" data-scroll-target="#producto-cartesiano">Producto cartesiano</a></li>
   <li><a href="#el-join-puede-expresarse-con-operadores-básicos" id="toc-el-join-puede-expresarse-con-operadores-básicos" class="nav-link" data-scroll-target="#el-join-puede-expresarse-con-operadores-básicos">El join puede expresarse con operadores básicos</a></li>
-  <li><a href="#join" id="toc-join" class="nav-link" data-scroll-target="#join">()-join</a></li>
+  <li><a href="#theta-join" id="toc-theta-join" class="nav-link" data-scroll-target="#theta-join"><span class="math inline">\(\theta\)</span>-join</a></li>
   <li><a href="#semijoin" id="toc-semijoin" class="nav-link" data-scroll-target="#semijoin">Semijoin</a></li>
   <li><a href="#anti-join" id="toc-anti-join" class="nav-link" data-scroll-target="#anti-join">Anti-join</a></li>
   <li><a href="#correspondencia-con-sql" id="toc-correspondencia-con-sql" class="nav-link" data-scroll-target="#correspondencia-con-sql">Correspondencia con SQL</a>
@@ -397,7 +426,7 @@ div.csl-indent {
 
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>Las relaciones separan información por temas. Para responder consultas reales necesitamos <strong>combinarlas</strong>. El operador central es el join: une tuplas que son compatibles en los atributos que comparten. <span class="citation" data-cites="riveros2026-clase02">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>Las relaciones separan información por temas. Para responder consultas reales necesitamos <strong>combinarlas</strong>. El operador central es el join: une tuplas que son compatibles en los atributos que comparten.</p>
 <p>Por ejemplo:</p>
 <div class="schema-box">
 <p><strong>Estudiante</strong>(<code>rut</code>, <code>nombre</code>, <code>carrera</code>)<br>
@@ -407,11 +436,17 @@ div.csl-indent {
 </section>
 <section id="compatibilidad-de-tuplas" class="level2">
 <h2 class="anchored" data-anchor-id="compatibilidad-de-tuplas">Compatibilidad de tuplas</h2>
-<p>Sean (_1) y (_2) tuplas nombradas. El curso define que son <strong>compatibles</strong>, escrito (_1_2), si coinciden en todos los atributos compartidos:</p>
-<p>[ _1_2 Aatt(_1)att(_2),; _1(A)=_2(A). ]</p>
+<p>Sean <span class="math inline">\(\bar\tau_1\)</span> y <span class="math inline">\(\bar\tau_2\)</span> tuplas nombradas. Diremos que son <strong>compatibles</strong>, escrito <span class="math inline">\(\bar\tau_1\sim\bar\tau_2\)</span>, si coinciden en todos los atributos compartidos:</p>
+<p><span class="math display">\[
+\bar\tau_1\sim\bar\tau_2
+\iff
+\forall A\in att(\bar\tau_1)\cap att(\bar\tau_2),\;
+\bar\tau_1(A)=\bar\tau_2(A).
+\]</span></p>
 <p>Si son compatibles, se pueden fusionar en una tupla con atributos</p>
-<p>[ att(_1)att(_2). ]</p>
-<p><span class="citation" data-cites="riveros2026-clase02">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p><span class="math display">\[
+att(\bar\tau_1)\cup att(\bar\tau_2).
+\]</span></p>
 </section>
 <section id="natural-join" class="level2">
 <h2 class="anchored" data-anchor-id="natural-join">Natural join</h2>
@@ -425,16 +460,26 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Para relaciones (R) y (S), el <strong>natural join</strong> es</p>
-<p>[ RS := {_1_2 _1R,&nbsp;_2S, &nbsp;_1_2}. ]</p>
+<p>Para relaciones <span class="math inline">\(R\)</span> y <span class="math inline">\(S\)</span>, el <strong>natural join</strong> es</p>
+<p><span class="math display">\[
+R\bowtie S
+:=
+\{\bar\tau_1\bowtie\bar\tau_2
+\mid
+\bar\tau_1\in R,\ \bar\tau_2\in S,
+\ \bar\tau_1\sim\bar\tau_2\}.
+\]</span></p>
 <p>Además,</p>
-<p>[ att(RS)=att(R)att(S). ]</p>
-<p><span class="citation" data-cites="riveros2026-clase02 saavedra2026-ayudantia1">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>; <a href="#ref-saavedra2026-ayudantia1" role="doc-biblioref">Saavedra 2026</a>)</span></p>
+<p><span class="math display">\[
+att(R\bowtie S)=att(R)\cup att(S).
+\]</span></p>
 </div>
 </div>
 <section id="ejemplo" class="level3">
 <h3 class="anchored" data-anchor-id="ejemplo">Ejemplo</h3>
-<p>[ EstudianteInscribe ]</p>
+<p><span class="math display">\[
+Estudiante\bowtie Inscribe
+\]</span></p>
 <p>combina una tupla de <code>Estudiante</code> con una de <code>Inscribe</code> exactamente cuando ambas tienen el mismo <code>rut</code>.</p>
 <div class="callout callout-style-default callout-warning callout-titled" title="El nombre de los atributos importa">
 <div class="callout-header d-flex align-content-center">
@@ -454,19 +499,40 @@ div.csl-indent {
 <section id="producto-cartesiano" class="level2">
 <h2 class="anchored" data-anchor-id="producto-cartesiano">Producto cartesiano</h2>
 <p>Cuando</p>
-<p>[ att(R)att(S)=, ]</p>
+<p><span class="math display">\[
+att(R)\cap att(S)=\varnothing,
+\]</span></p>
 <p>todas las parejas de tuplas son compatibles. En ese caso el join coincide con el producto cartesiano:</p>
-<p>[ RS := {_1_2 _1R,&nbsp;_2S}. ]</p>
-<p>El curso define (RS) solo para relaciones con atributos disjuntos. <span class="citation" data-cites="riveros2026-clase02">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p><span class="math display">\[
+R\times S
+:=
+\{\bar\tau_1\bowtie\bar\tau_2
+\mid
+\bar\tau_1\in R,\ \bar\tau_2\in S\}.
+\]</span></p>
+<p>En este sitio definimos <span class="math inline">\(R\times S\)</span> solo para relaciones con atributos disjuntos.</p>
 <p>El producto cartesiano suele ser un paso intermedio: genera todas las combinaciones y luego una selección conserva las que cumplen la condición de unión.</p>
 </section>
 <section id="el-join-puede-expresarse-con-operadores-básicos" class="level2">
 <h2 class="anchored" data-anchor-id="el-join-puede-expresarse-con-operadores-básicos">El join puede expresarse con operadores básicos</h2>
-<p>La Clase 02 demuestra el caso</p>
-<p>[ att(R_1)={A,B}, att(R_2)={B,C}. ]</p>
-<p>Renombrando temporalmente el segundo (B) como (B’):</p>
-<p>[ R_1R_2 = <em>{A,B,C} ( </em>{B=B’} ( R_1_{BB’}(R_2) ) ). ]</p>
-<p><span class="citation" data-cites="riveros2026-clase02">(<a href="#ref-riveros2026-clase02" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>Consideremos el caso</p>
+<p><span class="math display">\[
+att(R_1)=\{A,B\},
+\qquad
+att(R_2)=\{B,C\}.
+\]</span></p>
+<p>Renombrando temporalmente el segundo <span class="math inline">\(B\)</span> como <span class="math inline">\(B'\)</span>:</p>
+<p><span class="math display">\[
+R_1\bowtie R_2
+=
+\pi_{A,B,C}
+\left(
+\sigma_{B=B'}
+\left(
+R_1\times\rho_{B\to B'}(R_2)
+\right)
+\right).
+\]</span></p>
 <p>La idea general es:</p>
 <ol type="1">
 <li>renombrar atributos compartidos para poder formar el producto;</li>
@@ -475,34 +541,61 @@ div.csl-indent {
 </ol>
 <p>Esto muestra que el join es expresable a partir de producto, selección, renombramiento y proyección.</p>
 </section>
-<section id="join" class="level2">
-<h2 class="anchored" data-anchor-id="join">()-join</h2>
-<p>La Ayudantía 1 define, para relaciones con atributos disjuntos y una condición ():</p>
-<p>[ R<em>S := </em>(RS). ]</p>
-<p><span class="citation" data-cites="saavedra2026-ayudantia1">(<a href="#ref-saavedra2026-ayudantia1" role="doc-biblioref">Saavedra 2026</a>)</span></p>
+<section id="theta-join" class="level2">
+<h2 class="anchored" data-anchor-id="theta-join"><span class="math inline">\(\theta\)</span>-join</h2>
+<p>Para relaciones con atributos disjuntos y una condición <span class="math inline">\(\theta\)</span>:</p>
+<p><span class="math display">\[
+R\bowtie_\theta S
+:=
+\sigma_\theta(R\times S).
+\]</span></p>
 <p>Por ejemplo, si renombramos <code>Inscribe.codigo</code> como <code>codigoIns</code> y <code>Curso.codigo</code> como <code>codigoCurso</code>, podemos unir mediante</p>
-<p>[ Inscribe’_{codigoIns=codigoCurso}Curso’. ]</p>
-<p>Si los atributos no son disjuntos, primero se renombra lo necesario para que el producto sea válido bajo la convención del curso.</p>
+<p><span class="math display">\[
+Inscribe'\bowtie_{codigoIns=codigoCurso}Curso'.
+\]</span></p>
+<p>Si los atributos no son disjuntos, primero se renombra lo necesario para que el producto sea válido bajo la convención de atributos disjuntos.</p>
 </section>
 <section id="semijoin" class="level2">
 <h2 class="anchored" data-anchor-id="semijoin">Semijoin</h2>
-<p>El <strong>semijoin</strong> conserva únicamente las tuplas de (R) que tienen algún compañero compatible en (S):</p>
-<p>[ RS := {R S.;}. ]</p>
-<p>La Ayudantía 1 pide mostrar que puede expresarse como</p>
-<p>[ RS = _{att(R)}(RS). ]</p>
-<p><span class="citation" data-cites="saavedra2026-ayudantia1">(<a href="#ref-saavedra2026-ayudantia1" role="doc-biblioref">Saavedra 2026</a>)</span></p>
+<p>El <strong>semijoin</strong> conserva únicamente las tuplas de <span class="math inline">\(R\)</span> que tienen algún compañero compatible en <span class="math inline">\(S\)</span>:</p>
+<p><span class="math display">\[
+R\ltimes S
+:=
+\{\bar\tau\in R
+\mid
+\exists\bar\sigma\in S.\;\bar\tau\sim\bar\sigma\}.
+\]</span></p>
+<p>Puede expresarse mediante join y proyección:</p>
+<p><span class="math display">\[
+R\ltimes S
+=
+\pi_{att(R)}(R\bowtie S).
+\]</span></p>
 <p>Ejemplo: estudiantes que tienen al menos una inscripción:</p>
-<p>[ EstudianteInscribe. ]</p>
+<p><span class="math display">\[
+Estudiante\ltimes Inscribe.
+\]</span></p>
 </section>
 <section id="anti-join" class="level2">
 <h2 class="anchored" data-anchor-id="anti-join">Anti-join</h2>
-<p>El <strong>anti-join</strong> conserva las tuplas de (R) que no tienen ningún compañero compatible en (S):</p>
-<p>[ RS := {R S.;}. ]</p>
+<p>El <strong>anti-join</strong> conserva las tuplas de <span class="math inline">\(R\)</span> que no tienen ningún compañero compatible en <span class="math inline">\(S\)</span>:</p>
+<p><span class="math display">\[
+R\triangleright S
+:=
+\{\bar\tau\in R
+\mid
+\nexists\bar\sigma\in S.\;\bar\tau\sim\bar\sigma\}.
+\]</span></p>
 <p>Se deriva inmediatamente del semijoin:</p>
-<p>[ RS = R(RS). ]</p>
-<p><span class="citation" data-cites="saavedra2026-ayudantia1">(<a href="#ref-saavedra2026-ayudantia1" role="doc-biblioref">Saavedra 2026</a>)</span></p>
+<p><span class="math display">\[
+R\triangleright S
+=
+R\setminus(R\ltimes S).
+\]</span></p>
 <p>Así, los estudiantes sin inscripciones pueden expresarse como</p>
-<p>[ EstudianteInscribe. ]</p>
+<p><span class="math display">\[
+Estudiante\triangleright Inscribe.
+\]</span></p>
 </section>
 <section id="correspondencia-con-sql" class="level2">
 <h2 class="anchored" data-anchor-id="correspondencia-con-sql">Correspondencia con SQL</h2>
@@ -511,14 +604,14 @@ div.csl-indent {
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Estudiante <span class="kw">AS</span> E</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> Inscribe <span class="kw">AS</span> I</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> E.rut <span class="op">=</span> I.rut;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>El <a href="../sql/consultas-basicas.html">SQL básico</a> también presenta <code>NATURAL JOIN</code>, <code>JOIN ... USING (...)</code> y la forma con múltiples relaciones en <code>FROM</code> más una condición en <code>WHERE</code>, tal como aparecen en la Clase 04. <span class="citation" data-cites="riveros2026-clase04">(<a href="#ref-riveros2026-clase04" role="doc-biblioref">Riveros 2026b</a>)</span></p>
+<p>El <a href="../sql/consultas-basicas.html">SQL básico</a> también presenta <code>NATURAL JOIN</code>, <code>JOIN ... USING (...)</code> y la forma con múltiples relaciones en <code>FROM</code> más una condición en <code>WHERE</code>.</p>
 <section id="resumen" class="level3 summary-box">
 <h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
 <ul>
 <li>El natural join combina tuplas compatibles en atributos compartidos.</li>
 <li>El producto cartesiano es el caso en que los atributos son disjuntos.</li>
 <li>Un join puede construirse con producto, selección, renombramiento y proyección.</li>
-<li>El ()-join incorpora una condición explícita.</li>
+<li>El <span class="math inline">\(\theta\)</span>-join incorpora una condición explícita.</li>
 <li>Semijoin y anti-join expresan «tiene compañero» y «no tiene compañero» sin ampliar el poder expresivo del álgebra base.</li>
 </ul>
 </section>
@@ -539,15 +632,6 @@ div.csl-indent {
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-ramakrishnan2003" class="csl-entry" role="listitem">
 Ramakrishnan, Raghu, y Johannes Gehrke. 2003. <em>Database Management Systems</em>. 3.ª ed. McGraw-Hill.
-</div>
-<div id="ref-riveros2026-clase02" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026a. <em>Álgebra relacional</em>.
-</div>
-<div id="ref-riveros2026-clase04" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026b. <em>SQL (Parte II)</em>.
-</div>
-<div id="ref-saavedra2026-ayudantia1" class="csl-entry" role="listitem">
-Saavedra, Benjamin. 2026. <em>Ayudantía 1: Álgebra Relacional y Consultas de Primer Orden</em>.
 </div>
 <div id="ref-silberschatz2020" class="csl-entry" role="listitem">
 Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System Concepts</em>. 7.ª ed. McGraw-Hill Education.
@@ -974,7 +1058,7 @@ Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

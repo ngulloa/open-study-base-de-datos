@@ -5,7 +5,7 @@ description: "Left, right y full outer join como extensiones del join que preser
 
 ## Intuición y concepto
 
-Un join ordinario solo conserva combinaciones compatibles. Si una fila no tiene compañero en la otra relación, desaparece. Los **outer joins** preservan ciertas filas sin compañero y completan los atributos faltantes con `NULL`. La Clase 06 los introduce como mecanismo para modelar datos opcionales. [@riveros2026-clase06]
+Un join ordinario solo conserva combinaciones compatibles. Si una fila no tiene compañero en la otra relación, desaparece. Los **outer joins** preservan ciertas filas sin compañero y completan los atributos faltantes con `NULL`. Permiten consultar relaciones donde la correspondencia entre filas es opcional.
 
 Ejemplo:
 
@@ -18,23 +18,21 @@ Un natural join devuelve solo cursos que tienen al menos un prerrequisito. Si qu
 
 ## Extender una tupla con `NULL`
 
-El curso supone aquí \(NULL\notin Data\) y define una extensión de tupla. Para una tupla \(\bar\tau\) y un conjunto de atributos \(X\):
+Para formalizar la extensión, supongamos $NULL\notin Data$ y tuplas originales sin nulos. Para una tupla $\bar\tau$ y un conjunto de atributos $X$:
 
-\[
+$$
 \bar\tau[X]:att(\bar\tau)\cup X\to Data\cup\{NULL\},
-\]
+$$
 
 con
 
-\[
+$$
 \bar\tau[X](A)=
 \begin{cases}
 \bar\tau(A), & A\in att(\bar\tau),\\
 NULL, & A\notin att(\bar\tau).
 \end{cases}
-\]
-
-[@riveros2026-clase06]
+$$
 
 Esta operación permite completar una tupla cuando no existe información proveniente de la otra relación.
 
@@ -43,7 +41,7 @@ Esta operación permite completar una tupla cuando no existe información proven
 El **left outer join** contiene:
 
 1. todas las combinaciones del join normal;
-2. cada tupla de la relación izquierda que no tiene compañero, extendida con `NULL` en los atributos faltantes. [@riveros2026-clase06]
+2. cada tupla de la relación izquierda que no tiene compañero, extendida con `NULL` en los atributos faltantes.
 
 En SQL:
 
@@ -54,19 +52,19 @@ LEFT OUTER JOIN Requisito AS R
   ON C.codigo = R.codigo;
 ```
 
-Si `IIC1103` no tiene prerrequisito, la fila puede verse como:
+Si `PROG101` no tiene prerrequisito, la fila puede verse como:
 
 ::: {.table-responsive}
 | codigo | nombre | prerrequisito |
 |---|---|---|
-| IIC1103 | Introducción a Programación | `NULL` |
+| PROG101 | Introducción a Programación | `NULL` |
 :::
 
 Si un curso tiene dos prerrequisitos, aparecerá una fila por cada coincidencia.
 
 ## Right outer join
 
-El **right outer join** es simétrico: preserva las tuplas sin compañero de la relación derecha. La Clase 06 presenta la equivalencia conceptual de intercambiar los lados y usar left outer join. [@riveros2026-clase06]
+El **right outer join** es simétrico: preserva las tuplas sin compañero de la relación derecha. Puede expresarse intercambiando los lados y usando un left outer join, con las columnas de salida en el orden deseado.
 
 ```sql
 SELECT C.codigo, C.nombre, R.prerrequisito
@@ -85,7 +83,7 @@ El **full outer join** preserva:
 - filas de la izquierda sin compañero;
 - filas de la derecha sin compañero.
 
-La definición de Clase 06 lo construye como unión del left y right outer join. [@riveros2026-clase06]
+Bajo semántica de conjuntos y con el mismo esquema de salida, puede construirse como la unión del left y el right outer join. Esta identidad no autoriza a usar `UNION ALL` directamente en SQL: las coincidencias aparecerían dos veces.
 
 ```sql
 SELECT ...
@@ -111,14 +109,14 @@ Es útil cuando interesa detectar tanto elementos «sin correspondencia a la der
 
 Con outer joins, mover una condición entre `ON` y `WHERE` puede cambiar el resultado.
 
-Supongamos que queremos conservar todos los cursos y mostrar solo prerrequisitos cuyo código empieza por `IIC`:
+Supongamos que queremos conservar todos los cursos y mostrar solo prerrequisitos cuyo código empieza por `PROG`:
 
 ```sql
 SELECT C.codigo, R.prerrequisito
 FROM Curso AS C
 LEFT JOIN Requisito AS R
   ON C.codigo = R.codigo
- AND R.prerrequisito LIKE 'IIC%';
+ AND R.prerrequisito LIKE 'PROG%';
 ```
 
 La condición forma parte de la coincidencia; un curso sin coincidencia apropiada sigue apareciendo con `NULL`.
@@ -130,7 +128,7 @@ SELECT C.codigo, R.prerrequisito
 FROM Curso AS C
 LEFT JOIN Requisito AS R
   ON C.codigo = R.codigo
-WHERE R.prerrequisito LIKE 'IIC%';
+WHERE R.prerrequisito LIKE 'PROG%';
 ```
 
 el `WHERE` elimina las filas donde `R.prerrequisito` es `NULL` porque la condición no resulta `TRUE`. Esto puede convertir el efecto observable en algo cercano a un inner join para ese filtro.
@@ -139,7 +137,7 @@ La explicación depende directamente de la [lógica de tres valores](null-tres-v
 
 ## Outer join y anti-join no son lo mismo
 
-Un anti-join responde «qué tuplas de \(R\) no tienen compañero en \(S\)». Un left outer join conserva **tanto** las coincidencias como las no coincidencias de la izquierda. Para extraer solo las no coincidencias puede usarse un patrón como:
+Un anti-join responde «qué tuplas de $R$ no tienen compañero en $S$». Un left outer join conserva **tanto** las coincidencias como las no coincidencias de la izquierda. Para extraer solo las no coincidencias puede usarse un patrón como:
 
 ```sql
 SELECT C.codigo, C.nombre

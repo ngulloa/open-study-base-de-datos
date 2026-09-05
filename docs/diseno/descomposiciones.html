@@ -63,10 +63,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-cf41c34333c775e3f70cef0596922feb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -96,6 +96,35 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -324,8 +353,8 @@ div.csl-indent {
   <li><a href="#descomposición-sin-pérdida" id="toc-descomposición-sin-pérdida" class="nav-link" data-scroll-target="#descomposición-sin-pérdida">Descomposición sin pérdida</a></li>
   <li><a href="#dependencias-después-de-descomponer" id="toc-dependencias-después-de-descomponer" class="nav-link" data-scroll-target="#dependencias-después-de-descomponer">Dependencias después de descomponer</a></li>
   <li><a href="#ejemplo-de-dependencias-proyectadas" id="toc-ejemplo-de-dependencias-proyectadas" class="nav-link" data-scroll-target="#ejemplo-de-dependencias-proyectadas">Ejemplo de dependencias proyectadas</a></li>
-  <li><a href="#algoritmo-presentado-en-clase-08" id="toc-algoritmo-presentado-en-clase-08" class="nav-link" data-scroll-target="#algoritmo-presentado-en-clase-08">Algoritmo presentado en Clase 08</a></li>
-  <li><a href="#qué-falta-para-normalización" id="toc-qué-falta-para-normalización" class="nav-link" data-scroll-target="#qué-falta-para-normalización">Qué falta para normalización</a>
+  <li><a href="#calcular-una-base-de-dependencias-proyectadas" id="toc-calcular-una-base-de-dependencias-proyectadas" class="nav-link" data-scroll-target="#calcular-una-base-de-dependencias-proyectadas">Calcular una base de dependencias proyectadas</a></li>
+  <li><a href="#relación-con-la-normalización" id="toc-relación-con-la-normalización" class="nav-link" data-scroll-target="#relación-con-la-normalización">Relación con la normalización</a>
   <ul class="collapse">
   <li><a href="#resumen" id="toc-resumen" class="nav-link" data-scroll-target="#resumen">Resumen</a></li>
   </ul></li>
@@ -362,32 +391,43 @@ div.csl-indent {
 
 <section id="intuición-y-concepto" class="level2">
 <h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>Las dependencias funcionales explican por qué una relación redundante puede sufrir anomalías. Una estrategia de diseño es <strong>descomponerla</strong> en relaciones más pequeñas. El riesgo es que al separar atributos perdamos la capacidad de reconstruir exactamente la información original. La Clase 08 formaliza esta tensión mediante descomposiciones y joins. <span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>Las dependencias funcionales explican por qué una relación redundante puede sufrir anomalías. Una estrategia de diseño es <strong>descomponerla</strong> en relaciones más pequeñas. El riesgo es que al separar atributos perdamos la capacidad de reconstruir exactamente la información original. Las proyecciones y el join permiten precisar cuándo la reconstrucción es exacta.</p>
 </section>
 <section id="relación-redundante-de-ejemplo" class="level2">
 <h2 class="anchored" data-anchor-id="relación-redundante-de-ejemplo">Relación redundante de ejemplo</h2>
 <p>Consideremos:</p>
-<p>[ InscripcionDetallada(rut,nombreEst,carrera,codigo,nombreCurso,creditos,semestre) ]</p>
+<p><span class="math display">\[
+InscripcionDetallada(rut,nombreEst,carrera,codigo,nombreCurso,creditos,semestre)
+\]</span></p>
 <p>con dependencias del dominio como</p>
-<p>[ rutnombreEst&nbsp;carrera, codigonombreCurso&nbsp;creditos. ]</p>
+<p><span class="math display">\[
+rut\to nombreEst\ carrera,
+\qquad
+codigo\to nombreCurso\ creditos.
+\]</span></p>
 <p>La relación repite datos de estudiante y de curso en cada inscripción.</p>
 </section>
 <section id="descomposición-binaria" class="level2">
 <h2 class="anchored" data-anchor-id="descomposición-binaria">Descomposición binaria</h2>
-<div class="callout callout-style-default callout-note callout-titled" title="Definición de Clase 08">
+<div class="callout callout-style-default callout-note callout-titled" title="Definición formal">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Definición de Clase 08
+<span class="screen-reader-only">Nota</span>Definición formal
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Una descomposición de una relación (R) en listas de atributos (A) y (B) consiste en</p>
-<p>[ att(R)={A}{B}, ]</p>
-<p>[ S=<em>{A}(R), T=</em>{B}(R). ]</p>
-<p><span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>Una descomposición de una relación <span class="math inline">\(R\)</span> en listas de atributos <span class="math inline">\(\bar A\)</span> y <span class="math inline">\(\bar B\)</span> consiste en</p>
+<p><span class="math display">\[
+att(R)=\{\bar A\}\cup\{\bar B\},
+\]</span></p>
+<p><span class="math display">\[
+S=\pi_{\bar A}(R),
+\qquad
+T=\pi_{\bar B}(R).
+\]</span></p>
 </div>
 </div>
 <p>Una descomposición con más de dos relaciones puede obtenerse aplicando sucesivamente descomposiciones binarias.</p>
@@ -395,17 +435,27 @@ div.csl-indent {
 <section id="un-primer-paso-útil" class="level2">
 <h2 class="anchored" data-anchor-id="un-primer-paso-útil">Un primer paso útil</h2>
 <p>Tomemos</p>
-<p>[ A=(rut,nombreEst,carrera), ]</p>
-<p>[ B=(rut,codigo,nombreCurso,creditos,semestre). ]</p>
+<p><span class="math display">\[
+\bar A=(rut,nombreEst,carrera),
+\]</span></p>
+<p><span class="math display">\[
+\bar B=(rut,codigo,nombreCurso,creditos,semestre).
+\]</span></p>
 <p>Entonces:</p>
-<p>[ S=_{rut,nombreEst,carrera}(InscripcionDetallada), ]</p>
-<p>[ T=_{rut,codigo,nombreCurso,creditos,semestre}(InscripcionDetallada). ]</p>
+<p><span class="math display">\[
+S=\pi_{rut,nombreEst,carrera}(InscripcionDetallada),
+\]</span></p>
+<p><span class="math display">\[
+T=\pi_{rut,codigo,nombreCurso,creditos,semestre}(InscripcionDetallada).
+\]</span></p>
 <p>La proyección elimina repeticiones idénticas porque el álgebra relacional usa conjuntos.</p>
 </section>
 <section id="reconstrucción-y-tuplas-espurias" class="level2">
 <h2 class="anchored" data-anchor-id="reconstrucción-y-tuplas-espurias">Reconstrucción y tuplas espurias</h2>
 <p>Una vez separadas las relaciones intentamos reconstruir con</p>
-<p>[ ST. ]</p>
+<p><span class="math display">\[
+S\bowtie T.
+\]</span></p>
 <p>Siempre recuperaremos las tuplas originales en esta construcción por proyección, pero el join <strong>puede producir tuplas adicionales</strong> cuando los atributos compartidos no conservan suficiente información para emparejar correctamente las partes. Esas combinaciones adicionales se conocen como tuplas espurias en la bibliografía de diseño relacional. <span class="citation" data-cites="silberschatz2020 garciamolina2009">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>; <a href="#ref-garciamolina2009" role="doc-biblioref">Garcia-Molina et&nbsp;al. 2009</a>)</span></p>
 <section id="ejemplo-de-una-mala-elección" class="level3">
 <h3 class="anchored" data-anchor-id="ejemplo-de-una-mala-elección">Ejemplo de una mala elección</h3>
@@ -424,41 +474,46 @@ div.csl-indent {
 <tr class="odd">
 <td>r2</td>
 <td>Ben</td>
-<td>IIC2233</td>
+<td>PROG201</td>
 <td>Programación Avanzada</td>
 </tr>
 <tr class="even">
 <td>r2</td>
 <td>Ben</td>
-<td>IIC2413</td>
+<td>BD101</td>
 <td>Bases de Datos</td>
 </tr>
 </tbody>
 </table>
 </div>
 <p>formamos:</p>
-<p>[ X=_{rut,nombreEst,codigo}(R) ]</p>
+<p><span class="math display">\[
+X=\pi_{rut,nombreEst,codigo}(R)
+\]</span></p>
 <p>y</p>
-<p>[ Y=_{rut,nombreCurso}(R). ]</p>
-<p>El atributo compartido es solo <code>rut</code>. Al hacer (XY), cada código de Ben puede combinarse con <strong>cada</strong> nombre de curso de Ben. Aparecen asociaciones falsas como <code>IIC2233</code> con <code>Bases de Datos</code>.</p>
+<p><span class="math display">\[
+Y=\pi_{rut,nombreCurso}(R).
+\]</span></p>
+<p>El atributo compartido es solo <code>rut</code>. Al hacer <span class="math inline">\(X\bowtie Y\)</span>, cada código de Ben puede combinarse con <strong>cada</strong> nombre de curso de Ben. Aparecen asociaciones falsas como <code>PROG201</code> con <code>Bases de Datos</code>.</p>
 <p>La información no desapareció de las proyecciones, pero la separación olvidó qué nombre de curso correspondía a qué código.</p>
 </section>
 </section>
 <section id="descomposición-sin-pérdida" class="level2">
 <h2 class="anchored" data-anchor-id="descomposición-sin-pérdida">Descomposición sin pérdida</h2>
-<div class="callout callout-style-default callout-note callout-titled" title="Definición de Clase 08">
+<div class="callout callout-style-default callout-note callout-titled" title="Definición formal">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Nota</span>Definición de Clase 08
+<span class="screen-reader-only">Nota</span>Definición formal
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Sean (S=<em>{A}(R)) y (T=</em>{B}(R)). La descomposición es <strong>sin pérdida</strong> para (R) si</p>
-<p>[ R=ST. ]</p>
-<p><span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>Sean <span class="math inline">\(S=\pi_{\bar A}(R)\)</span> y <span class="math inline">\(T=\pi_{\bar B}(R)\)</span>. La descomposición es <strong>sin pérdida</strong> para <span class="math inline">\(R\)</span> si</p>
+<p><span class="math display">\[
+R=S\bowtie T.
+\]</span></p>
 </div>
 </div>
 <p>Esta igualdad exige dos cosas:</p>
@@ -476,64 +531,93 @@ div.csl-indent {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>La Clase 08 define aquí la propiedad respecto de una relación (R) concreta. La teoría de normalización estudia condiciones para garantizar pérdida cero para <strong>todas</strong> las relaciones que satisfacen ciertas dependencias. Como las formas normales todavía no aparecen en el material disponible, no adelantamos esas condiciones en esta página.</p>
+<p>La igualdad anterior describe una relación <span class="math inline">\(R\)</span> concreta. Una descomposición es sin pérdida <strong>bajo un conjunto de dependencias <span class="math inline">\(F\)</span></strong> cuando esa igualdad se cumple para toda relación del esquema que satisfaga <span class="math inline">\(F\)</span>. Comprobar solo una instancia no basta para garantizarlo.</p>
 </div>
 </div>
 </section>
 <section id="dependencias-después-de-descomponer" class="level2">
 <h2 class="anchored" data-anchor-id="dependencias-después-de-descomponer">Dependencias después de descomponer</h2>
-<p>No basta con conocer las dependencias escritas originalmente dentro de cada lado. También debemos considerar las que están <strong>implicadas</strong> por (F) y usan solo atributos de la nueva relación.</p>
-<p>La Clase 08 define, para el lado (S) con atributos (A):</p>
-<p>[ F_S := {XY FXY, {X}{A}, {Y}{A} }. ]</p>
-<p>Análogamente, para (T):</p>
-<p>[ F_T := {ZU FZU, {Z}{B}, {U}{B} }. ]</p>
-<p><span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<p>No basta con conocer las dependencias escritas originalmente dentro de cada lado. También debemos considerar las que están <strong>implicadas</strong> por <span class="math inline">\(F\)</span> y usan solo atributos de la nueva relación.</p>
+<p>Para el lado <span class="math inline">\(S\)</span> con atributos <span class="math inline">\(\bar A\)</span>, definimos:</p>
+<p><span class="math display">\[
+F_S
+:=
+\{\bar X\to\bar Y
+\mid
+F\models\bar X\to\bar Y,
+\{\bar X\}\subseteq\{\bar A\},
+\{\bar Y\}\subseteq\{\bar A\}
+\}.
+\]</span></p>
+<p>Análogamente, para <span class="math inline">\(T\)</span>:</p>
+<p><span class="math display">\[
+F_T
+:=
+\{\bar Z\to\bar U
+\mid
+F\models\bar Z\to\bar U,
+\{\bar Z\}\subseteq\{\bar B\},
+\{\bar U\}\subseteq\{\bar B\}
+\}.
+\]</span></p>
 <p>Esta operación suele llamarse <strong>proyección de dependencias</strong> sobre los atributos de una relación.</p>
 </section>
 <section id="ejemplo-de-dependencias-proyectadas" class="level2">
 <h2 class="anchored" data-anchor-id="ejemplo-de-dependencias-proyectadas">Ejemplo de dependencias proyectadas</h2>
 <p>Sea</p>
-<p>[ R(rut,nombreEst,codigo,nombreCurso) ]</p>
+<p><span class="math display">\[
+R(rut,nombreEst,codigo,nombreCurso)
+\]</span></p>
 <p>con</p>
-<p>[ F={rutnombreEst,;codigonombreCurso}. ]</p>
+<p><span class="math display">\[
+F=\{rut\to nombreEst,\;codigo\to nombreCurso\}.
+\]</span></p>
 <p>Si descomponemos en</p>
-<p>[ A={rut,nombreEst,codigo} ]</p>
+<p><span class="math display">\[
+A=\{rut,nombreEst,codigo\}
+\]</span></p>
 <p>y</p>
-<p>[ B={codigo,nombreCurso}, ]</p>
+<p><span class="math display">\[
+B=\{codigo,nombreCurso\},
+\]</span></p>
 <p>entonces, entre otras dependencias triviales:</p>
-<p>[ rutnombreEstF_A, ]</p>
-<p>[ codigonombreCursoF_B. ]</p>
-<p>Las reglas de cada componente deben obtenerse a partir de <strong>todas las consecuencias de (F)</strong> que permanecen dentro de sus atributos, no solo copiando textualmente dependencias originales.</p>
+<p><span class="math display">\[
+(rut\to nombreEst)\in F_A,
+\]</span></p>
+<p><span class="math display">\[
+(codigo\to nombreCurso)\in F_B.
+\]</span></p>
+<p>Las reglas de cada componente deben obtenerse a partir de <strong>todas las consecuencias de <span class="math inline">\(F\)</span></strong> que permanecen dentro de sus atributos, no solo copiando textualmente dependencias originales.</p>
 </section>
-<section id="algoritmo-presentado-en-clase-08" class="level2">
-<h2 class="anchored" data-anchor-id="algoritmo-presentado-en-clase-08">Algoritmo presentado en Clase 08</h2>
-<p>Para calcular (F_S), la clase propone enumerar subconjuntos no vacíos (X) de los atributos de (S), calcular (X^+) bajo (F), y agregar la parte de la clausura que permanece dentro de (S). <span class="citation" data-cites="riveros2026-clase08">(<a href="#ref-riveros2026-clase08" role="doc-biblioref">Riveros 2026a</a>)</span></p>
+<section id="calcular-una-base-de-dependencias-proyectadas" class="level2">
+<h2 class="anchored" data-anchor-id="calcular-una-base-de-dependencias-proyectadas">Calcular una base de dependencias proyectadas</h2>
+<p>Podemos obtener un conjunto de reglas equivalente a <span class="math inline">\(F_S\)</span> enumerando todos los subconjuntos <span class="math inline">\(X\)</span> de los atributos de <span class="math inline">\(S\)</span>, calculando <span class="math inline">\(X^+\)</span> bajo <span class="math inline">\(F\)</span> y conservando los atributos determinados que pertenecen a <span class="math inline">\(S\)</span>.</p>
 <p>En forma conceptual:</p>
 <pre class="text"><code>reglas &lt;- conjunto vacío
-para cada X no vacío contenido en atributos(S):
+para cada subconjunto X de atributos(S), incluido el vacío:
   calcular X+ según F
   Y &lt;- (X+ - X) intersección atributos(S)
   si Y no es vacío:
     agregar X -&gt; Y a reglas
 retornar reglas</code></pre>
-<p>Este algoritmo reutiliza directamente la <a href="../diseno/implicacion-clausura.html">clausura de atributos</a>.</p>
+<p>Este algoritmo reutiliza la <a href="../diseno/implicacion-clausura.html">clausura de atributos</a>. Devuelve una <strong>base equivalente</strong> a las dependencias proyectadas: omite reglas triviales y reúne consecuentes, sin enumerar literalmente todo <span class="math inline">\(F_S\)</span>. El subconjunto vacío es necesario cuando <span class="math inline">\(F\)</span> implica atributos constantes, como <span class="math inline">\(\varnothing\to A\)</span>. La enumeración puede ser exponencial en el número de atributos de <span class="math inline">\(S\)</span>.</p>
 </section>
-<section id="qué-falta-para-normalización" class="level2">
-<h2 class="anchored" data-anchor-id="qué-falta-para-normalización">Qué falta para normalización</h2>
-<p>Con el material actual ya podemos formular tres preguntas de diseño:</p>
+<section id="relación-con-la-normalización" class="level2">
+<h2 class="anchored" data-anchor-id="relación-con-la-normalización">Relación con la normalización</h2>
+<p>El análisis de una descomposición reúne tres preguntas de diseño:</p>
 <ol type="1">
 <li>¿qué redundancias sugieren las dependencias funcionales?</li>
 <li>¿la descomposición permite reconstruir la relación sin información espuria?</li>
 <li>¿qué dependencias quedan vigentes en cada componente?</li>
 </ol>
-<p>El paso siguiente será estudiar formas normales y algoritmos sistemáticos de descomposición. Ese contenido aparece en el programa, pero aún no está desarrollado en las clases disponibles, así que no se incorpora todavía. <span class="citation" data-cites="riveros2026-programa">(<a href="#ref-riveros2026-programa" role="doc-biblioref">Riveros 2026b</a>)</span></p>
+<p>Estas preguntas sirven de base para estudiar formas normales y algoritmos de normalización. Esta página se concentra en la reconstrucción por join y la proyección de dependencias; son propiedades que conviene distinguir al evaluar cualquier diseño. <span class="citation" data-cites="silberschatz2020 garciamolina2009">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>; <a href="#ref-garciamolina2009" role="doc-biblioref">Garcia-Molina et&nbsp;al. 2009</a>)</span></p>
 <section id="resumen" class="level3 summary-box">
 <h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
 <ul>
 <li>Una descomposición binaria se obtiene proyectando una relación sobre dos conjuntos de atributos cuya unión cubre el esquema original.</li>
 <li>El join de las proyecciones puede producir combinaciones espurias.</li>
-<li>Una descomposición es sin pérdida para (R) cuando (R=ST).</li>
-<li>Las dependencias de cada componente incluyen todas las consecuencias de (F) que solo mencionan sus atributos.</li>
+<li>Una descomposición es sin pérdida para <span class="math inline">\(R\)</span> cuando <span class="math inline">\(R=S\bowtie T\)</span>.</li>
+<li>Las dependencias de cada componente incluyen todas las consecuencias de <span class="math inline">\(F\)</span> que solo mencionan sus atributos.</li>
 <li>La clausura permite calcular esas dependencias proyectadas.</li>
 </ul>
 </section>
@@ -553,12 +637,6 @@ retornar reglas</code></pre>
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-garciamolina2009" class="csl-entry" role="listitem">
 Garcia-Molina, Hector, Jeffrey D. Ullman, y Jennifer Widom. 2009. <em>Database Systems: The Complete Book</em>. 2.ª ed. Pearson Prentice Hall.
-</div>
-<div id="ref-riveros2026-clase08" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026a. <em>Dependencias y descomposiciones</em>.
-</div>
-<div id="ref-riveros2026-programa" class="csl-entry" role="listitem">
-Riveros, Cristian. 2026b. <em>Programa de Curso: IIC2413 – Bases de Datos, Sección 3</em>.
 </div>
 <div id="ref-silberschatz2020" class="csl-entry" role="listitem">
 Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System Concepts</em>. 7.ª ed. McGraw-Hill Education.
@@ -982,7 +1060,7 @@ Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>IIC2413 · Bases de Datos</p>
+<p>Bases de Datos · Estudio por conceptos</p>
 </div>   
     <div class="nav-footer-center">
       &nbsp;

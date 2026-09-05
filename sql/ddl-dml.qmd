@@ -8,13 +8,13 @@ description: "Cómo SQL materializa un esquema relacional y cómo se insertan, a
 El [modelo relacional](../fundamentos/modelo-relacional.qmd) separa **esquema** y **datos**. SQL refleja esa separación:
 
 - DDL (*Data Definition Language*) define o modifica la estructura;
-- DML (*Data Manipulation Language*) modifica las tuplas almacenadas. [@riveros2026-clase03]
+- DML (*Data Manipulation Language*) modifica las tuplas almacenadas.
 
-La Clase 03 vincula explícitamente `CREATE TABLE` con la definición del esquema e `INSERT INTO` con la construcción de las relaciones de la instancia. [@riveros2026-clase03]
+`CREATE TABLE` define la estructura de una tabla; `INSERT INTO` agrega filas a la instancia. [@silberschatz2020]
 
 ## `CREATE TABLE`
 
-La forma básica presentada en el curso es:
+La forma básica es:
 
 ```sql
 CREATE TABLE nombre_relacion (
@@ -42,11 +42,11 @@ CREATE TABLE Curso (
 );
 ```
 
-La declaración de `PRIMARY KEY` se conecta con la definición formal de [llave](../diseno/dependencias-llaves.qmd). No introducimos aún llaves foráneas porque la integridad referencial aparece en el programa, pero todavía no ha sido desarrollada en los materiales disponibles. [@riveros2026-programa]
+La declaración de `PRIMARY KEY` se conecta con la definición formal de [llave](../diseno/dependencias-llaves.qmd). Estos ejemplos se concentran en la estructura y las llaves primarias; las restricciones entre tablas requieren además especificar la integridad referencial del dominio.
 
 ## Tipos de datos
 
-La Clase 03 agrupa ejemplos de tipos SQL en categorías como: [@riveros2026-clase03]
+Los tipos SQL pueden agruparse en categorías como:
 
 - numéricos: `INTEGER`, `SMALLINT`, `FLOAT`, ...;
 - caracteres: `CHAR(n)`, `VARCHAR(n)`, `CLOB`, ...;
@@ -55,12 +55,12 @@ La Clase 03 agrupa ejemplos de tipos SQL en categorías como: [@riveros2026-clas
 - temporales: `DATE`, `TIME`, `TIMESTAMP`, ...
 
 ::: {.callout-warning title="SQL estándar y motores reales"}
-Los nombres, tamaños, conversiones y comportamiento exacto de los tipos dependen del RDBMS. Por ejemplo, distintos motores implementan de manera diferente números en punto flotante, booleanos y tipos de texto. El curso recomienda verificar los tipos soportados por cada motor. [@riveros2026-clase03]
+Los nombres, tamaños, conversiones y comportamiento exacto de los tipos dependen del RDBMS. Por ejemplo, distintos motores implementan de manera diferente números en punto flotante, booleanos y tipos de texto. Verifica los tipos soportados por el motor elegido.
 :::
 
 ## Modificar el esquema
 
-El curso introduce operaciones como:
+Para modificar o eliminar estructuras se usan instrucciones como:
 
 ```sql
 DROP TABLE nombre_relacion;
@@ -76,7 +76,7 @@ ALTER TABLE nombre_relacion
 DROP COLUMN atributo;
 ```
 
-El soporte concreto de algunas variantes de `ALTER TABLE` depende del motor y su versión. [@riveros2026-clase03; @silberschatz2020]
+El soporte concreto de algunas variantes de `ALTER TABLE` depende del motor y su versión. [@silberschatz2020]
 
 ## Insertar tuplas
 
@@ -98,10 +98,10 @@ También podemos nombrar solo algunos atributos:
 
 ```sql
 INSERT INTO Profesor (pid, nombre)
-VALUES ('p1', 'Riveros');
+VALUES ('p1', 'Elena');
 ```
 
-Si `departamento` admite `NULL` y no tiene un valor por defecto distinto, quedará sin un valor conocido. La semántica de [NULL](../nulos/null-tres-valores.qmd) se desarrolla por separado. [@riveros2026-clase03; @riveros2026-clase06]
+Si `departamento` admite `NULL` y no tiene un valor por defecto distinto, quedará sin un valor conocido. La semántica de [NULL](../nulos/null-tres-valores.qmd) se desarrolla por separado.
 
 ::: {.callout-warning title="No omitir columnas sin revisar restricciones"}
 Omitir una columna no garantiza que la inserción sea válida: la operación puede fallar si la columna tiene `NOT NULL` y no posee un valor por defecto compatible.
@@ -138,7 +138,7 @@ Ejemplo:
 ```sql
 DELETE FROM Inscribe
 WHERE rut = 'r2'
-  AND codigo = 'IIC2413'
+  AND codigo = 'BD101'
   AND semestre = '2025-2';
 ```
 
@@ -146,15 +146,15 @@ De nuevo, `WHERE` determina qué filas son afectadas.
 
 ## Esquema teórico y SQL
 
-En el modelo nombrado del curso, un esquema especifica nombres de relaciones y sus atributos. `CREATE TABLE` agrega además información propia de un RDBMS real: tipos, restricciones y otras propiedades de almacenamiento lógico. [@riveros2026-clase03]
+En el modelo de relaciones nombradas, un esquema especifica nombres de relaciones y sus atributos. `CREATE TABLE` agrega además información propia de un RDBMS real: tipos, restricciones y otras propiedades de almacenamiento lógico.
 
 Por ello, la correspondencia es conceptual, no una identidad literal:
 
-\[
+$$
 \text{esquema relacional}
 \quad\longrightarrow\quad
 \text{DDL SQL con tipos y restricciones}.
-\]
+$$
 
 ## Ejemplo mínimo del esquema transversal
 
@@ -184,7 +184,7 @@ CREATE TABLE Requisito (
 );
 ```
 
-Las restricciones de llave para relaciones multivaluadas y las futuras llaves foráneas deben decidirse desde el modelo conceptual, no solo desde la sintaxis SQL.
+Las restricciones de llave para relaciones multivaluadas y las llaves foráneas deben decidirse desde el modelo conceptual, no solo desde la sintaxis SQL.
 
 ::: {.summary-box}
 ### Resumen
@@ -193,7 +193,7 @@ Las restricciones de llave para relaciones multivaluadas y las futuras llaves fo
 - `CREATE TABLE` agrega tipos y restricciones a la estructura relacional.
 - `INSERT`, `UPDATE` y `DELETE` alteran la instancia.
 - El soporte exacto de tipos y algunas operaciones de esquema depende del RDBMS.
-- `NULL`, llaves e integridad referencial tienen semántica propia y se estudian en sus páginas correspondientes.
+- `NULL` y las llaves tienen semántica propia, desarrollada en las páginas enlazadas.
 :::
 
 ::: {.related-links}
