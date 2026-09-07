@@ -35,7 +35,7 @@ Para servir el resultado con GitHub Pages, configura la publicación desde la ca
 - `diseno/`: dependencias funcionales, llaves, clausura y descomposiciones.
 - `references.bib`: las cinco obras académicas de la bibliografía principal.
 - `theme.scss`: paleta semántica, tipografía y variables compartidas de Bootstrap/Quarto.
-- `styles.css`: superficies, navegación y componentes responsivos; sombras, radios y espaciado centralizados.
+- `styles/`: estilos globales organizados por base, layout, componentes, conceptos y comportamiento responsivo.
 
 La interfaz aprovecha Bootstrap incluido en Quarto, sin dependencias adicionales ni fuentes externas. Conserva el menú colapsable de Quarto por debajo de 992 px, adapta los enlaces y recuadros a una columna en móvil y mantiene el desplazamiento de tablas y fórmulas dentro de sus contenedores. Respeta la preferencia de movimiento reducido y ofrece estados de foco para navegación con teclado.
 

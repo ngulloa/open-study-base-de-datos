@@ -1,0 +1,53 @@
+/* Escritorio ancho. */
+@media (min-width: 992px) {
+  #quarto-sidebar { padding-top: 2rem; }
+  .fullcontent #quarto-content > main { padding: 2.5rem 3rem; }
+}
+
+/* Sidebar colapsable y controles táctiles. */
+@media (max-width: 991.98px) {
+  #quarto-content > main { margin-top: 1.25rem; }
+  #quarto-sidebar { background: var(--db-surface); box-shadow: var(--db-shadow-lg); padding-right: 1rem; }
+  .sidebar-navigation .sidebar-item .sidebar-item-text { min-height: 44px; display: flex; align-items: center; }
+  .sidebar-navigation .sidebar-item-toggle { min-width: 44px; min-height: 44px; }
+  .code-copy-button { width: 44px; height: 44px; opacity: 1; }
+}
+
+/* Tablet. */
+@media (max-width: 767.98px) {
+  .related-links ul { columns: 1; }
+  #quarto-content > main { padding: 1.25rem; }
+  h2 { font-size: 1.4rem; }
+  .callout-body-container { overflow-x: auto; }
+  .nav-page a { padding: .75rem; font-size: .85rem; }
+}
+
+/* Teléfonos. */
+@media (max-width: 575.98px) {
+  :root { font-size: 16px; }
+  body { line-height: 1.65; }
+  #quarto-content > main { padding: 1.1rem; border-radius: var(--db-radius); }
+  .hero-db { padding: 1.25rem; }
+  .topic-grid { grid-template-columns: minmax(0, 1fr); }
+  .topic-card { padding: 1.25rem; }
+  .hero-actions { flex-direction: column; align-items: stretch; }
+  .hero-actions .btn { width: 100%; }
+  .schema-box, .summary-box { padding: 1rem; }
+  .page-navigation { gap: .75rem; flex-wrap: wrap; }
+  .page-navigation .nav-page { flex: 1 1 100%; max-width: 100%; }
+}
+
+/* Movimiento reducido. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* Impresión. */
+@media print {
+  body, #quarto-content > main { background: white; }
+  #quarto-content > main { box-shadow: none; padding: 0; margin: 0; }
+  .hero-db, .topic-card, .summary-box, div.callout, div.sourceCode { box-shadow: none; break-inside: avoid; }
+  .hero-actions { display: none; }
+  table.table, .table-responsive, .math.display, mjx-container[display="true"] { overflow: visible; }
+}

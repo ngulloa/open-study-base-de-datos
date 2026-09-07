@@ -1,0 +1,61 @@
+/* Bloque de conceptos clave. */
+.concept-section {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: clamp(.9rem, 1.5vw, 1.25rem) 0 clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.concept-label {
+  margin: 0 0 .65rem;
+  color: var(--db-text-secondary);
+  font-size: clamp(.88rem, 1.1vw, .95rem);
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+/* Etiquetas de conceptos. */
+.concept-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .55rem .7rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+.concept-tags > p { display: contents; margin: 0; }
+.concept-tag {
+  display: inline-flex;
+  flex: 0 1 auto;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  max-width: 100%;
+  padding: .35rem .75rem;
+  border: 1px solid #b8c5d6;
+  border-radius: 999px;
+  background-color: #eef4fb;
+  color: #40506a;
+  box-shadow: var(--db-shadow-sm);
+  font-size: clamp(.8rem, 1vw, .86rem);
+  font-weight: 500;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+/* Ajustes compactos del componente. */
+@media (max-width: 767.98px) {
+  .concept-section { margin: 1.5rem 0 2.5rem; }
+  .concept-label { margin-bottom: .8rem; }
+  .concept-tags { row-gap: .7rem; }
+}
+
+@media (max-width: 575.98px) {
+  .concept-section { margin: .75rem 0 1.75rem; }
+  .concept-label { margin-bottom: .5rem; font-size: .84rem; }
+  .concept-tags { gap: .45rem .5rem; }
+  .concept-tag { padding: .3rem .6rem; font-size: .8rem; }
+}

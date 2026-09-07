@@ -732,11 +732,11 @@
     ]
   },
   {
-    "objectID": "fundamentos/modelo-relacional.html#intuición-y-concepto",
-    "href": "fundamentos/modelo-relacional.html#intuición-y-concepto",
-    "title": "Modelo relacional",
-    "section": "",
-    "text": "El modelo relacional representa la información mediante relaciones. Su construcción formal parte de objetos matemáticos simples: tuplas, producto cartesiano, relaciones, esquemas y bases de datos.\nUsaremos el dominio universitario como ejemplo transversal. En su forma posicional, una tupla de estudiante puede representarse como\n\\[\n(r1,\\ \\text{Ana},\\ \\text{IngenieríaCivil}).\n\\]\nAquí la posición 1 representa el RUT, la posición 2 el nombre y la posición 3 la carrera. En la página de relaciones nombradas reemplazaremos esta dependencia de posiciones por atributos explícitos.",
+    "objectID": "fundamentos/modelo-relacional.html#introducción",
+    "href": "fundamentos/modelo-relacional.html#introducción",
+    "title": "Modelo relacional: tuplas, relaciones, esquemas y bases de datos",
+    "section": "Introducción",
+    "text": "Introducción\nEl modelo relacional representa la información mediante relaciones. Su construcción formal parte de objetos matemáticos simples: tuplas, producto cartesiano, relaciones, esquemas y bases de datos.\nUsaremos el dominio universitario como ejemplo transversal. En su forma posicional, una tupla de estudiante puede representarse como\n\\[\n(r1,\\ \\text{Ana},\\ \\text{IngenieríaCivil}).\n\\]\nAquí la posición 1 representa el RUT, la posición 2 el nombre y la posición 3 la carrera. En la página de relaciones nombradas reemplazaremos esta dependencia de posiciones por atributos explícitos.",
     "crumbs": [
       "Fundamentos del modelo relacional",
       "Modelo relacional"
@@ -758,7 +758,7 @@
     "href": "fundamentos/modelo-relacional.html#producto-cartesiano",
     "title": "Modelo relacional: tuplas, relaciones, esquemas y bases de datos",
     "section": "Producto cartesiano",
-    "text": "Producto cartesiano\nPara conjuntos \\(A_1,\\ldots,A_k\\), el producto cartesiano es\n\\[\nA_1\\times\\cdots\\times A_k\n:=\n\\{(a_1,\\ldots,a_k)\\mid a_i\\in A_i\\text{ para todo }i\\}.\n\\]Relaciones\nEs el conjunto de todas las \\(k\\)-tuplas que pueden formarse tomando un elemento de cada conjunto.\nPara un conjunto \\(A\\), definimos\n\\[\nA^k=\\underbrace{A\\times\\cdots\\times A}_{k\\text{ veces}},\n\\qquad\nA^0=\\{()\\}.\n\\]",
+    "text": "Producto cartesiano\nPara conjuntos \\(A_1,\\ldots,A_k\\), el producto cartesiano es\n\\[\nA_1\\times\\cdots\\times A_k\n:=\n\\{(a_1,\\ldots,a_k)\\mid a_i\\in A_i\\text{ para todo }i\\}.\n\\]\nEs el conjunto de todas las \\(k\\)-tuplas que pueden formarse tomando un elemento de cada conjunto.\nPara un conjunto \\(A\\), definimos\n\\[\nA^k=\\underbrace{A\\times\\cdots\\times A}_{k\\text{ veces}},\n\\qquad\nA^0=\\{()\\}.\n\\]",
     "crumbs": [
       "Fundamentos del modelo relacional",
       "Modelo relacional"
@@ -2137,17 +2137,6 @@
     "crumbs": [
       "Teoría de consultas",
       "Joins y operadores derivados"
-    ]
-  },
-  {
-    "objectID": "fundamentos/modelo-relacional.html#introducción",
-    "href": "fundamentos/modelo-relacional.html#introducción",
-    "title": "Modelo relacional: tuplas, relaciones, esquemas y bases de datos",
-    "section": "Introducción",
-    "text": "Introducción\nEl modelo relacional representa la información mediante relaciones. Su construcción formal parte de objetos matemáticos simples: tuplas, producto cartesiano, relaciones, esquemas y bases de datos.\nUsaremos el dominio universitario como ejemplo transversal. En su forma posicional, una tupla de estudiante puede representarse como\n\\[\n(r1,\\ \\text{Ana},\\ \\text{IngenieríaCivil}).\n\\]\nAquí la posición 1 representa el RUT, la posición 2 el nombre y la posición 3 la carrera. En la página de relaciones nombradas reemplazaremos esta dependencia de posiciones por atributos explícitos.",
-    "crumbs": [
-      "Fundamentos del modelo relacional",
-      "Modelo relacional"
     ]
   }
 ]

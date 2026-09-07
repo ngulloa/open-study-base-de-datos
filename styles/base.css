@@ -1,0 +1,38 @@
+/* Variables globales: radios, espaciados, sombras y transiciones. */
+:root {
+  --db-radius-sm: .4rem;
+  --db-radius: .65rem;
+  --db-radius-lg: 1rem;
+  --db-space-1: .5rem;
+  --db-space-2: 1rem;
+  --db-space-3: 1.5rem;
+  --db-space-4: 2rem;
+  --db-shadow-sm: 0 2px 5px rgb(24 43 73 / 5%), 0 5px 14px rgb(24 43 73 / 4%);
+  --db-shadow-md: 0 4px 10px rgb(24 43 73 / 5%), 0 14px 32px rgb(24 43 73 / 7%);
+  --db-shadow-lg: 0 8px 24px rgb(24 43 73 / 9%), 0 24px 64px rgb(24 43 73 / 12%);
+  --db-focus: 0 0 0 3px rgb(37 99 235 / 22%);
+  --db-transition: 150ms ease;
+}
+
+/* Documento, enlaces e interacción accesible. */
+body { color: var(--db-text-primary); background: var(--db-background); }
+a { color: var(--db-primary-hover); text-underline-offset: .2em; text-decoration-thickness: .07em; }
+a:hover { color: var(--db-heading); }
+a, button, input, select, textarea {
+  transition: color var(--db-transition), background-color var(--db-transition),
+    border-color var(--db-transition), box-shadow var(--db-transition);
+}
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--db-primary);
+  outline-offset: 3px;
+}
+::selection { background: #dbeafe; color: var(--db-heading); }
+
+/* Jerarquía tipográfica del contenido. */
+h1, h2, h3, h4 { color: var(--db-heading); letter-spacing: -.025em; }
+h1 { font-size: clamp(1.8rem, 3.3vw, 2.65rem); line-height: 1.18; text-wrap: balance; }
+h2 { font-size: 1.55rem; margin-top: 2.5rem; padding-bottom: .5rem; border-color: var(--db-border); }
+h3 { font-size: 1.18rem; margin-top: 1.75rem; line-height: 1.4; }
+main p, main li, main h1, main h2, main h3 { overflow-wrap: anywhere; }
+main li + li { margin-top: .3rem; }
+.lead, .quarto-title .subtitle { color: var(--db-text-secondary); }

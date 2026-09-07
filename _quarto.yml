@@ -71,7 +71,12 @@ format:
     theme:
       - cosmo
       - theme.scss
-    css: styles.css
+    css:
+      - styles/base.css
+      - styles/layout.css
+      - styles/components.css
+      - styles/concepts.css
+      - styles/responsive.css
     toc: true
     toc-depth: 3
     number-sections: false

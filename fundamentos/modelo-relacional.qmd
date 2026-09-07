@@ -1,8 +1,5 @@
 ---
 title: "Modelo relacional: tuplas, relaciones, esquemas y bases de datos"
-format:
-  html:
-    css: styles.css
 ---
 
 <div class="concept-section">
@@ -74,7 +71,7 @@ $$
 A_1\times\cdots\times A_k
 :=
 \{(a_1,\ldots,a_k)\mid a_i\in A_i\text{ para todo }i\}.
-$$Relaciones
+$$
 
 Es el conjunto de todas las $k$-tuplas que pueden formarse tomando un elemento de cada conjunto.
 
