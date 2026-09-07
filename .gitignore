@@ -5,3 +5,6 @@
 **/*.quarto_ipynb
 
 AGENTS.md
+
+/libros_referencia
+

@@ -1,5 +1,4 @@
-/* Shared design system. Colors come from theme.scss / Bootstrap.
-   Breakpoints: 576px compact, 768px tablet, 992px Quarto sidebar. */
+/* Variables globales de diseño: radios, espaciados, sombras y transiciones compartidas. */
 :root {
   --db-radius-sm: .4rem;
   --db-radius: .65rem;
@@ -15,20 +14,46 @@
   --db-transition: 150ms ease;
 }
 
-body { color: var(--db-text-primary); background: var(--db-background); }
-a { color: var(--db-primary-hover); text-underline-offset: .2em; text-decoration-thickness: .07em; }
-a:hover { color: var(--db-heading); }
-a, button, input, select, textarea {
-  transition: color var(--db-transition), background-color var(--db-transition),
-    border-color var(--db-transition), box-shadow var(--db-transition);
+/* Define colores base del documento. */
+body {
+  color: var(--db-text-primary);
+  background: var(--db-background);
 }
+
+/* Define el aspecto base de los enlaces. */
+a {
+  color: var(--db-primary-hover);
+  text-underline-offset: .2em;
+  text-decoration-thickness: .07em;
+}
+
+/* Ajusta el color de los enlaces al pasar el cursor. */
+a:hover {
+  color: var(--db-heading);
+}
+
+/* Suaviza cambios visuales en controles interactivos. */
+a, button, input, select, textarea {
+  transition:
+    color var(--db-transition),
+    background-color var(--db-transition),
+    border-color var(--db-transition),
+    box-shadow var(--db-transition);
+}
+
+/* Muestra un foco visible y accesible al navegar con teclado. */
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--db-primary);
   outline-offset: 3px;
 }
-::selection { background: #dbeafe; color: var(--db-heading); }
 
-/* Reading surface and hierarchy; preserve Quarto's grid and sticky offsets. */
+/* Personaliza el color del texto seleccionado. */
+::selection {
+  background: #dbeafe;
+  color: var(--db-heading);
+}
+
+/* Da forma a la superficie principal de lectura sin alterar la grilla de Quarto. */
 #quarto-content > main {
   min-width: 0;
   background: var(--db-surface);
@@ -38,34 +63,108 @@ a, button, input, select, textarea {
   margin-top: var(--db-space-4);
   margin-bottom: var(--db-space-4);
 }
+
+/* Separa visualmente el bloque de título del contenido. */
 #title-block-header {
   margin-bottom: var(--db-space-4);
   padding-bottom: var(--db-space-3);
   border-bottom: 1px solid var(--db-border);
 }
-h1, h2, h3, h4 { color: var(--db-heading); letter-spacing: -.025em; }
-h1 { font-size: clamp(1.8rem, 3.3vw, 2.65rem); line-height: 1.18; text-wrap: balance; }
-h2 { font-size: 1.55rem; margin-top: 2.5rem; padding-bottom: .5rem; border-color: var(--db-border); }
-h3 { font-size: 1.18rem; margin-top: 1.75rem; line-height: 1.4; }
-main p, main li, main h1, main h2, main h3 { overflow-wrap: anywhere; }
-main li + li { margin-top: .3rem; }
-.lead, .quarto-title .subtitle { color: var(--db-text-secondary); }
-.quarto-title-breadcrumbs { line-height: 1.5; }
 
-/* Existing navigation: clear active location and comfortable hit areas. */
-#quarto-sidebar { padding-right: 1rem; }
-.sidebar-title { font-size: 1.25rem; font-weight: 750; letter-spacing: -.04em; }
-.sidebar-title > a { color: var(--db-heading); }
-.sidebar-header { margin-bottom: var(--db-space-2); }
-.sidebar-menu-container { padding-top: .75rem; }
-.sidebar-item-container { border-radius: var(--db-radius); }
+/* Unifica color y espaciado tipográfico de los encabezados. */
+h1, h2, h3, h4 {
+  color: var(--db-heading);
+  letter-spacing: -.025em;
+}
+
+/* Ajusta tamaño y lectura del título principal. */
+h1 {
+  font-size: clamp(1.8rem, 3.3vw, 2.65rem);
+  line-height: 1.18;
+  text-wrap: balance;
+}
+
+/* Ajusta los encabezados de segundo nivel. */
+h2 {
+  font-size: 1.55rem;
+  margin-top: 2.5rem;
+  padding-bottom: .5rem;
+  border-color: var(--db-border);
+}
+
+/* Ajusta los encabezados de tercer nivel. */
+h3 {
+  font-size: 1.18rem;
+  margin-top: 1.75rem;
+  line-height: 1.4;
+}
+
+/* Evita desbordes de texto largo en el contenido principal. */
+main p, main li, main h1, main h2, main h3 {
+  overflow-wrap: anywhere;
+}
+
+/* Separa ligeramente elementos consecutivos de listas. */
+main li + li {
+  margin-top: .3rem;
+}
+
+/* Usa un tono secundario para textos introductorios y subtítulos. */
+.lead, .quarto-title .subtitle {
+  color: var(--db-text-secondary);
+}
+
+/* Mejora la legibilidad de las migas de pan del título. */
+.quarto-title-breadcrumbs {
+  line-height: 1.5;
+}
+
+/* Da espacio lateral al sidebar principal. */
+#quarto-sidebar {
+  padding-right: 1rem;
+}
+
+/* Jerarquiza el título del sidebar. */
+.sidebar-title {
+  font-size: 1.25rem;
+  font-weight: 750;
+  letter-spacing: -.04em;
+}
+
+/* Mantiene el título enlazado del sidebar con el color de encabezados. */
+.sidebar-title > a {
+  color: var(--db-heading);
+}
+
+/* Separa el encabezado del sidebar de su contenido. */
+.sidebar-header {
+  margin-bottom: var(--db-space-2);
+}
+
+/* Añade aire sobre el menú lateral. */
+.sidebar-menu-container {
+  padding-top: .75rem;
+}
+
+/* Redondea los contenedores de los ítems del sidebar. */
+.sidebar-item-container {
+  border-radius: var(--db-radius);
+}
+
+/* Define tamaño, relleno y legibilidad de cada opción del sidebar. */
 .sidebar-navigation .sidebar-item .sidebar-item-text {
   padding: .55rem .65rem;
   border-radius: var(--db-radius);
   font-size: .85rem;
   line-height: 1.45;
 }
-.sidebar-item-section > .sidebar-item-container > .sidebar-item-text { font-weight: 650; }
+
+/* Destaca los encabezados de sección del sidebar. */
+.sidebar-item-section > .sidebar-item-container > .sidebar-item-text {
+  font-weight: 650;
+}
+
+/* Aumenta el área clickeable de los controles de expansión del sidebar. */
 .sidebar-navigation .sidebar-item-toggle {
   min-width: 2.25rem;
   min-height: 2.5rem;
@@ -74,30 +173,98 @@ main li + li { margin-top: .3rem; }
   justify-content: center;
   border-radius: var(--db-radius-sm);
 }
-.sidebar-navigation .sidebar-item-toggle .bi { margin-left: 0 !important; }
-.sidebar-item-container:hover { background: #e9eef6; }
+
+/* Corrige el margen heredado de los íconos Bootstrap del sidebar. */
+.sidebar-navigation .sidebar-item-toggle .bi {
+  margin-left: 0 !important;
+}
+
+/* Marca visualmente un ítem del sidebar al pasar el cursor. */
+.sidebar-item-container:hover {
+  background: #e9eef6;
+}
+
+/* Destaca la página activa en la navegación lateral. */
 .sidebar-navigation a.active {
   color: var(--db-primary-hover) !important;
   background: var(--db-primary-light);
   box-shadow: inset 3px 0 var(--db-primary);
   font-weight: 650;
 }
-.sidebar-section { margin-left: .6rem; border-left: 1px solid var(--db-border); }
-#quarto-margin-sidebar #TOC { padding: .75rem .5rem .75rem 0; }
-#TOC #toc-title { color: var(--db-heading); font-weight: 650; margin-bottom: .8rem; }
-.sidebar nav[role="doc-toc"] ul > li > a { padding-top: .3rem; padding-bottom: .3rem; line-height: 1.5; }
+
+/* Indenta y separa las subsecciones del sidebar. */
+.sidebar-section {
+  margin-left: .6rem;
+  border-left: 1px solid var(--db-border);
+}
+
+/* Ajusta el espaciado del índice lateral de la página. */
+#quarto-margin-sidebar #TOC {
+  padding: .75rem .5rem .75rem 0;
+}
+
+/* Jerarquiza el título del índice de contenidos. */
+#TOC #toc-title {
+  color: var(--db-heading);
+  font-weight: 650;
+  margin-bottom: .8rem;
+}
+
+/* Mejora el área clickeable de los enlaces del índice. */
+.sidebar nav[role="doc-toc"] ul > li > a {
+  padding-top: .3rem;
+  padding-bottom: .3rem;
+  line-height: 1.5;
+}
+
+/* Destaca la sección activa dentro del índice. */
 .sidebar nav[role="doc-toc"] ul > li > a.active {
   color: var(--db-primary-hover) !important;
   border-left-color: var(--db-primary);
   background: var(--db-primary-light);
 }
-.quarto-secondary-nav { background: var(--db-surface); box-shadow: var(--db-shadow-sm); border-bottom: 1px solid var(--db-border); }
-.quarto-secondary-nav .container-fluid { align-items: center; min-height: 3.7rem; gap: .5rem; }
-.quarto-secondary-nav .quarto-page-breadcrumbs { min-width: 0; font-size: .8rem; line-height: 1.35; }
-.quarto-secondary-nav .breadcrumb { overflow-wrap: anywhere; }
+
+/* Da fondo, sombra y borde a la navegación secundaria. */
+.quarto-secondary-nav {
+  background: var(--db-surface);
+  box-shadow: var(--db-shadow-sm);
+  border-bottom: 1px solid var(--db-border);
+}
+
+/* Alinea el contenido de la barra secundaria. */
+.quarto-secondary-nav .container-fluid {
+  align-items: center;
+  min-height: 3.7rem;
+  gap: .5rem;
+}
+
+/* Ajusta las migas de pan dentro de la barra secundaria. */
+.quarto-secondary-nav .quarto-page-breadcrumbs {
+  min-width: 0;
+  font-size: .8rem;
+  line-height: 1.35;
+}
+
+/* Permite cortar textos largos en las migas de pan. */
+.quarto-secondary-nav .breadcrumb {
+  overflow-wrap: anywhere;
+}
+
+/* Normaliza tamaño y color de los botones de menú y búsqueda. */
 .quarto-secondary-nav .btn.quarto-btn-toggle,
-.quarto-secondary-nav .btn.quarto-search-button { flex: 0 0 44px; padding: .5rem; margin: 0; color: var(--db-primary-hover); }
-.nav-page { min-width: 0; }
+.quarto-secondary-nav .btn.quarto-search-button {
+  flex: 0 0 44px;
+  padding: .5rem;
+  margin: 0;
+  color: var(--db-primary-hover);
+}
+
+/* Evita desbordes en los controles de navegación entre páginas. */
+.nav-page {
+  min-width: 0;
+}
+
+/* Da formato de tarjeta a los enlaces de navegación entre páginas. */
 .nav-page a {
   height: 100%;
   padding: .85rem 1rem;
@@ -107,11 +274,26 @@ main li + li { margin-top: .3rem; }
   box-shadow: var(--db-shadow-sm);
   transition: box-shadow var(--db-transition), border-color var(--db-transition);
 }
-.nav-page a:hover { border-color: var(--db-primary); box-shadow: var(--db-shadow-md); }
-.nav-page .nav-page-text { overflow-wrap: anywhere; }
-.nav-footer { color: var(--db-text-secondary); border-top: 1px solid var(--db-border); font-size: .8rem; }
 
-/* Home and reusable learning components. */
+/* Refuerza la respuesta visual al pasar sobre la navegación entre páginas. */
+.nav-page a:hover {
+  border-color: var(--db-primary);
+  box-shadow: var(--db-shadow-md);
+}
+
+/* Evita desbordes en el texto de navegación entre páginas. */
+.nav-page .nav-page-text {
+  overflow-wrap: anywhere;
+}
+
+/* Separa y atenúa el pie de navegación. */
+.nav-footer {
+  color: var(--db-text-secondary);
+  border-top: 1px solid var(--db-border);
+  font-size: .8rem;
+}
+
+/* Define la tarjeta destacada de portada o introducción. */
 .hero-db {
   padding: clamp(1.4rem, 3vw, 2.4rem);
   margin: 0 0 var(--db-space-4);
@@ -120,12 +302,49 @@ main li + li { margin-top: .3rem; }
   border-top: 4px solid var(--db-primary);
   box-shadow: var(--db-shadow-sm);
 }
-.hero-db h2 { margin-top: 0; padding: 0; border: 0; font-size: clamp(1.65rem, 2.6vw, 2.15rem); line-height: 1.25; }
-.hero-db p { color: var(--db-text-secondary); }
-.hero-db p:first-of-type { color: var(--db-text-primary); font-size: 1.05rem; }
-.hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin: var(--db-space-3) 0; }
-.hero-actions p { display: contents; }
-.topic-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1.25rem 0 2rem; }
+
+/* Ajusta el título dentro del bloque destacado. */
+.hero-db h2 {
+  margin-top: 0;
+  padding: 0;
+  border: 0;
+  font-size: clamp(1.65rem, 2.6vw, 2.15rem);
+  line-height: 1.25;
+}
+
+/* Atenúa el texto secundario del bloque destacado. */
+.hero-db p {
+  color: var(--db-text-secondary);
+}
+
+/* Resalta el primer párrafo del bloque destacado. */
+.hero-db p:first-of-type {
+  color: var(--db-text-primary);
+  font-size: 1.05rem;
+}
+
+/* Distribuye las acciones del bloque destacado. */
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin: var(--db-space-3) 0;
+}
+
+/* Evita que los párrafos añadan una caja extra alrededor de las acciones. */
+.hero-actions p {
+  display: contents;
+}
+
+/* Crea una grilla de dos columnas para tarjetas temáticas. */
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0 2rem;
+}
+
+/* Define la apariencia base de cada tarjeta temática. */
 .topic-card {
   min-width: 0;
   display: flex;
@@ -137,37 +356,189 @@ main li + li { margin-top: .3rem; }
   box-shadow: var(--db-shadow-sm);
   transition: box-shadow var(--db-transition), border-color var(--db-transition);
 }
-.topic-card:hover, .topic-card:focus-within { border-color: #9bb9f4; box-shadow: var(--db-shadow-md); }
-.topic-card h3 { margin: 0 0 .75rem; font-size: 1.15rem; }
-.topic-card p { color: var(--db-text-secondary); font-size: .93rem; }
-.topic-card p:last-child { margin-top: auto; margin-bottom: 0; padding-top: .5rem; }
-.topic-card p:last-child a { display: inline-block; padding: .4rem 0; font-weight: 600; text-decoration: none; }
-.topic-card p:last-child a:hover { text-decoration: underline; }
-.schema-box, .summary-box { border-radius: var(--db-radius); padding: 1.15rem 1.35rem; margin: 1.4rem 0; }
-.schema-box { border-left: 3px solid var(--db-primary); background: var(--db-primary-light); }
-.summary-box { background: #f7f9fc; border: 1px solid var(--db-border); box-shadow: var(--db-shadow-sm); }
-.schema-box > :last-child, .summary-box > :last-child { margin-bottom: 0; }
-.summary-box > :first-child { margin-top: 0; }
-.related-links ul { columns: 2; column-gap: 2rem; padding-left: 1.15rem; }
-.related-links li { break-inside: avoid; padding: .3rem 0; }
-div.callout { border-radius: var(--db-radius); box-shadow: var(--db-shadow-sm); margin: 1.5rem 0; border-color: var(--db-border); }
-div.callout.callout-note { border-left-color: var(--db-primary); }
-div.callout.callout-warning, div.callout.callout-caution { border-left-color: var(--db-warning); }
-div.callout.callout-tip { border-left-color: var(--db-success); }
-div.callout.callout-important { border-left-color: var(--db-danger); }
-div.callout.callout-style-default > .callout-header { padding: .6rem .85rem; font-weight: 650; }
-div.callout.callout-style-default > .callout-body { padding: .65rem .85rem; }
-div.callout.callout-style-default.callout-note > .callout-header { background: var(--db-primary-light); }
-.callout-body-container { min-width: 0; }
 
-/* Bootstrap variants inherit the palette; primary is reserved for key actions. */
-.btn { min-height: 44px; white-space: normal; border-radius: var(--db-radius); }
-.btn-primary { --bs-btn-hover-bg: var(--db-primary-hover); --bs-btn-hover-border-color: var(--db-primary-hover); box-shadow: 0 3px 7px rgb(37 99 235 / 18%); }
-.btn-secondary { --bs-btn-bg: #edf1f6; --bs-btn-color: var(--db-text-primary); --bs-btn-border-color: #edf1f6; --bs-btn-hover-bg: #e1e7ef; --bs-btn-hover-color: var(--db-heading); --bs-btn-hover-border-color: #dce3ed; }
-.btn-outline-primary { --bs-btn-color: var(--db-primary-hover); --bs-btn-border-color: #9bb9f4; }
-.btn:focus-visible { box-shadow: var(--db-focus); }
-.btn:active { box-shadow: inset 0 2px 4px rgb(24 43 73 / 12%); }
-.btn:disabled, .btn.disabled { box-shadow: none; opacity: .55; }
+/* Destaca una tarjeta temática al interactuar con ella. */
+.topic-card:hover,
+.topic-card:focus-within {
+  border-color: #9bb9f4;
+  box-shadow: var(--db-shadow-md);
+}
+
+/* Ajusta el título de cada tarjeta temática. */
+.topic-card h3 {
+  margin: 0 0 .75rem;
+  font-size: 1.15rem;
+}
+
+/* Ajusta el texto descriptivo de las tarjetas temáticas. */
+.topic-card p {
+  color: var(--db-text-secondary);
+  font-size: .93rem;
+}
+
+/* Empuja el último párrafo al pie de la tarjeta. */
+.topic-card p:last-child {
+  margin-top: auto;
+  margin-bottom: 0;
+  padding-top: .5rem;
+}
+
+/* Da formato al enlace final de cada tarjeta. */
+.topic-card p:last-child a {
+  display: inline-block;
+  padding: .4rem 0;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Subraya el enlace final al pasar el cursor. */
+.topic-card p:last-child a:hover {
+  text-decoration: underline;
+}
+
+/* Comparte geometría y espaciado entre cajas de esquema y resumen. */
+.schema-box,
+.summary-box {
+  border-radius: var(--db-radius);
+  padding: 1.15rem 1.35rem;
+  margin: 1.4rem 0;
+}
+
+/* Destaca las cajas de esquema con el color primario. */
+.schema-box {
+  border-left: 3px solid var(--db-primary);
+  background: var(--db-primary-light);
+}
+
+/* Da una superficie neutra a las cajas de resumen. */
+.summary-box {
+  background: #f7f9fc;
+  border: 1px solid var(--db-border);
+  box-shadow: var(--db-shadow-sm);
+}
+
+/* Elimina margen sobrante al final de cajas de esquema y resumen. */
+.schema-box > :last-child,
+.summary-box > :last-child {
+  margin-bottom: 0;
+}
+
+/* Elimina margen superior sobrante al inicio de las cajas de resumen. */
+.summary-box > :first-child {
+  margin-top: 0;
+}
+
+/* Distribuye enlaces relacionados en dos columnas. */
+.related-links ul {
+  columns: 2;
+  column-gap: 2rem;
+  padding-left: 1.15rem;
+}
+
+/* Evita cortes incómodos dentro de cada enlace relacionado. */
+.related-links li {
+  break-inside: avoid;
+  padding: .3rem 0;
+}
+
+/* Unifica geometría y sombra de los callouts de Quarto. */
+div.callout {
+  border-radius: var(--db-radius);
+  box-shadow: var(--db-shadow-sm);
+  margin: 1.5rem 0;
+  border-color: var(--db-border);
+}
+
+/* Usa el color primario para callouts informativos. */
+div.callout.callout-note {
+  border-left-color: var(--db-primary);
+}
+
+/* Usa el color de advertencia para warnings y cautions. */
+div.callout.callout-warning,
+div.callout.callout-caution {
+  border-left-color: var(--db-warning);
+}
+
+/* Usa el color de éxito para consejos. */
+div.callout.callout-tip {
+  border-left-color: var(--db-success);
+}
+
+/* Usa el color de peligro para contenido importante. */
+div.callout.callout-important {
+  border-left-color: var(--db-danger);
+}
+
+/* Ajusta el encabezado de los callouts estándar. */
+div.callout.callout-style-default > .callout-header {
+  padding: .6rem .85rem;
+  font-weight: 650;
+}
+
+/* Ajusta el cuerpo de los callouts estándar. */
+div.callout.callout-style-default > .callout-body {
+  padding: .65rem .85rem;
+}
+
+/* Da fondo primario suave al encabezado de notas. */
+div.callout.callout-style-default.callout-note > .callout-header {
+  background: var(--db-primary-light);
+}
+
+/* Evita desbordes de contenido dentro de los callouts. */
+.callout-body-container {
+  min-width: 0;
+}
+
+/* Define tamaño mínimo y geometría común de botones Bootstrap. */
+.btn {
+  min-height: 44px;
+  white-space: normal;
+  border-radius: var(--db-radius);
+}
+
+/* Ajusta hover y sombra del botón primario. */
+.btn-primary {
+  --bs-btn-hover-bg: var(--db-primary-hover);
+  --bs-btn-hover-border-color: var(--db-primary-hover);
+  box-shadow: 0 3px 7px rgb(37 99 235 / 18%);
+}
+
+/* Define la paleta del botón secundario. */
+.btn-secondary {
+  --bs-btn-bg: #edf1f6;
+  --bs-btn-color: var(--db-text-primary);
+  --bs-btn-border-color: #edf1f6;
+  --bs-btn-hover-bg: #e1e7ef;
+  --bs-btn-hover-color: var(--db-heading);
+  --bs-btn-hover-border-color: #dce3ed;
+}
+
+/* Ajusta color y borde del botón primario delineado. */
+.btn-outline-primary {
+  --bs-btn-color: var(--db-primary-hover);
+  --bs-btn-border-color: #9bb9f4;
+}
+
+/* Refuerza el foco accesible de los botones. */
+.btn:focus-visible {
+  box-shadow: var(--db-focus);
+}
+
+/* Añade profundidad al estado presionado de los botones. */
+.btn:active {
+  box-shadow: inset 0 2px 4px rgb(24 43 73 / 12%);
+}
+
+/* Atenúa botones deshabilitados y elimina su sombra. */
+.btn:disabled,
+.btn.disabled {
+  box-shadow: none;
+  opacity: .55;
+}
+
+/* Define tamaño y superficie del botón para copiar código. */
 .code-copy-button {
   width: 36px;
   height: 36px;
@@ -177,101 +548,551 @@ div.callout.callout-style-default.callout-note > .callout-header { background: v
   color: var(--db-secondary);
   opacity: .85;
 }
-.code-copy-button:hover, .code-copy-button:focus-visible { color: var(--db-primary); opacity: 1; box-shadow: var(--db-shadow-sm); }
-#quarto-back-to-top { background: var(--db-surface); color: var(--db-primary-hover); border: 1px solid var(--db-border); border-radius: 2rem; box-shadow: var(--db-shadow-md); padding: .65rem 1rem; }
-.form-control, .form-select { min-height: 44px; border-radius: var(--db-radius); }
-.form-label, .form-check-label { color: var(--db-text-primary); }
-.form-label { font-weight: 600; margin-bottom: .4rem; }
-.form-text { color: var(--db-text-secondary); }
-.form-check-input { border-color: #8897aa; }
-.form-check-input:focus { border-color: var(--db-primary); box-shadow: var(--db-focus); }
-textarea.form-control { min-height: 7rem; }
-.form-control:disabled, .form-select:disabled { background: #edf1f6; color: var(--db-text-secondary); }
 
-/* Search is the site's main form and floating panel. */
-#quarto-search .aa-Form, .aa-DetachedFormContainer .aa-Form {
+/* Destaca el botón de copiar código al interactuar con él. */
+.code-copy-button:hover,
+.code-copy-button:focus-visible {
+  color: var(--db-primary);
+  opacity: 1;
+  box-shadow: var(--db-shadow-sm);
+}
+
+/* Da formato al botón flotante para volver arriba. */
+#quarto-back-to-top {
+  background: var(--db-surface);
+  color: var(--db-primary-hover);
+  border: 1px solid var(--db-border);
+  border-radius: 2rem;
+  box-shadow: var(--db-shadow-md);
+  padding: .65rem 1rem;
+}
+
+/* Normaliza altura y radios de inputs y selects. */
+.form-control,
+.form-select {
+  min-height: 44px;
+  border-radius: var(--db-radius);
+}
+
+/* Mantiene consistencia de color en etiquetas de formulario. */
+.form-label,
+.form-check-label {
+  color: var(--db-text-primary);
+}
+
+/* Jerarquiza las etiquetas principales de formulario. */
+.form-label {
+  font-weight: 600;
+  margin-bottom: .4rem;
+}
+
+/* Atenúa los textos de ayuda de formulario. */
+.form-text {
+  color: var(--db-text-secondary);
+}
+
+/* Define el borde de los controles de selección. */
+.form-check-input {
+  border-color: #8897aa;
+}
+
+/* Destaca los controles de selección al recibir foco. */
+.form-check-input:focus {
+  border-color: var(--db-primary);
+  box-shadow: var(--db-focus);
+}
+
+/* Da una altura mínima cómoda a las áreas de texto. */
+textarea.form-control {
+  min-height: 7rem;
+}
+
+/* Atenúa campos y selectores deshabilitados. */
+.form-control:disabled,
+.form-select:disabled {
+  background: #edf1f6;
+  color: var(--db-text-secondary);
+}
+
+/* Da formato al campo principal de búsqueda de Quarto. */
+#quarto-search .aa-Form,
+.aa-DetachedFormContainer .aa-Form {
   min-height: 44px;
   background: var(--db-surface);
   border: 1px solid var(--db-border);
   border-radius: var(--db-radius);
   box-shadow: var(--db-shadow-sm);
 }
-#quarto-search .aa-Form:focus-within, .aa-DetachedFormContainer .aa-Form:focus-within { border-color: var(--db-primary); box-shadow: var(--db-focus); }
-#quarto-search-results .aa-Panel, .aa-DetachedContainer, .dropdown-menu, .modal-content {
+
+/* Refuerza visualmente la búsqueda cuando contiene el foco. */
+#quarto-search .aa-Form:focus-within,
+.aa-DetachedFormContainer .aa-Form:focus-within {
+  border-color: var(--db-primary);
+  box-shadow: var(--db-focus);
+}
+
+/* Unifica superficie y sombra de paneles flotantes y modales. */
+#quarto-search-results .aa-Panel,
+.aa-DetachedContainer,
+.dropdown-menu,
+.modal-content {
   border: 1px solid var(--db-border);
   border-radius: var(--db-radius-lg);
   box-shadow: var(--db-shadow-lg);
   background: var(--db-surface);
 }
-.aa-DetachedOverlay { background: rgb(24 43 73 / 35%); }
-.aa-DetachedCancelButton { min-height: 44px; color: var(--db-primary-hover); border-radius: var(--db-radius); }
-#quarto-search-results .aa-SourceNoResults { max-width: 100%; color: var(--db-text-secondary); }
-.dropdown-item { padding: .55rem 1rem; }
-.alert { border-radius: var(--db-radius); box-shadow: var(--db-shadow-sm); }
-.badge { border-radius: var(--db-radius-sm); font-weight: 600; }
-.tippy-box { border-radius: var(--db-radius); box-shadow: var(--db-shadow-lg); }
 
-/* Dense tables and technical content scroll within their own surface. */
-.table-responsive { max-width: 100%; overflow-x: auto; margin: 1.2rem 0 1.5rem; border-radius: var(--db-radius); box-shadow: var(--db-shadow-sm); }
-table.table { display: block; max-width: 100%; overflow-x: auto; border-color: var(--db-border); font-size: .9rem; border-radius: var(--db-radius); margin: 1.2rem 0; }
-.table-responsive table.table { display: table; width: 100%; min-width: 100%; margin: 0; }
-.table > :not(caption) > * > * { padding: .6rem .8rem; box-shadow: none; }
-.table > thead > tr > th { background: #edf2f9; color: var(--db-heading); font-weight: 650; border-bottom: 1px solid var(--db-border); }
-.table > tbody > tr:nth-child(even) > * { background: #f8fafc; }
-.table > tbody > tr:hover > * { background: var(--db-primary-light); }
-.table > tbody > tr:last-child > * { border-bottom-width: 0; }
-.table td, .table th { min-width: 4rem; }
-.table caption { color: var(--db-text-secondary); }
-div.sourceCode { border: 1px solid var(--db-border); border-radius: var(--db-radius); box-shadow: var(--db-shadow-sm); }
-pre { border-radius: var(--db-radius); }
-pre:not(.sourceCode) { padding: 1rem; background: #f7f9fc; border: 1px solid var(--db-border); }
-div.sourceCode pre { border: 0; margin: 0; }
-pre.sourceCode code { padding: 1rem 2.8rem 1rem 1rem; }
-code:not(pre code) { padding: .1em .3em; border-radius: .25rem; overflow-wrap: anywhere; }
-.math.display, .math.inline { max-width: 100%; }
-.math.inline mjx-container { max-width: 100%; overflow-x: auto; overflow-y: hidden; vertical-align: middle; padding: .15em 0; }
-.math.display, mjx-container[display="true"] { max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: .2rem 0 .3rem; }
-.quarto-figure, img, svg { max-width: 100%; height: auto; }
+/* Oscurece el fondo detrás de la búsqueda desacoplada. */
+.aa-DetachedOverlay {
+  background: rgb(24 43 73 / 35%);
+}
 
+/* Da tamaño y color al botón cancelar de la búsqueda. */
+.aa-DetachedCancelButton {
+  min-height: 44px;
+  color: var(--db-primary-hover);
+  border-radius: var(--db-radius);
+}
+
+/* Ajusta el mensaje cuando no hay resultados de búsqueda. */
+#quarto-search-results .aa-SourceNoResults {
+  max-width: 100%;
+  color: var(--db-text-secondary);
+}
+
+/* Aumenta el área clickeable de cada opción de menú desplegable. */
+.dropdown-item {
+  padding: .55rem 1rem;
+}
+
+/* Redondea y eleva visualmente las alertas. */
+.alert {
+  border-radius: var(--db-radius);
+  box-shadow: var(--db-shadow-sm);
+}
+
+/* Ajusta la geometría base de badges Bootstrap. */
+.badge {
+  border-radius: var(--db-radius-sm);
+  font-weight: 600;
+}
+
+/* Redondea y eleva los tooltips. */
+.tippy-box {
+  border-radius: var(--db-radius);
+  box-shadow: var(--db-shadow-lg);
+}
+
+/* Permite desplazamiento horizontal en tablas responsivas. */
+.table-responsive {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1.2rem 0 1.5rem;
+  border-radius: var(--db-radius);
+  box-shadow: var(--db-shadow-sm);
+}
+
+/* Hace que las tablas técnicas puedan desplazarse sin romper el layout. */
+table.table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-color: var(--db-border);
+  font-size: .9rem;
+  border-radius: var(--db-radius);
+  margin: 1.2rem 0;
+}
+
+/* Recupera el comportamiento tabular normal dentro de un contenedor responsivo. */
+.table-responsive table.table {
+  display: table;
+  width: 100%;
+  min-width: 100%;
+  margin: 0;
+}
+
+/* Define el relleno interno de celdas y elimina sombras heredadas. */
+.table > :not(caption) > * > * {
+  padding: .6rem .8rem;
+  box-shadow: none;
+}
+
+/* Destaca visualmente los encabezados de tabla. */
+.table > thead > tr > th {
+  background: #edf2f9;
+  color: var(--db-heading);
+  font-weight: 650;
+  border-bottom: 1px solid var(--db-border);
+}
+
+/* Alterna el fondo de filas pares para facilitar la lectura. */
+.table > tbody > tr:nth-child(even) > * {
+  background: #f8fafc;
+}
+
+/* Resalta una fila al pasar el cursor. */
+.table > tbody > tr:hover > * {
+  background: var(--db-primary-light);
+}
+
+/* Elimina el borde inferior sobrante de la última fila. */
+.table > tbody > tr:last-child > * {
+  border-bottom-width: 0;
+}
+
+/* Evita columnas demasiado estrechas. */
+.table td,
+.table th {
+  min-width: 4rem;
+}
+
+/* Atenúa el texto de los títulos de tabla. */
+.table caption {
+  color: var(--db-text-secondary);
+}
+
+/* Da borde, radio y sombra a bloques de código fuente. */
+div.sourceCode {
+  border: 1px solid var(--db-border);
+  border-radius: var(--db-radius);
+  box-shadow: var(--db-shadow-sm);
+}
+
+/* Redondea todos los bloques preformateados. */
+pre {
+  border-radius: var(--db-radius);
+}
+
+/* Da superficie propia a bloques preformateados que no son código fuente. */
+pre:not(.sourceCode) {
+  padding: 1rem;
+  background: #f7f9fc;
+  border: 1px solid var(--db-border);
+}
+
+/* Evita bordes y márgenes duplicados dentro del contenedor de código. */
+div.sourceCode pre {
+  border: 0;
+  margin: 0;
+}
+
+/* Reserva espacio para el botón de copiar dentro del código. */
+pre.sourceCode code {
+  padding: 1rem 2.8rem 1rem 1rem;
+}
+
+/* Da formato compacto al código en línea. */
+code:not(pre code) {
+  padding: .1em .3em;
+  border-radius: .25rem;
+  overflow-wrap: anywhere;
+}
+
+/* Limita fórmulas matemáticas al ancho disponible. */
+.math.display,
+.math.inline {
+  max-width: 100%;
+}
+
+/* Permite desplazamiento horizontal en fórmulas matemáticas en línea largas. */
+.math.inline mjx-container {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  vertical-align: middle;
+  padding: .15em 0;
+}
+
+/* Permite desplazamiento horizontal en fórmulas matemáticas de bloque largas. */
+.math.display,
+mjx-container[display="true"] {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: .2rem 0 .3rem;
+}
+
+/* Hace responsivas figuras, imágenes y SVG. */
+.quarto-figure,
+img,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Ajustes para pantallas de escritorio. */
 @media (min-width: 992px) {
-  #quarto-sidebar { padding-top: 2rem; }
-  .fullcontent #quarto-content > main { padding: 2.5rem 3rem; }
+  /* Separa el sidebar del borde superior. */
+  #quarto-sidebar {
+    padding-top: 2rem;
+  }
+
+  /* Amplía el relleno del contenido en layouts de ancho completo. */
+  .fullcontent #quarto-content > main {
+    padding: 2.5rem 3rem;
+  }
 }
+
+/* Ajustes para tablet y pantallas sin sidebar fijo. */
 @media (max-width: 991.98px) {
-  #quarto-content > main { margin-top: 1.25rem; }
-  #quarto-sidebar { background: var(--db-surface); box-shadow: var(--db-shadow-lg); padding-right: 1rem; }
-  .sidebar-navigation .sidebar-item .sidebar-item-text { min-height: 44px; display: flex; align-items: center; }
-  .sidebar-navigation .sidebar-item-toggle { min-width: 44px; min-height: 44px; }
-  .code-copy-button { width: 44px; height: 44px; opacity: 1; }
+  /* Reduce el margen superior del contenido. */
+  #quarto-content > main {
+    margin-top: 1.25rem;
+  }
+
+  /* Convierte el sidebar móvil en una superficie elevada. */
+  #quarto-sidebar {
+    background: var(--db-surface);
+    box-shadow: var(--db-shadow-lg);
+    padding-right: 1rem;
+  }
+
+  /* Aumenta el área táctil de los enlaces del sidebar. */
+  .sidebar-navigation .sidebar-item .sidebar-item-text {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Aumenta el área táctil de los toggles del sidebar. */
+  .sidebar-navigation .sidebar-item-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Aumenta el botón de copiar código en pantallas táctiles. */
+  .code-copy-button {
+    width: 44px;
+    height: 44px;
+    opacity: 1;
+  }
 }
+
+/* Ajustes para tablets pequeñas y móviles. */
 @media (max-width: 767.98px) {
-  .related-links ul { columns: 1; }
-  #quarto-content > main { padding: 1.25rem; }
-  h2 { font-size: 1.4rem; }
-  .callout-body-container { overflow-x: auto; }
-  .nav-page a { padding: .75rem; font-size: .85rem; }
+  /* Lleva los enlaces relacionados a una sola columna. */
+  .related-links ul {
+    columns: 1;
+  }
+
+  /* Reduce el relleno del contenido principal. */
+  #quarto-content > main {
+    padding: 1.25rem;
+  }
+
+  /* Reduce ligeramente los encabezados de segundo nivel. */
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  /* Permite desplazamiento horizontal dentro de callouts extensos. */
+  .callout-body-container {
+    overflow-x: auto;
+  }
+
+  /* Compacta la navegación entre páginas. */
+  .nav-page a {
+    padding: .75rem;
+    font-size: .85rem;
+  }
 }
+
+/* Ajustes específicos para móviles compactos. */
 @media (max-width: 575.98px) {
-  :root { font-size: 16px; }
-  body { line-height: 1.65; }
-  #quarto-content > main { padding: 1.1rem; border-radius: var(--db-radius); }
-  .hero-db { padding: 1.25rem; }
-  .topic-grid { grid-template-columns: minmax(0, 1fr); }
-  .topic-card { padding: 1.25rem; }
-  .hero-actions { flex-direction: column; align-items: stretch; }
-  .hero-actions .btn { width: 100%; }
-  .schema-box, .summary-box { padding: 1rem; }
-  .page-navigation { gap: .75rem; flex-wrap: wrap; }
-  .page-navigation .nav-page { flex: 1 1 100%; max-width: 100%; }
+  /* Fija un tamaño base legible en móvil. */
+  :root {
+    font-size: 16px;
+  }
+
+  /* Aumenta el interlineado general en móvil. */
+  body {
+    line-height: 1.65;
+  }
+
+  /* Compacta la superficie principal de lectura. */
+  #quarto-content > main {
+    padding: 1.1rem;
+    border-radius: var(--db-radius);
+  }
+
+  /* Compacta el bloque destacado. */
+  .hero-db {
+    padding: 1.25rem;
+  }
+
+  /* Lleva la grilla temática a una sola columna. */
+  .topic-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Reduce el relleno de las tarjetas temáticas. */
+  .topic-card {
+    padding: 1.25rem;
+  }
+
+  /* Apila verticalmente las acciones principales. */
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Hace que los botones principales ocupen todo el ancho. */
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  /* Compacta cajas de esquema y resumen. */
+  .schema-box,
+  .summary-box {
+    padding: 1rem;
+  }
+
+  /* Permite que la navegación entre páginas se apile. */
+  .page-navigation {
+    gap: .75rem;
+    flex-wrap: wrap;
+  }
+
+  /* Hace que cada enlace de navegación ocupe una fila. */
+  .page-navigation .nav-page {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
 }
+
+/* Respeta la preferencia del sistema por reducir animaciones. */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto !important; }
-  *, *::before, *::after { transition: none !important; animation: none !important; }
+  /* Desactiva el desplazamiento suave. */
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  /* Desactiva transiciones y animaciones. */
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
 }
+
+/* Simplifica estilos visuales para impresión. */
 @media print {
-  body, #quarto-content > main { background: white; }
-  #quarto-content > main { box-shadow: none; padding: 0; margin: 0; }
-  .hero-db, .topic-card, .summary-box, div.callout, div.sourceCode { box-shadow: none; break-inside: avoid; }
-  .hero-actions { display: none; }
-  table.table, .table-responsive, .math.display, mjx-container[display="true"] { overflow: visible; }
+  /* Usa fondo blanco en el documento impreso. */
+  body,
+  #quarto-content > main {
+    background: white;
+  }
+
+  /* Elimina sombra, relleno y márgenes del contenido principal. */
+  #quarto-content > main {
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Evita sombras y cortes dentro de componentes importantes. */
+  .hero-db,
+  .topic-card,
+  .summary-box,
+  div.callout,
+  div.sourceCode {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  /* Oculta acciones que no tienen sentido en papel. */
+  .hero-actions {
+    display: none;
+  }
+
+  /* Evita scroll interno al imprimir tablas y fórmulas. */
+  table.table,
+  .table-responsive,
+  .math.display,
+  mjx-container[display="true"] {
+    overflow: visible;
+  }
+}
+
+/* Agrupa el rótulo “Conceptos Claves” y sus etiquetas sin afectar el resto del contenido. */
+.concept-section {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: clamp(.9rem, 1.5vw, 1.25rem) 0 clamp(1.75rem, 3vw, 2.5rem);
+}
+
+/* Define el rótulo que aparece inmediatamente sobre las etiquetas. */
+.concept-label {
+  margin: 0 0 .65rem;
+  color: var(--db-text-secondary);
+  font-size: clamp(.78rem, 1vw, .85rem);
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+/* Distribuye las etiquetas en varias filas cuando el ancho disponible disminuye. */
+.concept-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: .7rem;
+  row-gap: .55rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+/* Define la apariencia de cada etiqueta. */
+.concept-tag {
+  flex: 0 0 auto;
+  max-width: 100%;
+  padding: .35rem .75rem;
+  border: 1px solid #b8c5d6;
+  border-radius: 999px;
+  background-color: #eef4fb;
+  color: #40506a;
+  font-size: clamp(.8rem, 1vw, .86rem);
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+/* Ajustes para tablets y ventanas estrechas. */
+@media (max-width: 767.98px) {
+  .concept-section {
+    margin: 1.5rem 0 2.5rem;
+  }
+  
+  .concept-label {
+    margin-bottom: 0.8rem;
+  }
+  
+  .concept-tags {
+    row-gap: 0.7rem;
+  }
+}
+
+/* Ajustes para teléfonos. */
+@media (max-width: 575.98px) {
+  .concept-section {
+    margin: .75rem 0 1.75rem;
+  }
+
+  .concept-label {
+    margin-bottom: .5rem;
+    font-size: .78rem;
+  }
+
+  .concept-tags {
+    column-gap: .5rem;
+    row-gap: .45rem;
+  }
+
+  .concept-tag {
+    padding: .3rem .6rem;
+    font-size: .8rem;
+  }
 }

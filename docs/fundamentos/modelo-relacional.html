@@ -6,7 +6,6 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Construcción formal del modelo relacional desde tuplas y producto cartesiano hasta esquemas y bases de datos.">
 
 <title>Modelo relacional: tuplas, relaciones, esquemas y bases de datos – Bases de Datos</title>
 <style>
@@ -67,7 +66,7 @@ div.csl-indent {
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-9f43a20c679eb76b4703ca291990b4b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-87fa72fe65cf0770eb2257872295e8b7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-25591d7fb713da620d4918298aefbfaa.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -128,6 +127,7 @@ window.Quarto = {
 </script>
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar docked quarto-light">
@@ -343,7 +343,7 @@ window.Quarto = {
     <h2 id="toc-title">En esta página</h2>
    
   <ul>
-  <li><a href="#intuición-y-concepto" id="toc-intuición-y-concepto" class="nav-link active" data-scroll-target="#intuición-y-concepto">Intuición y concepto</a></li>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción">Introducción</a></li>
   <li><a href="#tuplas" id="toc-tuplas" class="nav-link" data-scroll-target="#tuplas">Tuplas</a></li>
   <li><a href="#producto-cartesiano" id="toc-producto-cartesiano" class="nav-link" data-scroll-target="#producto-cartesiano">Producto cartesiano</a></li>
   <li><a href="#relaciones" id="toc-relaciones" class="nav-link" data-scroll-target="#relaciones">Relaciones</a></li>
@@ -366,11 +366,6 @@ window.Quarto = {
 <h1 class="title">Modelo relacional: tuplas, relaciones, esquemas y bases de datos</h1>
 </div>
 
-<div>
-  <div class="description">
-    Construcción formal del modelo relacional desde tuplas y producto cartesiano hasta esquemas y bases de datos.
-  </div>
-</div>
 
 
 <div class="quarto-title-meta">
@@ -385,8 +380,17 @@ window.Quarto = {
 </header>
 
 
-<section id="intuición-y-concepto" class="level2">
-<h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
+<div class="concept-section">
+<div class="concept-label">
+Conceptos Claves
+</div>
+<div class="concept-tags">
+<p><span class="concept-tag">Tuplas</span> <span class="concept-tag">Relaciones</span> <span class="concept-tag">Producto cartesiano</span> <span class="concept-tag">Esquemas</span> <span class="concept-tag">Bases de datos</span></p>
+</div>
+</div>
+<!-- Contenido -->
+<section id="introducción" class="level2">
+<h2 class="anchored" data-anchor-id="introducción">Introducción</h2>
 <p>El modelo relacional representa la información mediante <strong>relaciones</strong>. Su construcción formal parte de objetos matemáticos simples: tuplas, producto cartesiano, relaciones, esquemas y bases de datos.</p>
 <p>Usaremos el dominio universitario como ejemplo transversal. En su forma posicional, una tupla de estudiante puede representarse como</p>
 <p><span class="math display">\[
@@ -439,7 +443,7 @@ window.Quarto = {
 A_1\times\cdots\times A_k
 :=
 \{(a_1,\ldots,a_k)\mid a_i\in A_i\text{ para todo }i\}.
-\]</span></p>
+\]</span>Relaciones</p>
 <p>Es el conjunto de todas las <span class="math inline">\(k\)</span>-tuplas que pueden formarse tomando un elemento de cada conjunto.</p>
 <p>Para un conjunto <span class="math inline">\(A\)</span>, definimos</p>
 <p><span class="math display">\[

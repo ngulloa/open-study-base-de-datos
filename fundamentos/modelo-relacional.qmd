@@ -1,9 +1,25 @@
 ---
 title: "Modelo relacional: tuplas, relaciones, esquemas y bases de datos"
-description: "Construcción formal del modelo relacional desde tuplas y producto cartesiano hasta esquemas y bases de datos."
+format:
+  html:
+    css: styles.css
 ---
 
-## Intuición y concepto
+<div class="concept-section">
+<div class="concept-label">Conceptos Claves</div>
+
+<div class="concept-tags">
+<span class="concept-tag">Tuplas</span>
+<span class="concept-tag">Relaciones</span>
+<span class="concept-tag">Producto cartesiano</span>
+<span class="concept-tag">Esquemas</span>
+<span class="concept-tag">Bases de datos</span>
+</div>
+</div>
+
+<!-- Contenido -->
+
+## Introducción
 
 El modelo relacional representa la información mediante **relaciones**. Su construcción formal parte de objetos matemáticos simples: tuplas, producto cartesiano, relaciones, esquemas y bases de datos.
 
@@ -58,7 +74,7 @@ $$
 A_1\times\cdots\times A_k
 :=
 \{(a_1,\ldots,a_k)\mid a_i\in A_i\text{ para todo }i\}.
-$$
+$$Relaciones
 
 Es el conjunto de todas las $k$-tuplas que pueden formarse tomando un elemento de cada conjunto.
 
