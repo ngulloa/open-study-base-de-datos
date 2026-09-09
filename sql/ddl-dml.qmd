@@ -1,48 +1,400 @@
 ---
-title: "Definición y modificación de datos: DDL y DML"
-description: "Cómo SQL materializa un esquema relacional y cómo se insertan, actualizan y eliminan datos."
+title: "SQL y manipulación de datos"
 ---
 
-## Intuición y concepto
+<div class="concept-section">
+<div class="concept-label">Conceptos Claves</div>
 
-El [modelo relacional](../fundamentos/modelo-relacional.qmd) separa **esquema** y **datos**. SQL refleja esa separación:
+<div class="concept-tags">
+<span class="concept-tag">DDL</span>
+<span class="concept-tag">DML</span>
+<span class="concept-tag">PRIMARY KEY</span>
+<span class="concept-tag">FOREIGN KEY</span>
+<span class="concept-tag">NOT NULL</span>
+<span class="concept-tag">SQL</span>
+</div>
+</div>
 
-- DDL (*Data Definition Language*) define o modifica la estructura;
-- DML (*Data Manipulation Language*) modifica las tuplas almacenadas.
+<!-- Contenido -->
 
-`CREATE TABLE` define la estructura de una tabla; `INSERT INTO` agrega filas a la instancia. [@silberschatz2020]
+## Introducción
 
-## `CREATE TABLE`
+**SQL** (*Structured Query Language*) es un lenguaje de programación **declarativo** para bases de datos relacionales. Su sintaxis y semántica se desarrollan en el **estándar SQL**, que define formalmente un conjunto de instrucciones para definir, manipular y consultar datos. 
 
-La forma básica es:
+SQL está fuertemente basado en dos fundamentos teóricos:
+
+* [Álgebra relacional](../teoria-consultas/algebra-relacional.qmd): describe operaciones sobre relaciones (tablas), como selección, proyección, join, unión, diferencia.
+
+
+* [Lógica de primer orden](../teoria-consultas/logica-primer-orden.qmd): permite expresar condiciones del tipo y propocisiones declarativas que cumplan o no ciertas condiciones.
+
+El [modelo relacional](../fundamentos/modelo-relacional.qmd) separa **esquema** y **datos** y en SQL esto se refleja con distintas familias de comandos:
+
+- **DDL** (*Data Definition Language*): define o modifica la estructura de la base de datos, como tablas y restricciones;
+- **DML** (*Data Manipulation Language*): modifica o consulta los datos almacenados en la base de datos, como insertar, actualizar o eliminar filas.
+
+## Comandos DDL (Data Definition Language)
+### `CREATE TABLE`
+
+Crea una nueva tabla.
+
+
 
 ```sql
 CREATE TABLE nombre_relacion (
+
   atributo1 tipo1,
+
   atributo2 tipo2,
+
+  ...
+
+);
+```
+
+Por ejemplo, para crear una tabla de estudiantes y otra de cursos:
+
+```sql
+CREATE TABLE Estudiante (
+
+  rut     **VARCHAR**(12),
+
+  nombre  **VARCHAR**(100),
+
+  carrera **VARCHAR**(100),
+
+  **PRIMARY KEY** (rut)
+
+);
+
+CREATE TABLE Curso (
+
+  codigo   **VARCHAR**(20),
+
+  nombre   **VARCHAR**(120),
+
+  creditos **INTEGER**,
+
+  **PRIMARY KEY** (codigo)
+
+);
+```
+
+### `ALTER TABLE`
+
+Modifica la estructura de una tabla existente.
+
+
+
+```sql
+ALTER TABLE nombre_relacion
+ADD COLUMN atributo tipo;
+```
+
+Por ejemplo, para agregar el atributo edad a la tabla de estudiantes:
+
+```sql
+ALTER TABLE Estudiante
+ADD COLUMN edad **INTEGER**;
+```
+
+### `DROP TABLE`
+
+Elimina una tabla junto con todos los datos almacenados en ella.
+
+
+
+```sql
+DROP TABLE nombre_relacion;
+```
+
+Por ejemplo, para eliminar la tabla de estudiantes:
+
+```sql
+DROP TABLE Estudiante;
+```
+
+### `CREATE VIEW`
+
+Crea una vista a partir del resultado de una consulta.
+
+
+
+```sql
+CREATE VIEW nombre_vista AS
+
+SELECT atributo1, atributo2, ...
+
+FROM nombre_relacion
+
+WHERE condicion;
+```
+
+Por ejemplo, para crear una vista con los estudiantes de Ingeniería:
+
+```sql
+CREATE VIEW EstudiantesIngenieria AS
+
+SELECT rut, nombre
+
+FROM Estudiante
+
+WHERE carrera = 'Ingeniería';
+```
+
+### `DROP VIEW`
+
+Elimina una vista existente.
+
+
+
+```sql
+DROP VIEW nombre_vista;
+```
+
+Por ejemplo, para eliminar la vista de estudiantes de Ingeniería:
+
+```sql
+DROP VIEW EstudiantesIngenieria;
+```
+
+### `CREATE INDEX`
+
+Crea un índice sobre uno o más atributos de una tabla para acelerar ciertas búsquedas.
+
+
+
+```sql
+CREATE INDEX nombre_indice
+
+ON nombre_relacion (atributo);
+```
+
+Por ejemplo, para crear un índice sobre el nombre de los estudiantes:
+
+```sql
+CREATE INDEX indice_nombre_estudiante
+
+ON Estudiante (nombre);
+```
+
+### `DROP INDEX`
+
+Elimina un índice existente.
+
+
+
+```sql
+DROP INDEX nombre_indice;
+```
+
+Por ejemplo, para eliminar el índice sobre el nombre de los estudiantes:
+
+```sql
+DROP INDEX indice_nombre_estudiante;
+```
+
+### `TRUNCATE TABLE`
+
+Elimina todas las tuplas de una tabla, pero mantiene su estructura.
+
+
+
+```sql
+TRUNCATE TABLE nombre_relacion;
+```
+
+Por ejemplo, para eliminar todos los estudiantes sin eliminar la tabla:
+
+```sql
+TRUNCATE TABLE Estudiante;
+```
+
+**Nota:** `TRUNCATE TABLE` no está disponible en SQLite. En SQLite se utiliza:
+
+```sql
+DELETE FROM Estudiante;
+```
+
+
+La declaración de `PRIMARY KEY` corresponda a la [llave](../diseno/dependencias-llaves.qmd).
+
+## Comandos DML (Data Manipulation Language)
+
+### `INSERT INTO`
+
+Inserta una o más tuplas nuevas en una tabla.
+
+
+
+```sql
+INSERT INTO nombre_relacion (
+  atributo1,
+  atributo2,
+  ...
+)
+
+VALUES (
+  valor1,
+  valor2,
   ...
 );
 ```
 
-Para el dominio universitario:
+Por ejemplo, para insertar un estudiante:
 
 ```sql
-CREATE TABLE Estudiante (
-  rut     VARCHAR(12),
-  nombre  VARCHAR(100),
-  carrera VARCHAR(100),
-  PRIMARY KEY (rut)
-);
+INSERT INTO Estudiante (
+  rut,
+  nombre,
+  carrera
+)
 
-CREATE TABLE Curso (
-  codigo   VARCHAR(20),
-  nombre   VARCHAR(120),
-  creditos INTEGER,
-  PRIMARY KEY (codigo)
+VALUES (
+  '20.123.456-7',
+  'Ana Pérez',
+  'Ingeniería'
 );
 ```
 
-La declaración de `PRIMARY KEY` se conecta con la definición formal de [llave](../diseno/dependencias-llaves.qmd). Estos ejemplos se concentran en la estructura y las llaves primarias; las restricciones entre tablas requieren además especificar la integridad referencial del dominio.
+También se pueden insertar varias tuplas a la vez:
+
+```sql
+INSERT INTO Estudiante (
+  rut,
+  nombre,
+  carrera
+)
+
+VALUES
+  ('20.123.456-7', 'Ana Pérez', 'Ingeniería'),
+  ('21.987.654-3', 'Juan Soto', 'Matemáticas');
+```
+
+### `UPDATE`
+
+Modifica los valores de una o más tuplas existentes.
+
+
+
+```sql
+UPDATE nombre_relacion
+
+SET atributo1 = valor1,
+    atributo2 = valor2
+
+WHERE condicion;
+```
+
+Por ejemplo, para cambiar la carrera de un estudiante:
+
+```sql
+UPDATE Estudiante
+
+SET carrera = 'Ciencia de Datos'
+
+WHERE rut = '20.123.456-7';
+```
+
+Si se omite `WHERE`, se modifican todas las tuplas de la tabla:
+
+```sql
+UPDATE Estudiante
+
+SET carrera = 'Ingeniería';
+```
+
+### `DELETE FROM`
+
+Elimina una o más tuplas de una tabla.
+
+
+
+```sql
+DELETE FROM nombre_relacion
+
+WHERE condicion;
+```
+
+Por ejemplo, para eliminar un estudiante:
+
+```sql
+DELETE FROM Estudiante
+
+WHERE rut = '20.123.456-7';
+```
+
+Si se omite `WHERE`, se eliminan todas las tuplas de la tabla:
+
+```sql
+DELETE FROM Estudiante;
+```
+
+### `MERGE`
+
+Permite insertar, actualizar o eliminar tuplas dependiendo de si existe una coincidencia entre dos conjuntos de datos.
+
+
+
+```sql
+MERGE INTO nombre_relacion AS destino
+
+USING otra_relacion AS origen
+
+ON condicion
+
+WHEN MATCHED THEN
+  UPDATE SET atributo = valor
+
+WHEN NOT MATCHED THEN
+  INSERT (atributo1, atributo2)
+  VALUES (valor1, valor2);
+```
+
+Por ejemplo:
+
+```sql
+MERGE INTO Estudiante AS destino
+
+USING NuevosEstudiantes AS origen
+
+ON destino.rut = origen.rut
+
+WHEN MATCHED THEN
+  UPDATE SET nombre = origen.nombre
+
+WHEN NOT MATCHED THEN
+  INSERT (rut, nombre, carrera)
+  VALUES (origen.rut, origen.nombre, origen.carrera);
+```
+
+**Nota:** `MERGE` forma parte del estándar SQL, pero **SQLite no lo soporta directamente**.
+
+### `SELECT`
+
+Consulta datos almacenados sin modificar las tuplas.
+
+```sql
+SELECT atributo1, atributo2, ...
+
+FROM nombre_relacion
+
+WHERE condicion;
+```
+
+Por ejemplo, para obtener los estudiantes de Ingeniería:
+
+```sql
+SELECT rut, nombre
+
+FROM Estudiante
+
+WHERE carrera = 'Ingeniería';
+```
+
+**Nota:** `SELECT` muchas veces se clasifica separadamente como **DQL** (*Data Query Language*), ya que consulta datos pero no los modifica. En una clasificación amplia de SQL puede considerarse parte de las operaciones de manipulación de datos.
+
+
 
 ## Tipos de datos
 
@@ -57,134 +409,6 @@ Los tipos SQL pueden agruparse en categorías como:
 ::: {.callout-warning title="SQL estándar y motores reales"}
 Los nombres, tamaños, conversiones y comportamiento exacto de los tipos dependen del RDBMS. Por ejemplo, distintos motores implementan de manera diferente números en punto flotante, booleanos y tipos de texto. Verifica los tipos soportados por el motor elegido.
 :::
-
-## Modificar el esquema
-
-Para modificar o eliminar estructuras se usan instrucciones como:
-
-```sql
-DROP TABLE nombre_relacion;
-```
-
-```sql
-ALTER TABLE nombre_relacion
-ADD COLUMN nuevo_atributo tipo;
-```
-
-```sql
-ALTER TABLE nombre_relacion
-DROP COLUMN atributo;
-```
-
-El soporte concreto de algunas variantes de `ALTER TABLE` depende del motor y su versión. [@silberschatz2020]
-
-## Insertar tuplas
-
-La forma básica es:
-
-```sql
-INSERT INTO relacion (atributo1, atributo2, ...)
-VALUES (valor1, valor2, ...);
-```
-
-Ejemplo:
-
-```sql
-INSERT INTO Estudiante (rut, nombre, carrera)
-VALUES ('r1', 'Ana', 'Ingeniería Civil');
-```
-
-También podemos nombrar solo algunos atributos:
-
-```sql
-INSERT INTO Profesor (pid, nombre)
-VALUES ('p1', 'Elena');
-```
-
-Si `departamento` admite `NULL` y no tiene un valor por defecto distinto, quedará sin un valor conocido. La semántica de [NULL](../nulos/null-tres-valores.qmd) se desarrolla por separado.
-
-::: {.callout-warning title="No omitir columnas sin revisar restricciones"}
-Omitir una columna no garantiza que la inserción sea válida: la operación puede fallar si la columna tiene `NOT NULL` y no posee un valor por defecto compatible.
-:::
-
-## Actualizar datos
-
-```sql
-UPDATE relacion
-SET atributo1 = valor1,
-    atributo2 = valor2
-WHERE condicion;
-```
-
-Ejemplo:
-
-```sql
-UPDATE Estudiante
-SET carrera = 'Computación'
-WHERE rut = 'r1';
-```
-
-La condición puede seleccionar varias filas. Por eso, una actualización sin el filtro correcto puede modificar más datos de los pretendidos.
-
-## Eliminar datos
-
-```sql
-DELETE FROM relacion
-WHERE condicion;
-```
-
-Ejemplo:
-
-```sql
-DELETE FROM Inscribe
-WHERE rut = 'r2'
-  AND codigo = 'BD101'
-  AND semestre = '2025-2';
-```
-
-De nuevo, `WHERE` determina qué filas son afectadas.
-
-## Esquema teórico y SQL
-
-En el modelo de relaciones nombradas, un esquema especifica nombres de relaciones y sus atributos. `CREATE TABLE` agrega además información propia de un RDBMS real: tipos, restricciones y otras propiedades de almacenamiento lógico.
-
-Por ello, la correspondencia es conceptual, no una identidad literal:
-
-$$
-\text{esquema relacional}
-\quad\longrightarrow\quad
-\text{DDL SQL con tipos y restricciones}.
-$$
-
-## Ejemplo mínimo del esquema transversal
-
-```sql
-CREATE TABLE Profesor (
-  pid          VARCHAR(20),
-  nombre       VARCHAR(100),
-  departamento VARCHAR(100),
-  PRIMARY KEY (pid)
-);
-
-CREATE TABLE Inscribe (
-  rut      VARCHAR(12),
-  codigo   VARCHAR(20),
-  semestre VARCHAR(10)
-);
-
-CREATE TABLE Dicta (
-  pid      VARCHAR(20),
-  codigo   VARCHAR(20),
-  semestre VARCHAR(10)
-);
-
-CREATE TABLE Requisito (
-  codigo        VARCHAR(20),
-  prerrequisito VARCHAR(20)
-);
-```
-
-Las restricciones de llave para relaciones multivaluadas y las llaves foráneas deben decidirse desde el modelo conceptual, no solo desde la sintaxis SQL.
 
 ::: {.summary-box}
 ### Resumen

@@ -6,9 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Cómo SQL materializa un esquema relacional y cómo se insertan, actualizan y eliminan datos.">
 
-<title>Definición y modificación de datos: DDL y DML – Bases de Datos</title>
+<title>SQL y manipulación de datos – Bases de Datos</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -62,26 +61,7 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -132,35 +112,6 @@ div.csl-indent {
 }</script>
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles/base.css">
 <link rel="stylesheet" href="../styles/layout.css">
@@ -382,15 +333,27 @@ window.Quarto = {
     <h2 id="toc-title">En esta página</h2>
    
   <ul>
-  <li><a href="#intuición-y-concepto" id="toc-intuición-y-concepto" class="nav-link active" data-scroll-target="#intuición-y-concepto">Intuición y concepto</a></li>
+  <li><a href="#introducción" id="toc-introducción" class="nav-link active" data-scroll-target="#introducción">Introducción</a></li>
+  <li><a href="#comandos-ddl-data-definition-language" id="toc-comandos-ddl-data-definition-language" class="nav-link" data-scroll-target="#comandos-ddl-data-definition-language">Comandos DDL (Data Definition Language)</a>
+  <ul class="collapse">
   <li><a href="#create-table" id="toc-create-table" class="nav-link" data-scroll-target="#create-table"><code>CREATE TABLE</code></a></li>
-  <li><a href="#tipos-de-datos" id="toc-tipos-de-datos" class="nav-link" data-scroll-target="#tipos-de-datos">Tipos de datos</a></li>
-  <li><a href="#modificar-el-esquema" id="toc-modificar-el-esquema" class="nav-link" data-scroll-target="#modificar-el-esquema">Modificar el esquema</a></li>
-  <li><a href="#insertar-tuplas" id="toc-insertar-tuplas" class="nav-link" data-scroll-target="#insertar-tuplas">Insertar tuplas</a></li>
-  <li><a href="#actualizar-datos" id="toc-actualizar-datos" class="nav-link" data-scroll-target="#actualizar-datos">Actualizar datos</a></li>
-  <li><a href="#eliminar-datos" id="toc-eliminar-datos" class="nav-link" data-scroll-target="#eliminar-datos">Eliminar datos</a></li>
-  <li><a href="#esquema-teórico-y-sql" id="toc-esquema-teórico-y-sql" class="nav-link" data-scroll-target="#esquema-teórico-y-sql">Esquema teórico y SQL</a></li>
-  <li><a href="#ejemplo-mínimo-del-esquema-transversal" id="toc-ejemplo-mínimo-del-esquema-transversal" class="nav-link" data-scroll-target="#ejemplo-mínimo-del-esquema-transversal">Ejemplo mínimo del esquema transversal</a>
+  <li><a href="#alter-table" id="toc-alter-table" class="nav-link" data-scroll-target="#alter-table"><code>ALTER TABLE</code></a></li>
+  <li><a href="#drop-table" id="toc-drop-table" class="nav-link" data-scroll-target="#drop-table"><code>DROP TABLE</code></a></li>
+  <li><a href="#create-view" id="toc-create-view" class="nav-link" data-scroll-target="#create-view"><code>CREATE VIEW</code></a></li>
+  <li><a href="#drop-view" id="toc-drop-view" class="nav-link" data-scroll-target="#drop-view"><code>DROP VIEW</code></a></li>
+  <li><a href="#create-index" id="toc-create-index" class="nav-link" data-scroll-target="#create-index"><code>CREATE INDEX</code></a></li>
+  <li><a href="#drop-index" id="toc-drop-index" class="nav-link" data-scroll-target="#drop-index"><code>DROP INDEX</code></a></li>
+  <li><a href="#truncate-table" id="toc-truncate-table" class="nav-link" data-scroll-target="#truncate-table"><code>TRUNCATE TABLE</code></a></li>
+  </ul></li>
+  <li><a href="#comandos-dml-data-manipulation-language" id="toc-comandos-dml-data-manipulation-language" class="nav-link" data-scroll-target="#comandos-dml-data-manipulation-language">Comandos DML (Data Manipulation Language)</a>
+  <ul class="collapse">
+  <li><a href="#insert-into" id="toc-insert-into" class="nav-link" data-scroll-target="#insert-into"><code>INSERT INTO</code></a></li>
+  <li><a href="#update" id="toc-update" class="nav-link" data-scroll-target="#update"><code>UPDATE</code></a></li>
+  <li><a href="#delete-from" id="toc-delete-from" class="nav-link" data-scroll-target="#delete-from"><code>DELETE FROM</code></a></li>
+  <li><a href="#merge" id="toc-merge" class="nav-link" data-scroll-target="#merge"><code>MERGE</code></a></li>
+  <li><a href="#select" id="toc-select" class="nav-link" data-scroll-target="#select"><code>SELECT</code></a></li>
+  </ul></li>
+  <li><a href="#tipos-de-datos" id="toc-tipos-de-datos" class="nav-link" data-scroll-target="#tipos-de-datos">Tipos de datos</a>
   <ul class="collapse">
   <li><a href="#resumen" id="toc-resumen" class="nav-link" data-scroll-target="#resumen">Resumen</a></li>
   </ul></li>
@@ -403,14 +366,9 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../sql/ddl-dml.html">SQL</a></li><li class="breadcrumb-item"><a href="../sql/ddl-dml.html">DDL y DML</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Definición y modificación de datos: DDL y DML</h1>
+<h1 class="title">SQL y manipulación de datos</h1>
 </div>
 
-<div>
-  <div class="description">
-    Cómo SQL materializa un esquema relacional y cómo se insertan, actualizan y eliminan datos.
-  </div>
-</div>
 
 
 <div class="quarto-title-meta">
@@ -425,38 +383,257 @@ window.Quarto = {
 </header>
 
 
-<section id="intuición-y-concepto" class="level2">
-<h2 class="anchored" data-anchor-id="intuición-y-concepto">Intuición y concepto</h2>
-<p>El <a href="../fundamentos/modelo-relacional.html">modelo relacional</a> separa <strong>esquema</strong> y <strong>datos</strong>. SQL refleja esa separación:</p>
+<div class="concept-section">
+<div class="concept-label">
+Conceptos Claves
+</div>
+<div class="concept-tags">
+<p><span class="concept-tag">DDL</span> <span class="concept-tag">DML</span> <span class="concept-tag">PRIMARY KEY</span> <span class="concept-tag">FOREIGN KEY</span> <span class="concept-tag">NOT NULL</span> <span class="concept-tag">SQL</span></p>
+</div>
+</div>
+<!-- Contenido -->
+<section id="introducción" class="level2">
+<h2 class="anchored" data-anchor-id="introducción">Introducción</h2>
+<p><strong>SQL</strong> (<em>Structured Query Language</em>) es un lenguaje de programación <strong>declarativo</strong> para bases de datos relacionales. Su sintaxis y semántica se desarrollan en el <strong>estándar SQL</strong>, que define formalmente un conjunto de instrucciones para definir, manipular y consultar datos.</p>
+<p>SQL está fuertemente basado en dos fundamentos teóricos:</p>
 <ul>
-<li>DDL (<em>Data Definition Language</em>) define o modifica la estructura;</li>
-<li>DML (<em>Data Manipulation Language</em>) modifica las tuplas almacenadas.</li>
+<li><p><a href="../teoria-consultas/algebra-relacional.html">Álgebra relacional</a>: describe operaciones sobre relaciones (tablas), como selección, proyección, join, unión, diferencia.</p></li>
+<li><p><a href="../teoria-consultas/logica-primer-orden.html">Lógica de primer orden</a>: permite expresar condiciones del tipo y propocisiones declarativas que cumplan o no ciertas condiciones.</p></li>
 </ul>
-<p><code>CREATE TABLE</code> define la estructura de una tabla; <code>INSERT INTO</code> agrega filas a la instancia. <span class="citation" data-cites="silberschatz2020">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>)</span></p>
+<p>El <a href="../fundamentos/modelo-relacional.html">modelo relacional</a> separa <strong>esquema</strong> y <strong>datos</strong> y en SQL esto se refleja con distintas familias de comandos:</p>
+<ul>
+<li><strong>DDL</strong> (<em>Data Definition Language</em>): define o modifica la estructura de la base de datos, como tablas y restricciones;</li>
+<li><strong>DML</strong> (<em>Data Manipulation Language</em>): modifica o consulta los datos almacenados en la base de datos, como insertar, actualizar o eliminar filas.</li>
+</ul>
 </section>
-<section id="create-table" class="level2">
-<h2 class="anchored" data-anchor-id="create-table"><code>CREATE TABLE</code></h2>
-<p>La forma básica es:</p>
+<section id="comandos-ddl-data-definition-language" class="level2">
+<h2 class="anchored" data-anchor-id="comandos-ddl-data-definition-language">Comandos DDL (Data Definition Language)</h2>
+<section id="create-table" class="level3">
+<h3 class="anchored" data-anchor-id="create-table"><code>CREATE TABLE</code></h3>
+<p>Crea una nueva tabla.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> nombre_relacion (</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  atributo1 tipo1,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  atributo2 tipo2,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">..</span>.</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Para el dominio universitario:</p>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  atributo1 tipo1,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  atributo2 tipo2,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">..</span>.</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por ejemplo, para crear una tabla de estudiantes y otra de cursos:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> Estudiante (</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  rut     <span class="dt">VARCHAR</span>(<span class="dv">12</span>),</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  nombre  <span class="dt">VARCHAR</span>(<span class="dv">100</span>),</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  carrera <span class="dt">VARCHAR</span>(<span class="dv">100</span>),</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">PRIMARY</span> <span class="kw">KEY</span> (rut)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>);</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> Curso (</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  codigo   <span class="dt">VARCHAR</span>(<span class="dv">20</span>),</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  nombre   <span class="dt">VARCHAR</span>(<span class="dv">120</span>),</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  creditos <span class="dt">INTEGER</span>,</span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">PRIMARY</span> <span class="kw">KEY</span> (codigo)</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>La declaración de <code>PRIMARY KEY</code> se conecta con la definición formal de <a href="../diseno/dependencias-llaves.html">llave</a>. Estos ejemplos se concentran en la estructura y las llaves primarias; las restricciones entre tablas requieren además especificar la integridad referencial del dominio.</p>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  rut     <span class="op">**</span><span class="dt">VARCHAR</span><span class="op">**</span>(<span class="dv">12</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  nombre  <span class="op">**</span><span class="dt">VARCHAR</span><span class="op">**</span>(<span class="dv">100</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  carrera <span class="op">**</span><span class="dt">VARCHAR</span><span class="op">**</span>(<span class="dv">100</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">**</span><span class="kw">PRIMARY</span> <span class="kw">KEY</span><span class="op">**</span> (rut)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> Curso (</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  codigo   <span class="op">**</span><span class="dt">VARCHAR</span><span class="op">**</span>(<span class="dv">20</span>),</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  nombre   <span class="op">**</span><span class="dt">VARCHAR</span><span class="op">**</span>(<span class="dv">120</span>),</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  creditos <span class="op">**</span><span class="dt">INTEGER</span><span class="op">**</span>,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="op">**</span><span class="kw">PRIMARY</span> <span class="kw">KEY</span><span class="op">**</span> (codigo)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="alter-table" class="level3">
+<h3 class="anchored" data-anchor-id="alter-table"><code>ALTER TABLE</code></h3>
+<p>Modifica la estructura de una tabla existente.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> nombre_relacion</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ADD</span> <span class="kw">COLUMN</span> atributo tipo;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por ejemplo, para agregar el atributo edad a la tabla de estudiantes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> Estudiante</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ADD</span> <span class="kw">COLUMN</span> edad <span class="op">**</span><span class="dt">INTEGER</span><span class="op">**</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="drop-table" class="level3">
+<h3 class="anchored" data-anchor-id="drop-table"><code>DROP TABLE</code></h3>
+<p>Elimina una tabla junto con todos los datos almacenados en ella.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">TABLE</span> nombre_relacion;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por ejemplo, para eliminar la tabla de estudiantes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">TABLE</span> Estudiante;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="create-view" class="level3">
+<h3 class="anchored" data-anchor-id="create-view"><code>CREATE VIEW</code></h3>
+<p>Crea una vista a partir del resultado de una consulta.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> nombre_vista <span class="kw">AS</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> atributo1, atributo2, <span class="op">..</span>.</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> nombre_relacion</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> condicion;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por ejemplo, para crear una vista con los estudiantes de Ingeniería:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> EstudiantesIngenieria <span class="kw">AS</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> rut, nombre</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Estudiante</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> carrera <span class="op">=</span> <span class="st">'Ingeniería'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="drop-view" class="level3">
+<h3 class="anchored" data-anchor-id="drop-view"><code>DROP VIEW</code></h3>
+<p>Elimina una vista existente.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">VIEW</span> nombre_vista;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por ejemplo, para eliminar la vista de estudiantes de Ingeniería:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">VIEW</span> EstudiantesIngenieria;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="create-index" class="level3">
+<h3 class="anchored" data-anchor-id="create-index"><code>CREATE INDEX</code></h3>
+<p>Crea un índice sobre uno o más atributos de una tabla para acelerar ciertas búsquedas.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> nombre_indice</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> nombre_relacion (atributo);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por ejemplo, para crear un índice sobre el nombre de los estudiantes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> indice_nombre_estudiante</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> Estudiante (nombre);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="drop-index" class="level3">
+<h3 class="anchored" data-anchor-id="drop-index"><code>DROP INDEX</code></h3>
+<p>Elimina un índice existente.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">INDEX</span> nombre_indice;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por ejemplo, para eliminar el índice sobre el nombre de los estudiantes:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">INDEX</span> indice_nombre_estudiante;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="truncate-table" class="level3">
+<h3 class="anchored" data-anchor-id="truncate-table"><code>TRUNCATE TABLE</code></h3>
+<p>Elimina todas las tuplas de una tabla, pero mantiene su estructura.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">TRUNCATE</span> <span class="kw">TABLE</span> nombre_relacion;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por ejemplo, para eliminar todos los estudiantes sin eliminar la tabla:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">TRUNCATE</span> <span class="kw">TABLE</span> Estudiante;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Nota:</strong> <code>TRUNCATE TABLE</code> no está disponible en SQLite. En SQLite se utiliza:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DELETE</span> <span class="kw">FROM</span> Estudiante;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>La declaración de <code>PRIMARY KEY</code> corresponda a la <a href="../diseno/dependencias-llaves.html">llave</a>.</p>
+</section>
+</section>
+<section id="comandos-dml-data-manipulation-language" class="level2">
+<h2 class="anchored" data-anchor-id="comandos-dml-data-manipulation-language">Comandos DML (Data Manipulation Language)</h2>
+<section id="insert-into" class="level3">
+<h3 class="anchored" data-anchor-id="insert-into"><code>INSERT INTO</code></h3>
+<p>Inserta una o más tuplas nuevas en una tabla.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> nombre_relacion (</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  atributo1,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  atributo2,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">..</span>.</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  valor1,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  valor2,</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">..</span>.</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por ejemplo, para insertar un estudiante:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> Estudiante (</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  rut,</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  nombre,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  carrera</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">'20.123.456-7'</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Ana Pérez'</span>,</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">'Ingeniería'</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>También se pueden insertar varias tuplas a la vez:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> Estudiante (</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  rut,</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  nombre,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  carrera</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  (<span class="st">'20.123.456-7'</span>, <span class="st">'Ana Pérez'</span>, <span class="st">'Ingeniería'</span>),</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  (<span class="st">'21.987.654-3'</span>, <span class="st">'Juan Soto'</span>, <span class="st">'Matemáticas'</span>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="update" class="level3">
+<h3 class="anchored" data-anchor-id="update"><code>UPDATE</code></h3>
+<p>Modifica los valores de una o más tuplas existentes.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> nombre_relacion</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> atributo1 <span class="op">=</span> valor1,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    atributo2 <span class="op">=</span> valor2</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> condicion;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por ejemplo, para cambiar la carrera de un estudiante:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> Estudiante</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> carrera <span class="op">=</span> <span class="st">'Ciencia de Datos'</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> rut <span class="op">=</span> <span class="st">'20.123.456-7'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Si se omite <code>WHERE</code>, se modifican todas las tuplas de la tabla:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> Estudiante</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> carrera <span class="op">=</span> <span class="st">'Ingeniería'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="delete-from" class="level3">
+<h3 class="anchored" data-anchor-id="delete-from"><code>DELETE FROM</code></h3>
+<p>Elimina una o más tuplas de una tabla.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DELETE</span> <span class="kw">FROM</span> nombre_relacion</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> condicion;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por ejemplo, para eliminar un estudiante:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DELETE</span> <span class="kw">FROM</span> Estudiante</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> rut <span class="op">=</span> <span class="st">'20.123.456-7'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Si se omite <code>WHERE</code>, se eliminan todas las tuplas de la tabla:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DELETE</span> <span class="kw">FROM</span> Estudiante;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="merge" class="level3">
+<h3 class="anchored" data-anchor-id="merge"><code>MERGE</code></h3>
+<p>Permite insertar, actualizar o eliminar tuplas dependiendo de si existe una coincidencia entre dos conjuntos de datos.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">MERGE</span> <span class="kw">INTO</span> nombre_relacion <span class="kw">AS</span> destino</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="kw">USING</span> otra_relacion <span class="kw">AS</span> origen</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> condicion</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="cf">WHEN</span> MATCHED <span class="cf">THEN</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">UPDATE</span> <span class="kw">SET</span> atributo <span class="op">=</span> valor</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="cf">WHEN</span> <span class="kw">NOT</span> MATCHED <span class="cf">THEN</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INSERT</span> (atributo1, atributo2)</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">VALUES</span> (valor1, valor2);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por ejemplo:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">MERGE</span> <span class="kw">INTO</span> Estudiante <span class="kw">AS</span> destino</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="kw">USING</span> NuevosEstudiantes <span class="kw">AS</span> origen</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ON</span> destino.rut <span class="op">=</span> origen.rut</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="cf">WHEN</span> MATCHED <span class="cf">THEN</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">UPDATE</span> <span class="kw">SET</span> nombre <span class="op">=</span> origen.nombre</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="cf">WHEN</span> <span class="kw">NOT</span> MATCHED <span class="cf">THEN</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INSERT</span> (rut, nombre, carrera)</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">VALUES</span> (origen.rut, origen.nombre, origen.carrera);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Nota:</strong> <code>MERGE</code> forma parte del estándar SQL, pero <strong>SQLite no lo soporta directamente</strong>.</p>
+</section>
+<section id="select" class="level3">
+<h3 class="anchored" data-anchor-id="select"><code>SELECT</code></h3>
+<p>Consulta datos almacenados sin modificar las tuplas.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> atributo1, atributo2, <span class="op">..</span>.</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> nombre_relacion</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> condicion;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Por ejemplo, para obtener los estudiantes de Ingeniería:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> rut, nombre</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> Estudiante</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> carrera <span class="op">=</span> <span class="st">'Ingeniería'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Nota:</strong> <code>SELECT</code> muchas veces se clasifica separadamente como <strong>DQL</strong> (<em>Data Query Language</em>), ya que consulta datos pero no los modifica. En una clasificación amplia de SQL puede considerarse parte de las operaciones de manipulación de datos.</p>
+</section>
 </section>
 <section id="tipos-de-datos" class="level2">
 <h2 class="anchored" data-anchor-id="tipos-de-datos">Tipos de datos</h2>
@@ -481,102 +658,6 @@ window.Quarto = {
 <p>Los nombres, tamaños, conversiones y comportamiento exacto de los tipos dependen del RDBMS. Por ejemplo, distintos motores implementan de manera diferente números en punto flotante, booleanos y tipos de texto. Verifica los tipos soportados por el motor elegido.</p>
 </div>
 </div>
-</section>
-<section id="modificar-el-esquema" class="level2">
-<h2 class="anchored" data-anchor-id="modificar-el-esquema">Modificar el esquema</h2>
-<p>Para modificar o eliminar estructuras se usan instrucciones como:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">TABLE</span> nombre_relacion;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> nombre_relacion</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ADD</span> <span class="kw">COLUMN</span> nuevo_atributo tipo;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> nombre_relacion</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">DROP</span> <span class="kw">COLUMN</span> atributo;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>El soporte concreto de algunas variantes de <code>ALTER TABLE</code> depende del motor y su versión. <span class="citation" data-cites="silberschatz2020">(<a href="#ref-silberschatz2020" role="doc-biblioref">Silberschatz et&nbsp;al. 2020</a>)</span></p>
-</section>
-<section id="insertar-tuplas" class="level2">
-<h2 class="anchored" data-anchor-id="insertar-tuplas">Insertar tuplas</h2>
-<p>La forma básica es:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> relacion (atributo1, atributo2, <span class="op">..</span>.)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (valor1, valor2, <span class="op">..</span>.);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Ejemplo:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> Estudiante (rut, nombre, carrera)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="st">'r1'</span>, <span class="st">'Ana'</span>, <span class="st">'Ingeniería Civil'</span>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>También podemos nombrar solo algunos atributos:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">INSERT</span> <span class="kw">INTO</span> Profesor (pid, nombre)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">VALUES</span> (<span class="st">'p1'</span>, <span class="st">'Elena'</span>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Si <code>departamento</code> admite <code>NULL</code> y no tiene un valor por defecto distinto, quedará sin un valor conocido. La semántica de <a href="../nulos/null-tres-valores.html">NULL</a> se desarrolla por separado.</p>
-<div class="callout callout-style-default callout-warning callout-titled" title="No omitir columnas sin revisar restricciones">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Advertencia</span>No omitir columnas sin revisar restricciones
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Omitir una columna no garantiza que la inserción sea válida: la operación puede fallar si la columna tiene <code>NOT NULL</code> y no posee un valor por defecto compatible.</p>
-</div>
-</div>
-</section>
-<section id="actualizar-datos" class="level2">
-<h2 class="anchored" data-anchor-id="actualizar-datos">Actualizar datos</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> relacion</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> atributo1 <span class="op">=</span> valor1,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    atributo2 <span class="op">=</span> valor2</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> condicion;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Ejemplo:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">UPDATE</span> Estudiante</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SET</span> carrera <span class="op">=</span> <span class="st">'Computación'</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> rut <span class="op">=</span> <span class="st">'r1'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>La condición puede seleccionar varias filas. Por eso, una actualización sin el filtro correcto puede modificar más datos de los pretendidos.</p>
-</section>
-<section id="eliminar-datos" class="level2">
-<h2 class="anchored" data-anchor-id="eliminar-datos">Eliminar datos</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DELETE</span> <span class="kw">FROM</span> relacion</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> condicion;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Ejemplo:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">DELETE</span> <span class="kw">FROM</span> Inscribe</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> rut <span class="op">=</span> <span class="st">'r2'</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> codigo <span class="op">=</span> <span class="st">'BD101'</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> semestre <span class="op">=</span> <span class="st">'2025-2'</span>;</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>De nuevo, <code>WHERE</code> determina qué filas son afectadas.</p>
-</section>
-<section id="esquema-teórico-y-sql" class="level2">
-<h2 class="anchored" data-anchor-id="esquema-teórico-y-sql">Esquema teórico y SQL</h2>
-<p>En el modelo de relaciones nombradas, un esquema especifica nombres de relaciones y sus atributos. <code>CREATE TABLE</code> agrega además información propia de un RDBMS real: tipos, restricciones y otras propiedades de almacenamiento lógico.</p>
-<p>Por ello, la correspondencia es conceptual, no una identidad literal:</p>
-<p><span class="math display">\[
-\text{esquema relacional}
-\quad\longrightarrow\quad
-\text{DDL SQL con tipos y restricciones}.
-\]</span></p>
-</section>
-<section id="ejemplo-mínimo-del-esquema-transversal" class="level2">
-<h2 class="anchored" data-anchor-id="ejemplo-mínimo-del-esquema-transversal">Ejemplo mínimo del esquema transversal</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> Profesor (</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  pid          <span class="dt">VARCHAR</span>(<span class="dv">20</span>),</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  nombre       <span class="dt">VARCHAR</span>(<span class="dv">100</span>),</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  departamento <span class="dt">VARCHAR</span>(<span class="dv">100</span>),</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">PRIMARY</span> <span class="kw">KEY</span> (pid)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>);</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> Inscribe (</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  rut      <span class="dt">VARCHAR</span>(<span class="dv">12</span>),</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  codigo   <span class="dt">VARCHAR</span>(<span class="dv">20</span>),</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  semestre <span class="dt">VARCHAR</span>(<span class="dv">10</span>)</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>);</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> Dicta (</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  pid      <span class="dt">VARCHAR</span>(<span class="dv">20</span>),</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  codigo   <span class="dt">VARCHAR</span>(<span class="dv">20</span>),</span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  semestre <span class="dt">VARCHAR</span>(<span class="dv">10</span>)</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>);</span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> Requisito (</span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  codigo        <span class="dt">VARCHAR</span>(<span class="dv">20</span>),</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  prerrequisito <span class="dt">VARCHAR</span>(<span class="dv">20</span>)</span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Las restricciones de llave para relaciones multivaluadas y las llaves foráneas deben decidirse desde el modelo conceptual, no solo desde la sintaxis SQL.</p>
 <section id="resumen" class="level3 summary-box">
 <h3 class="anchored" data-anchor-id="resumen">Resumen</h3>
 <ul>
@@ -600,12 +681,7 @@ window.Quarto = {
 
 
 
-
-<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Referencias</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-silberschatz2020" class="csl-entry" role="listitem">
-Silberschatz, Abraham, Henry F. Korth, y S. Sudarshan. 2020. <em>Database System Concepts</em>. 7.ª ed. McGraw-Hill Education.
-</div>
-</div></section></div></main> <!-- /main -->
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Volver arriba</a></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
